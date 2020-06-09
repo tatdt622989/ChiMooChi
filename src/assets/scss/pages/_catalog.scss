@@ -1,0 +1,44 @@
+.carousel-indicators {
+  li {
+    border-radius: 999em;
+    border: 1px solid #fff;
+  }
+  .active {
+    background-color: $primary;
+  }
+}
+
+.banner-sm-wrap {
+  .banner-sm-btn {
+    &:hover,&:active {
+      background-position: 100% 0;
+    }
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(170, 134, 111, 0.5);
+    }
+    background: no-repeat 0% 0/200% 100% linear-gradient(90deg, #8E6652 0%, #C2977B 50%, #8E6652 100%);
+    height: 44px;
+    position: absolute;
+    transition: $transition-base;
+    top: 50%;
+    right: 32px;
+    margin-top: -22px;
+  }
+  img {
+    width: 100%;
+  }
+  margin-top: 45px;
+  position: relative;
+}
+
+.recommend-list-wrap {
+  p {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  span {
+    line-height: 1.5;
+  }
+  margin-top: 45px;
+  text-align: left;
+}

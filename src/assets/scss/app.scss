@@ -1,0 +1,13 @@
+// bootstrap
+@import "~bootstrap/scss/functions";
+@import "./helpers/variables";
+@import "~bootstrap/scss/bootstrap";
+
+//basic
+@import "./basic/fontSize";
+
+// pages
+@import "./pages/catalog";
+
+// components
+@import "./components/navbar";
