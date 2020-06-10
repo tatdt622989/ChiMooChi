@@ -16,12 +16,13 @@
     &:focus {
       box-shadow: 0 0 0 0.2rem rgba(170, 134, 111, 0.5);
     }
-    background: no-repeat 0% 0/200% 100% linear-gradient(90deg, #8E6652 0%, #C2977B 50%, #8E6652 100%);
+    background: no-repeat 0% 0/200% 100% linear-gradient(90deg, $quaternary 0%, $link-hover-primary-color 50%, $quaternary 100%);
+    border: 1px solid #fff;
     height: 44px;
     position: absolute;
     transition: $transition-base;
     top: 50%;
-    right: 32px;
+    right: 27px;
     margin-top: -22px;
   }
   img {
@@ -32,13 +33,21 @@
 }
 
 .recommend-list-wrap {
-  p {
+  h2 {
+    a {
+      &:hover {
+        color: $link-hover-primary-color;
+      }
+      color: $primary;
+      transition: $transition-base;
+    }
+    a, >span{
+      vertical-align: top;
+    }
     display: flex;
-    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
   }
-  span {
-    line-height: 1.5;
-  }
-  margin-top: 45px;
+  margin-top: 40px;
   text-align: left;
 }

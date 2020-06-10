@@ -1,13 +1,20 @@
 // bootstrap
 @import "~bootstrap/scss/functions";
-@import "./helpers/variables";
+@import "./utils/variables";
 @import "~bootstrap/scss/bootstrap";
 
-//basic
-@import "./basic/fontSize";
+// material-icon
+@import "./utils/materialIcons";
+
+// basic
+@import "./basic/basic";
 
 // pages
 @import "./pages/catalog";
 
 // components
 @import "./components/navbar";
+@import "./components/card";
+
+// utils
+@import "./utils/font";

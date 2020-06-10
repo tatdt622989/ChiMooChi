@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Catalog from '../views/Catalog.vue';
+import Home from '../components/catalog/Home.vue';
 
 Vue.use(VueRouter);
 
@@ -9,6 +10,13 @@ const routes = [
     path: '/',
     name: 'Catalog',
     component: Catalog,
+    children: [
+      {
+        path: 'home',
+        name: 'Home',
+        component: Home,
+      },
+    ],
   },
   // {
   //   path: '/about',

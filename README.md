@@ -1,4 +1,4 @@
-# chimoochi
+# ChiMooChi
 
 ## Project setup
 ```

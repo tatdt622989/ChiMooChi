@@ -6,7 +6,6 @@
 
 <style lang="scss">
 @import "./assets/scss/app.scss";
-@import "~material-design-icons/iconfont/material-icons.css";
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
 
 #app {
