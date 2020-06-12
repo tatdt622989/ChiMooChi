@@ -49,11 +49,13 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
+              <span class="badge badge-danger">1</span>
               <span class="material-icons">favorite</span>
             </a>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
+              <span class="badge badge-danger">1</span>
               <span class="material-icons">shopping_cart</span>
             </a>
           </li>

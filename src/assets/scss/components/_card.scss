@@ -1,0 +1,57 @@
+.img-wrap {
+  @include media-breakpoint-up (md) {
+    height: 184px;
+  }
+  @include media-breakpoint-up (lg) {
+    height: 184px;
+  }
+  @include media-breakpoint-up (xl) {
+    height: 231px;
+  }
+  background-color: $gray-400;
+  margin: 11px 11px 12px 11px;
+  width: auto;
+}
+
+.card {
+  display: block;
+}
+
+.card-body {
+  .card-title{
+    margin-bottom: 6px;
+    width: 100%;
+  }
+  .price-wrap {
+    .original-price {
+      color: $gray-500;
+      font-size: $font-size-base;
+    }
+    .on-sale-price {
+      color: $danger;
+      font-weight: bold;
+    }
+  }
+  .card-btn-group {
+    button {
+      border: 0;
+      color: $white;
+      padding: 10px;
+    }
+    .favorite {
+      margin-right: 12px;
+      background-color: $gray-400;
+    }
+    .add-to-cart {
+      background-color: $primary;
+    }
+    display: flex;
+    height: 44px;
+    margin-top: 10px;
+  }
+  align-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-top: 0px;
+}

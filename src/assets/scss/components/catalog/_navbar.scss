@@ -6,9 +6,10 @@
     height: 76px;
   }
   @include media-breakpoint-up (lg) {
+    height: 100px;
   }
   @include media-breakpoint-up (xl) {
-    height: 100px;
+    
   }
   .container {
     .navbar-brand {
@@ -80,12 +81,24 @@
     }
     .member-nav {
       a{
+        .badge {
+          height: 17px;
+          padding-top: 2px;
+          position: absolute;
+          right: 0;
+          top: 4px;
+          width: 17px;
+        }
         &:hover{
           color: $primary;
+        }
+        span{
+          line-height: 1;
         }
         display: flex;
         margin-left: 20px;
         padding: 10px;
+        position: relative;
         transition: $transition-base;
       }
     }

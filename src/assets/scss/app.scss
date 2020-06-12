@@ -10,10 +10,10 @@
 @import "./basic/basic";
 
 // pages
-@import "./pages/catalog";
 
 // components
-@import "./components/navbar";
+@import "./components/catalog/navbar";
+@import "./components/catalog/home";
 @import "./components/card";
 
 // utils

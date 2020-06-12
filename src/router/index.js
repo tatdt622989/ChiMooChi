@@ -8,6 +8,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
+    redirect: '/home',
     name: 'Catalog',
     component: Catalog,
     children: [

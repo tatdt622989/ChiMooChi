@@ -7,10 +7,18 @@
       </ol>
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img src="../../assets/images/banner_lg_01.png" class="d-block w-100" alt="banner_01" />
+          <img
+            src="../../assets/images/main_banner_01.png"
+            class="d-block w-100"
+            alt="main_banner_01"
+          />
         </div>
         <div class="carousel-item">
-          <img src="../../assets/images/banner_lg_02.png" class="d-block w-100" alt="banner_02" />
+          <img
+            src="../../assets/images/main_banner_02.png"
+            class="d-block w-100"
+            alt="main_banner_02"
+          />
         </div>
       </div>
       <a
@@ -34,60 +42,142 @@
     </div>
     <div class="banner-sm-wrap">
       <img src="../../assets/images/banner_sm_01.png" alt />
-      <button class="banner-sm-btn btn text-white btn-primary">立即領取</button>
+      <a href="#" class="banner-sm-btn btn text-white btn-primary">立即領取</a>
     </div>
-    <div class="recommend-list-wrap t2">
-      <h2>
+    <div class="featured-list-wrap t2 row">
+      <h2 class="col-12">
         <span>
-          <span class="material-icons t2 mr-2">thumb_up</span>精選特價商品
+          <span class="material-icons t2 mr-2">thumb_up</span>特色推薦商品
         </span>
         <a href="#">
           查看更多
           <span class="material-icons t2 mr-2">play_arrow</span>
         </a>
       </h2>
-      <div class="row">
-        <div class="col-3">
-          <div class="card">
-            <div class="img-box">
-              <a href="#" title>
-                <!-- <img src="..." class="card-img-top" alt="..."> -->
-              </a>
-            </div>
-            <div class="card-body"></div>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="card">
+          <div class="img-wrap">
+            <a href="#" title>
+              <!-- <img src="..." class="card-img-top" alt="..."> -->
+            </a>
           </div>
-        </div>
-        <div class="col-3">
-          <div class="card">
-            <div class="img-box">
-              <a href="#" title>
-                <!-- <img src="..." class="card-img-top" alt="..."> -->
-              </a>
+          <div class="card-body">
+            <h3 class="card-title">Card title</h3>
+            <div class="price-wrap">
+              <p class="original-price">
+                $
+                <del>9999</del>
+              </p>
+              <p class="on-sale-price">
+                $
+                <span>1000</span>
+              </p>
             </div>
-            <div class="card-body"></div>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="card">
-            <div class="img-box">
-              <a href="#" title>
-                <!-- <img src="..." class="card-img-top" alt="..."> -->
-              </a>
+            <div class="card-btn-group">
+              <button class="favorite">
+                <span class="material-icons">favorite_border</span>
+              </button>
+              <button class="add-to-cart">
+                <span class="material-icons">shopping_cart</span>
+              </button>
             </div>
-            <div class="card-body"></div>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="card">
-            <div class="img-box">
-              <a href="#" title>
-                <!-- <img src="..." class="card-img-top" alt="..."> -->
-              </a>
-            </div>
-            <div class="card-body"></div>
           </div>
         </div>
       </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="card">
+          <div class="img-wrap">
+            <a href="#" title>
+              <!-- <img src="..." class="card-img-top" alt="..."> -->
+            </a>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Card title</h3>
+            <div class="price-wrap">
+              <p class="original-price">
+                $
+                <del>9999</del>
+              </p>
+              <p class="on-sale-price">
+                $
+                <span>1000</span>
+              </p>
+            </div>
+            <div class="card-btn-group">
+              <button class="favorite">
+                <span class="material-icons">favorite_border</span>
+              </button>
+              <button class="add-to-cart">
+                <span class="material-icons">shopping_cart</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="card">
+          <div class="img-wrap">
+            <a href="#" title>
+              <!-- <img src="..." class="card-img-top" alt="..."> -->
+            </a>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Card title</h3>
+            <div class="price-wrap">
+              <p class="original-price">
+                $
+                <del>9999</del>
+              </p>
+              <p class="on-sale-price">
+                $
+                <span>1000</span>
+              </p>
+            </div>
+            <div class="card-btn-group">
+              <button class="favorite">
+                <span class="material-icons">favorite_border</span>
+              </button>
+              <button class="add-to-cart">
+                <span class="material-icons">shopping_cart</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 d-md-none col-sm-6 col-12 d-lg-block">
+        <div class="card">
+          <div class="img-wrap">
+            <a href="#" title>
+              <!-- <img src="..." class="card-img-top" alt="..."> -->
+            </a>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Card title</h3>
+            <div class="price-wrap">
+              <p class="original-price">
+                $
+                <del>9999</del>
+              </p>
+              <p class="on-sale-price">
+                $
+                <span>1000</span>
+              </p>
+            </div>
+            <div class="card-btn-group">
+              <button class="favorite">
+                <span class="material-icons">favorite_border</span>
+              </button>
+              <button class="add-to-cart">
+                <span class="material-icons">shopping_cart</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="featured-banner row no-gutters">
+        <div class="col-8"></div>
+        <div class="col-4"></div>
     </div>
   </div>
 </template>
