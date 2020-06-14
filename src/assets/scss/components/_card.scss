@@ -37,12 +37,19 @@
       border: 0;
       color: $white;
       padding: 10px;
+      transition: $transition-base;
     }
     .favorite {
+      &:hover,&:active {
+        background-color: $gray-500;
+      }
       margin-right: 12px;
       background-color: $gray-400;
     }
     .add-to-cart {
+      &:hover,&:active {
+        background-color: $tertiary;
+      }
       background-color: $primary;
     }
     display: flex;

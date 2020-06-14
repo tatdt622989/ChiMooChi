@@ -175,9 +175,35 @@
         </div>
       </div>
     </div>
-    <div class="featured-banner row no-gutters">
-        <div class="col-8"></div>
-        <div class="col-4"></div>
+    <div class="featured-banner-wrap-1">
+      <div class="banner-content-left">
+        <h2>
+          在家渡假好輕鬆
+          <br />躺椅享七折優惠
+        </h2>
+        <h3>
+          即刻入手進口高品質躺椅讓度假不再需要出遠門！
+        </h3>
+        <a href="#" class="btn">去逛逛</a>
+      </div>
+    </div>
+    <div class="featured-banner-wrap-2">
+      <div class="banner-content-right">
+        <h2>
+          好看與舒適兼具
+          <br />不再只當視覺系
+        </h2>
+        <h3>
+          嚴選舒適美學沙發以及精緻抱枕直接一次擁有！
+        </h3>
+        <a href="#" class="btn">去逛逛</a>
+      </div>
+    </div>
+    <div class="newsletter-wrap">
+      <h2>訂閱電子報</h2>
+      <h3>立即訂閱「奇木奇奇」，一手掌握所有好康優惠！</h3>
+      <input type="text">
+      <button value="訂閱">訂閱</button>
     </div>
   </div>
 </template>

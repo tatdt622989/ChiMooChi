@@ -11,13 +11,12 @@
 .banner-sm-wrap {
   .banner-sm-btn {
     &:hover,&:active {
-      background-position: 100% 0;
+      background-color: $tertiary;
     }
     &:focus {
       box-shadow: 0 0 0 0.2rem rgba(170, 134, 111, 0.5);
     }
-    background: no-repeat 0% 0/200% 100% linear-gradient(90deg, $quaternary 0%, $link-hover-primary-color 50%, $quaternary 100%);
-    border: 1px solid #fff;
+    background-color: $quaternary;
     position: absolute;
     transition: $transition-base;
     top: 50%;
@@ -53,12 +52,63 @@
   text-align: left;
 }
 
-.featured-banner {
-  div:nth-of-type(1) {
-    background: center 60%/100% auto  url('./assets/images/featured_01.jpg') content-box;
-  }
-  div:nth-of-type(2) {
-    background-color: rgba(194, 151, 123, 0.85);
-  }
+.featured-banner-wrap-1, .featured-banner-wrap-2 {
   height: 427px;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.banner-content-right, .banner-content-left {
+  h2 {
+    font-size: 36px;
+    font-weight: normal;
+    margin-bottom: 24px;
+  }
+  h3 {
+    margin-bottom: 32px;
+  }
+  a{
+    &:hover {
+      background-color: $white;
+      color: $primary;
+    } 
+    border: 1px solid $white;
+    color: $white;
+    transition: $transition-base;
+    width: 114px;
+  }
+  background-color: transparentize($primary, 0.15);
+  color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 427px;
+  left: 0;
+  padding: 0px 49px 0px 49px;
+  position: absolute;
+  text-align: left;
+  top: 0;
+  width: 350px;
+}
+
+.featured-banner-wrap-1 {
+  background: center 60%/100% auto no-repeat url('./assets/images/featured_banner_01.jpg') content-box;
+}
+
+.featured-banner-wrap-2 {
+  .banner-content-right {
+    a {
+      &:hover {
+        color: $gray-500;
+      }
+    }
+    background-color: transparentize($gray-500, 0.15);
+    left: auto;
+    right: 0;
+  }
+  background: center 60%/100% auto no-repeat url('./assets/images/featured_banner_02.jpg') content-box;
+}
+
+.newsletter-wrap {
+  background: no-repeat url('./assets/images/newsletter.jpg');
 }
