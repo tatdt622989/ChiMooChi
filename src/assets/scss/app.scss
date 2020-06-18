@@ -1,20 +1,17 @@
-// bootstrap
-@import "~bootstrap/scss/functions";
-@import "./utils/variables";
+// Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
+
+// Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
-// material-icon
+// Material Design icons
 @import "./utils/materialIcons";
 
 // basic
-@import "./basic/basic";
 
 // pages
 
 // components
-@import "./components/catalog/navbar";
-@import "./components/catalog/home";
-@import "./components/card";
 
 // utils
 @import "./utils/font";
