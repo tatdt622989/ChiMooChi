@@ -64,7 +64,7 @@
               </p>
             </div>
             <div class="card-btn-group">
-              <button class="favorite">
+              <button class="favorite-btn">
                 <span class="material-icons">favorite_border</span>
               </button>
               <button class="add-to-cart">
@@ -94,7 +94,7 @@
               </p>
             </div>
             <div class="card-btn-group">
-              <button class="favorite">
+              <button class="favorite-btn">
                 <span class="material-icons">favorite_border</span>
               </button>
               <button class="add-to-cart">
@@ -124,7 +124,7 @@
               </p>
             </div>
             <div class="card-btn-group">
-              <button class="favorite">
+              <button class="favorite-btn">
                 <span class="material-icons">favorite_border</span>
               </button>
               <button class="add-to-cart">
@@ -154,7 +154,7 @@
               </p>
             </div>
             <div class="card-btn-group">
-              <button class="favorite">
+              <button class="favorite-btn">
                 <span class="material-icons">favorite_border</span>
               </button>
               <button class="add-to-cart">
@@ -191,9 +191,25 @@
       <input type="text" placeholder="請輸入您的電子郵件" />
       <button value="訂閱" class="btn btn-primary">訂閱</button>
     </div>
-    <div class="favorite"></div>
+    <div class="favorite modal fade" id="exampleModal">
+      <div class="modal-dialog" role="document">
+    <div class="modal-content" tabindex="-1" role="dialog">
+      <div class="modal-header">
+          <h5 class="modal-title">我的最愛</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Modal body text goes here.</p>
+        </div>
+      </div>
+    </div>
+    </div>
   </div>
 </template>
+
+<script></script>
 
 <style lang="scss">
 .carousel {
@@ -359,6 +375,10 @@
     height: 265px;
     margin-bottom: 45px;
   }
+  @include media-breakpoint-up(lg) {
+    height: 341px;
+    margin-bottom: 45px;
+  }
   @include media-breakpoint-up(xl) {
     height: 427px;
     margin-bottom: 60px;
@@ -400,11 +420,11 @@
   @include media-breakpoint-up(lg) {
     h2 {
       font-size: 30px;
-      margin-bottom: 0px;
+      margin-bottom: 16px;
     }
     h3 {
       font-size: 18px;
-      margin-bottom: 12px;
+      margin-bottom: 24px;
     }
     padding: 0px 49px 0px 49px;
   }
@@ -483,7 +503,7 @@
     }
     margin-bottom: 60px;
   }
-  @include media-breakpoint-up(xl) {
+  @include media-breakpoint-up(lg) {
     h2 {
       font-size: 30px;
     }
@@ -534,5 +554,34 @@
   flex-wrap: wrap;
   height: 278px;
   justify-content: center;
+}
+
+.favorite {
+  @include media-breakpoint-up(xs) {
+
+  }
+  @include media-breakpoint-up(md) {
+
+  }
+  @include media-breakpoint-up(lg) {
+    .modal-dialog {
+      .modal-content {
+        height: 670px;
+        margin-right: auto;
+        margin-left: auto;
+        width: 730px;
+      }
+      margin-top: 98px;
+      max-width: none;
+    }
+  }
+  @include media-breakpoint-up(xl) {
+  }
+  .modal-dialog {
+    .modal-content {
+      box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.4);
+    }
+  }
+  position: fixed;
 }
 </style>

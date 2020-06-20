@@ -263,7 +263,7 @@ $caret-spacing:               $caret-width * .85 !default;
 
 $transition-base:             all .2s ease-in-out !default;
 $transition-fade:             opacity .15s linear !default;
-$transition-collapse:         height .35s ease !default;
+$transition-collapse:         all .35s ease !default;
 
 $embed-responsive-aspect-ratios: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -690,6 +690,8 @@ $form-validation-states: map-merge(
 // Warning: Avoid customizing these values. They're used for a bird's eye view
 // of components dependent on the z-axis and are designed to all work together.
 
+$zindex-navbar-bg:                  998;
+$zindex-navbar:                     999;
 $zindex-dropdown:                   1000 !default;
 $zindex-sticky:                     1020 !default;
 $zindex-fixed:                      1030 !default;
@@ -964,13 +966,13 @@ $modal-content-box-shadow-xs:       0 .25rem .5rem rgba($black, .5) !default;
 $modal-content-box-shadow-sm-up:    0 .5rem 1rem rgba($black, .5) !default;
 
 $modal-backdrop-bg:                 $black !default;
-$modal-backdrop-opacity:            .5 !default;
+$modal-backdrop-opacity:            .6 !default;
 $modal-header-border-color:         $border-color !default;
 $modal-footer-border-color:         $modal-header-border-color !default;
 $modal-header-border-width:         $modal-content-border-width !default;
 $modal-footer-border-width:         $modal-header-border-width !default;
-$modal-header-padding-y:            1rem !default;
-$modal-header-padding-x:            1rem !default;
+$modal-header-padding-y:            1.25rem !default;
+$modal-header-padding-x:            1.25rem !default;
 $modal-header-padding:              $modal-header-padding-y $modal-header-padding-x !default; // Keep this for backwards compatibility
 
 $modal-xl:                          1140px !default;
@@ -1149,6 +1151,23 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 
 // Catalog
 //
+// Navbar
+// Navbar toggler
+$navbar-toggler-hover-color:           $primary;
+// Nav
+$nav-color:                            $secondary;
+$nav-active-xs-bg:                     $primary;
+$nav-active-lg-bg:                     $white;
+$nav-active-xs-color:                  white;
+$nav-active-lg-color:                  $secondary;
+$nav-hover-xs-bg:                      $primary;
+$nav-hover-lg-bg:                      $white;
+$nav-hover-xs-color:                   white;
+$nav-hover-lg-color:                   $primary;
+$nav-close-btn-hover-color:            $primary;
+// Member Nav
+$member-nav-btn-hover:              $primary;
+
 // Featured-list
 $featured-list-title-link-color:    $primary; 
 $featured-list-1-bg-color:          transparentize($primary, 0.15);

@@ -133,7 +133,7 @@ export default {
       padding: 10px;
       transition: $transition-base;
     }
-    .favorite {
+    .favorite-btn {
       &:hover,&:active {
         background-color: $gray-500;
       }
