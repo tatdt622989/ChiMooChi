@@ -5,13 +5,10 @@
 @import "~bootstrap/scss/bootstrap";
 
 // Material Design icons
-@import "./utils/materialIcons";
+@import "./helpers/materialIcons";
 
-// basic
-
-// pages
+// base
+@import "./base/typography";
 
 // components
-
-// utils
-@import "./utils/font";
+@import "./components/button";

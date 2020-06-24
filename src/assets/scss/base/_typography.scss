@@ -1,0 +1,49 @@
+// font size
+
+$font-size: (
+  14: 14px,
+  16: 16px,
+  20: 20px,
+  24: 24px,
+  28: 28px,
+  30: 30px,
+  36: 36px
+);
+
+@each $number, $size in $font-size {
+  .f-#{$number} {
+    font-size: $size;
+  }
+  @each $breakpoint, $width in $grid-breakpoints {
+    .f-#{$breakpoint}-#{$number} {
+      @include media-breakpoint-up ($breakpoint) {
+        font-size: $size;
+      }
+    }
+  }
+}
+
+// line height
+
+.lh-100-pct{
+  line-height: 100%;
+}
+
+.lh-1 {
+  line-height: 1;
+}
+
+.lh-1-5 {
+  line-height: 1.5;
+}
+
+// color
+
+@each $name, $color in $theme-colors {
+  .text-hover-#{$name} {
+    &:hover {
+      color: $color;
+    }
+  }
+}
+

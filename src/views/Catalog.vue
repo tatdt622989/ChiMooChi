@@ -1,20 +1,23 @@
 <template>
   <div class="catalog">
-    <Navbar/>
+    <Navbar />
+    <Favorite />
     <router-view></router-view>
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Navbar from '@/components/catalog/Navbar.vue';
+import Favorite from '@/components/catalog/Favorite.vue';
 import Footer from '@/components/catalog/Footer.vue';
 
 export default {
   name: 'Catalog',
   components: {
     Navbar,
+    Favorite,
     Footer,
   },
   created() {
@@ -31,34 +34,46 @@ export default {
   align-content: space-between;
 }
 
-.product-img {
-  @include media-breakpoint-up (xs) {
-    height: 134px;
-    margin: 11px 11px 9px 11px;
+.card-img-link {
+  @include media-breakpoint-up(xs) {
+    height: 132px;
+    margin: 12px 12px 6px 12px;
   }
-  @include media-breakpoint-up (sm) {
-    height: 216px;
-    margin: 11px 11px 11px 11px;
+  @include media-breakpoint-up(sm) {
+    height: 214px;
+    margin: 12px 12px 11px 12px;
   }
-  @include media-breakpoint-up (md) {
-    height: 186px;
-    margin: 11px 11px 5px 11px;
+  @include media-breakpoint-up(md) {
+    height: 184px;
+    margin: 12px 12px 7px 12px;
   }
-  @include media-breakpoint-up (lg) {
-    height: 186px;
-    margin: 11px 11px 5px 11px;
+  @include media-breakpoint-up(lg) {
   }
-  @include media-breakpoint-up (xl) {
-    height: 231px;
+  @include media-breakpoint-up(xl) {
+    height: 229px;
+    margin: 12px 12px 14px 12px;
   }
   background-color: $gray-400;
   width: auto;
 }
 
+.card-btn-group {
+  @include media-breakpoint-up(xs) {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  @include media-breakpoint-up(sm) {
+    width: auto;
+  }
+  display: flex;
+  height: 44px;
+}
+
 .card-body {
-  @include media-breakpoint-up (xs) {
+  @include media-breakpoint-up(xs) {
     .card-title {
-      margin-bottom: 9px;
+      margin-bottom: 7px;
     }
     .product-price {
       .original-price {
@@ -71,51 +86,46 @@ export default {
       align-items: center;
       display: flex;
       line-height: 1;
-    }
-    .card-btn-group {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      width: 100%
+      margin-bottom: 16px;
     }
     padding-top: 0px;
   }
-  @include media-breakpoint-up (sm) {
+  @include media-breakpoint-up(sm) {
     .card-title {
-      margin-bottom: 0px;
+      margin-bottom: 12px;
     }
     .product-price {
       .on-sale-price {
         margin-top: 8px;
       }
       display: block;
-      margin-top: 11px;
-    }
-    .card-btn-group {
-      margin-top: 10px;
-      width: auto;
+      margin-bottom: 0;
     }
   }
-  @include media-breakpoint-up (md) {
-    .card-btn-group {
-      margin-top: 5px;
-    }
-    .product-price {
-      margin-top: 5px;
-    }
-  }
-  @include media-breakpoint-up (lg) {
-  }
-  @include media-breakpoint-up (xl) {
+  @include media-breakpoint-up(md) {
     .card-title {
-      margin-bottom: 6px;
+      h3 {
+        font-size: 18px;
+      }
+      margin-bottom: 7px;
     }
   }
-  .card-title{
-    text-overflow: ellipsis;
-    overflow: hidden;
+  @include media-breakpoint-up(xl) {
+    .card-title {
+      h3 {
+        font-size: 20px;
+      }
+      margin-bottom: 15px;
+    }
+  }
+  .card-title {
+    h3 {
+      margin-bottom: 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
     width: 100%;
-    white-space: nowrap;
   }
   .product-price {
     .original-price {
@@ -125,29 +135,6 @@ export default {
       color: $danger;
       font-weight: bold;
     }
-  }
-  .card-btn-group {
-    button {
-      border: 0;
-      color: $white;
-      padding: 10px;
-      transition: $transition-base;
-    }
-    .favorite-btn {
-      &:hover,&:active {
-        background-color: $gray-500;
-      }
-      margin-right: 12px;
-      background-color: $gray-400;
-    }
-    .add-to-cart {
-      &:hover,&:active {
-        background-color: $tertiary;
-      }
-      background-color: $primary;
-    }
-    display: flex;
-    height: 44px;
   }
   align-content: space-between;
   display: flex;

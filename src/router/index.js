@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Catalog from '../views/Catalog.vue';
-import Home from '../components/catalog/Home.vue';
+import Home from '../pages/Home.vue';
+import Product from '../pages/Product.vue';
+import ProductInfo from '../pages/ProductInfo.vue';
 
 Vue.use(VueRouter);
 
@@ -17,6 +19,16 @@ const routes = [
         name: 'Home',
         component: Home,
       },
+      {
+        path: 'product',
+        name: 'Product',
+        component: Product,
+      },
+      {
+        path: 'product-info',
+        name: 'ProductInfo',
+        component: ProductInfo,
+      },
     ],
   },
   // {
@@ -31,6 +43,9 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  },
 });
 
 export default router;

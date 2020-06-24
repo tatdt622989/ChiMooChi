@@ -156,7 +156,7 @@ footer {
       padding: 0 7px 0 7px;
       width: 44px;
     }
-    .email,.phone {
+    .email, .phone {
       align-items: center;
       display: flex;
     }

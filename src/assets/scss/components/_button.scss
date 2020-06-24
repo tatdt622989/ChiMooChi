@@ -1,0 +1,144 @@
+// type
+
+.btn {
+  padding: 10px 32px 10px 32px;
+  transition: $transition-base;
+}
+
+.btn-square {
+  border: 0;
+  padding: 10px;
+  transition: $transition-base;
+}
+
+// color & hover
+
+.btn-primary {
+  &:hover{
+    background-color: $tertiary;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: $primary;
+    color: #fff;
+  }
+  &:focus{
+    background-color: $tertiary;
+    box-shadow: 0 0 0.1rem 0.2rem transparentize($primary, 0.3);
+    outline: 0;
+  }
+  background-color: $primary;
+  border: 0;
+  color: #fff;
+}
+
+.btn-secondary-primary {
+  &:hover{
+    background-color: $primary;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: $secondary;
+    color: #fff;
+  }
+  &:focus{
+    background-color: $primary;
+    box-shadow: 0 0 0.1rem 0.2rem transparentize($secondary, 0.3);
+    outline: 0;
+  }
+  background-color: $secondary;
+  border: 0;
+  color: #fff;
+}
+
+.btn-quaternary {
+  &:hover{
+    background-color: $tertiary;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: $quaternary;
+  }
+  &:focus{
+    background-color: $tertiary;
+    box-shadow: 0 0 0.1rem 0.2rem transparentize($quaternary, 0.6);
+    outline: 0;
+  }
+  background-color: $quaternary;
+  border: 0;
+  color: #fff;
+}
+
+.btn-tertiary {
+  &:hover{
+    background-color: $quaternary;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: $tertiary;
+  }
+  &:focus{
+    background-color: $quaternary;
+    box-shadow: 0 0 0.1rem 0.2rem transparentize($tertiary, 0.3);
+    outline: 0;
+  }
+  background-color: $tertiary;
+  border: 0;
+  color: #fff;
+}
+
+.btn-light {
+  &:hover{
+    background-color: $secondary;
+    color: #fff;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: $light;
+    color: #fff;
+  }
+  &:focus{
+    background-color: $secondary;
+    box-shadow: 0 0 0.1rem 0.2rem transparentize($light, 0.3);
+    outline: 0;
+  }
+  background-color: $light;
+  border: 0;
+  color: #fff;
+}
+
+@each $name, $color in $theme-colors {
+  .btn-outline-#{$name} {
+    &:hover{
+      background-color: $color;
+    }
+    &:not(:disabled):not(.disabled):active {
+      background-color: transparent;
+      color: $color;
+    }
+    &:focus{
+      background-color: $color;
+      box-shadow: 0 0 0.1rem 0.2rem transparentize($color, 0.3);
+      color: white;
+      outline: 0;
+    }
+    border: 1px solid $color;
+    color: $color;
+  }
+}
+
+@each $name, $color in $theme-colors {
+  .btn-outline-white-#{$name} {
+    &:hover{
+      background-color: white;
+      color: $color;
+    }
+    &:not(:disabled):not(.disabled):active {
+      background-color: transparent;
+      color: #fff;
+    }
+    &:focus{
+      background-color: white;
+      box-shadow: 0 0 0.1rem 0.2rem transparentize($color, 0.3);
+      color: $color;
+      outline: 0;
+    }
+    border: 1px solid white;
+    color: white;
+  }
+}
