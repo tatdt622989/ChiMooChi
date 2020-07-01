@@ -1,22 +1,10 @@
 <template>
   <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb pt-4 pt-sm-12">
-        <li class="breadcrumb-item">
-          <a href="#">
-            <span class="material-icons">location_on</span>首頁
-          </a>
-        </li>
-        <li class="breadcrumb-item">
-          <a href="#">Library</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Data</li>
-      </ol>
-    </nav>
+    <Breadcrumb />
     <div class="row">
       <div class="search-result-title col-5  col-sm-4 col-md-6">
-        <h1 class="f-24 f-md-30 mr-20 mr-md-32 mb-0">全部商品</h1>
-        <h2 class="f-16 f-md-20 mb-0">共29件商品</h2>
+        <h1 class="f-20 f-sm-24 f-md-30 mr-20 mr-md-32 mb-0 font-weight-bold">全部商品</h1>
+        <h2 class="f-14 f-sm-16 f-md-20 mb-0">共29件商品</h2>
       </div>
       <div class="product-filter col-7 col-sm-8 col-md-6">
         <button class="btn btn-outline-secondary mr-8 mr-sm-8 mr-md-20 mb-0
@@ -40,7 +28,7 @@
     <hr class="mb-8 mb-sm-16" />
     <div class="product-category">
       <button class="btn text-hover-primary product-category-btn acitve">全部商品</button>
-      <button class="btn text-hover-primary product-category-btn">精選推薦</button>
+      <button class="btn text-hover-primary product-category-btn">特色推薦</button>
       <button class="btn text-hover-primary product-category-btn">經典設計</button>
       <button class="btn text-hover-primary product-category-btn">木椅</button>
       <button class="btn text-hover-primary product-category-btn">塑膠椅</button>
@@ -104,6 +92,17 @@
     </nav>
   </div>
 </template>
+
+<script>
+import Breadcrumb from '@/components/catalog/Breadcrumb.vue';
+
+export default {
+  name: 'Product',
+  components: {
+    Breadcrumb,
+  },
+};
+</script>
 
 <style lang="scss">
 .search-result-title {

@@ -135,9 +135,10 @@ footer {
       &:hover {
         opacity: 0.8;
       }
-      height: 44px;
-      width: 44px;
       background: no-repeat center/auto;
+      height: 44px;
+      transition: $transition-base;
+      width: 44px;
     }
     button {
       span {
@@ -154,6 +155,7 @@ footer {
       border: 0;
       height: 44px;
       padding: 0 7px 0 7px;
+      transition: $transition-base;
       width: 44px;
     }
     .email, .phone {

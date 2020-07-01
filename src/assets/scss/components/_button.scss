@@ -1,13 +1,14 @@
 // type
 
 .btn {
-  padding: 10px 32px 10px 32px;
+  border-width: 1px;
+  padding: 9px 32px 9px 32px;
   transition: $transition-base;
 }
 
 .btn-square {
-  border: 0;
-  padding: 10px;
+  border-width: 1px;
+  padding: 9px;
   transition: $transition-base;
 }
 
@@ -16,24 +17,49 @@
 .btn-primary {
   &:hover{
     background-color: $tertiary;
+    border-color: $tertiary;
   }
   &:not(:disabled):not(.disabled):active {
     background-color: $primary;
     color: #fff;
   }
   &:focus{
-    background-color: $tertiary;
+    background-color: $primary;
+    border-color: $tertiary;
     box-shadow: 0 0 0.1rem 0.2rem transparentize($primary, 0.3);
     outline: 0;
   }
   background-color: $primary;
-  border: 0;
+  border-color: $primary;
+  border-style: solid;
+  color: #fff;
+}
+
+.btn-secondary {
+  &:hover{
+    background-color: $dark;
+    border-color: $dark;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: $secondary;
+    color: #fff;
+  }
+  &:focus{
+    background-color: $secondary;
+    border-color: $dark;
+    box-shadow: 0 0 0.1rem 0.2rem transparentize($secondary, 0.3);
+    outline: 0;
+  }
+  background-color: $secondary;
+  border-color: $secondary;
+  border-style: solid;
   color: #fff;
 }
 
 .btn-secondary-primary {
   &:hover{
     background-color: $primary;
+    border-color: $primary;
   }
   &:not(:disabled):not(.disabled):active {
     background-color: $secondary;
@@ -41,51 +67,60 @@
   }
   &:focus{
     background-color: $primary;
+    border-color: $primary;
     box-shadow: 0 0 0.1rem 0.2rem transparentize($secondary, 0.3);
     outline: 0;
   }
   background-color: $secondary;
-  border: 0;
+  border-color: $secondary;
+  border-style: solid;
   color: #fff;
 }
 
 .btn-quaternary {
   &:hover{
     background-color: $tertiary;
+    border-color: $tertiary;
   }
   &:not(:disabled):not(.disabled):active {
     background-color: $quaternary;
   }
   &:focus{
-    background-color: $tertiary;
+    background-color: $quaternary;
+    border-color: $tertiary;
     box-shadow: 0 0 0.1rem 0.2rem transparentize($quaternary, 0.6);
     outline: 0;
   }
   background-color: $quaternary;
-  border: 0;
+  border-color: $quaternary;
+  border-style: solid;
   color: #fff;
 }
 
 .btn-tertiary {
   &:hover{
     background-color: $quaternary;
+    border-color: $quaternary;
   }
   &:not(:disabled):not(.disabled):active {
     background-color: $tertiary;
   }
   &:focus{
-    background-color: $quaternary;
+    background-color: $tertiary;
+    border-color: $quaternary;
     box-shadow: 0 0 0.1rem 0.2rem transparentize($tertiary, 0.3);
     outline: 0;
   }
   background-color: $tertiary;
-  border: 0;
+  border-color: $tertiary;
+  border-style: solid;
   color: #fff;
 }
 
 .btn-light {
   &:hover{
     background-color: $secondary;
+    border-color: $secondary;
     color: #fff;
   }
   &:not(:disabled):not(.disabled):active {
@@ -93,12 +128,14 @@
     color: #fff;
   }
   &:focus{
-    background-color: $secondary;
+    background-color: $light;
+    border-color: $secondary;
     box-shadow: 0 0 0.1rem 0.2rem transparentize($light, 0.3);
     outline: 0;
   }
   background-color: $light;
-  border: 0;
+  border-color: $light;
+  border-style: solid;
   color: #fff;
 }
 
@@ -117,6 +154,18 @@
       color: white;
       outline: 0;
     }
+    &.active {
+      &:not(:disabled):not(.disabled):active {
+        background-color: $color;
+        color: white;
+      }
+      &:not(:disabled):not(.disabled):focus {
+        box-shadow: none;
+      }
+      background-color: $color;
+      color: white;
+    }
+    background-color: transparent;
     border: 1px solid $color;
     color: $color;
   }

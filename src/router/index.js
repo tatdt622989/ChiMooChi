@@ -4,6 +4,8 @@ import Catalog from '../views/Catalog.vue';
 import Home from '../pages/Home.vue';
 import Product from '../pages/Product.vue';
 import ProductInfo from '../pages/ProductInfo.vue';
+import Cart from '../pages/Cart.vue';
+import Checkout from '../pages/Checkout.vue';
 
 Vue.use(VueRouter);
 
@@ -28,6 +30,16 @@ const routes = [
         path: 'product-info',
         name: 'ProductInfo',
         component: ProductInfo,
+      },
+      {
+        path: 'cart',
+        name: 'Cart',
+        component: Cart,
+      },
+      {
+        path: 'checkout',
+        name: 'Checkout',
+        component: Checkout,
       },
     ],
   },

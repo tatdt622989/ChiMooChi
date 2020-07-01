@@ -53,7 +53,7 @@ export default {
     height: 229px;
     margin: 12px 12px 14px 12px;
   }
-  background-color: $gray-400;
+  background-color: $img-link-bg-color;
   width: auto;
 }
 

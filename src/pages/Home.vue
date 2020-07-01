@@ -45,7 +45,7 @@
       <div class="col-lg-3 col-md-4 col-6 d-lg-block mb-16 mb-lg-0">
         <div class="card">
           <a href="#" title class="card-img-link">
-            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <img src="" class="card-img-top" alt="">
           </a>
           <div class="card-body">
             <a class="card-title" href="#">
@@ -74,9 +74,9 @@
       </div>
       <div class="col-lg-3 col-md-4 col-6 d-lg-block mb-16 mb-lg-0">
         <div class="card">
-          <a href="#" title="card-img-link" class="card-img-link">
-            <!-- <img src="..." class="card-img-top" alt="..."> -->
-          </a>
+          <router-link to="/product-info" title="card-img-link" class="card-img-link">
+            <img src="" class="card-img-top" alt="">
+          </router-link>
           <div class="card-body">
             <a class="card-title" href="#">
               <h3>超強鋁合金雙渦輪動力按摩椅</h3>
@@ -105,7 +105,7 @@
       <div class="col-lg-3 col-md-4 col-6 d-lg-block">
         <div class="card">
           <a href="#" title class="card-img-link">
-            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <img src="" class="card-img-top" alt="">
           </a>
 
           <div class="card-body">
@@ -136,7 +136,7 @@
       <div class="col-lg-3 d-md-none col-6 d-lg-block">
         <div class="card">
           <a href="#" title class="card-img-link">
-            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <img src="" class="card-img-top" alt="">
           </a>
 
           <div class="card-body">
