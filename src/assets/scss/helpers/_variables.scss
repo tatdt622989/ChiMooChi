@@ -1185,9 +1185,6 @@ $nav-close-btn-hover-color:         $primary;
 $navbar-member-btn-hover:              $primary;
 $navbar-member-color:                  $secondary;
 
-// Favorite
-$favorite-modal-btn:             $secondary;
-
 // Featured-list
 $featured-list-1-bg-color:          transparentize($primary, 0.15);
 $featured-list-1-bg-img:            url('~@/assets/images/featured-banner-01.jpg');
@@ -1210,7 +1207,11 @@ $footer-color:                      $white;
 $footer-declaration-bg-color:       $primary;
 
 // Img-link
-$img-link-bg-color:                $light;
+$img-link-bg-color:                 $light;
 
 // Cart
 $cart-bg-color:                     $gray-300;
+
+// Checkout flowchart
+$flowchart-status-bg-color:         $light;
+$flowchart-status-active-bg-color:  $primary;

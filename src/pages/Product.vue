@@ -19,8 +19,8 @@
             aria-expanded="false"
           >價格</button>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">高到低</a>
-            <a class="dropdown-item" href="#">低到高</a>
+            <button class="dropdown-item" type="button">高到低</button>
+            <button class="dropdown-item" type="button">低到高</button>
           </div>
         </div>
       </div>

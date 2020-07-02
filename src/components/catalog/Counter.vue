@@ -26,12 +26,6 @@
   @include media-breakpoint-up(md) {
     order: 0;
   }
-  .counter-btn {
-    &:hover {
-      background-color: $favorite-modal-btn;
-      color: #fff;
-    }
-  }
   .counter-quantity {
     align-items: center;
     display: flex;

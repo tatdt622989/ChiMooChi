@@ -14,9 +14,9 @@
           <img src="@/assets/images/logo.svg" alt="ChiMooChi" class="navbar-brand-img"/>
         </router-link>
       </div>
-      <div class="navbar-primary align-items-center d-flex"
+      <div class="navbar-primary"
           :class="{active : navBarIsActive}">
-        <button class="close-navbar-btn align-self-end" @click="toggleNav">
+        <button class="close-navbar-btn" @click="toggleNav">
           <span class="material-icons">close</span>
         </button>
         <ul class="navbar-nav">
@@ -54,7 +54,7 @@
           <input class="search-input" type="search" placeholder="搜尋" />
         </form>
       </div>
-      <ul class="navbar-member navbar-nav flex-row w-auto">
+      <ul class="navbar-member navbar-nav">
         <li class="navbar-member-item">
           <a href="#" class="navbar-member-link btn-square">
             <span class="material-icons lh-1">account_circle</span>
@@ -170,7 +170,9 @@ export default {
     flex-basis: 100%;
     position: static;
   }
+  align-items: center;
   background-color: #fff;
+  display: flex;
   transition: $transition-collapse;
   z-index: $zindex-navbar;
 }
@@ -238,6 +240,7 @@ export default {
   @include media-breakpoint-up(lg) {
     display: none;
   }
+  align-self: flex-end;
 }
 .search-form{
   @include media-breakpoint-up(xs) {
@@ -316,6 +319,8 @@ export default {
 .navbar-member {
   align-items: center;
   display: flex;
+  flex-direction: row;
+  width: auto;
 }
 .navbar-member-item {
   @include media-breakpoint-up(xs) {

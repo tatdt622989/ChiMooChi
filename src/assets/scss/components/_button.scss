@@ -145,8 +145,8 @@
       background-color: $color;
     }
     &:not(:disabled):not(.disabled):active {
-      background-color: transparent;
-      color: $color;
+      background-color: $color;
+      color: white;
     }
     &:focus{
       background-color: $color;

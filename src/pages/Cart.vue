@@ -16,7 +16,7 @@
           </button>
         </div>
       </div>
-      <div class=" col-lg-4 col-md-5 summary text-left">
+      <div class=" col-lg-4 col-md-5 total text-left">
         <div class="align-items-center p-md-16 p-sm-32 p-24 d-flex flex-wrap">
           <p class="flex-grow-1">商品共計</p>
           <p class="flex-grow-1 font-weight-bold text-right">$1000</p>
@@ -25,16 +25,17 @@
           <button class="btn btn-outline-secondary cash-on-delivery-btn px-16">貨到付款</button>
           <p class="mt-20 w-75-pct">運費</p>
           <p class="mt-20 font-weight-bold text-right w-25-pct">$60</p>
-          <div class="summary-coupon mt-20">
-            <input class="summary-coupon-input mr-16" type="text" placeholder="請輸入優惠券序號">
+          <div class="total-coupon mt-20">
+            <input class="total-coupon-input mr-16" type="text" placeholder="請輸入優惠券序號">
             <button class="btn btn-secondary flex-shrink-0
-            summary-coupon-apply-btn">套用</button>
+            total-coupon-apply-btn">套用</button>
           </div>
           <p class="mt-20 w-75-pct">優惠券折抵</p>
           <p class="mt-20 font-weight-bold text-right w-25-pct">-$60</p>
           <p class="mt-20 w-75-pct">合計</p>
           <p class="f-24 font-weight-bold mt-20 text-danger text-right w-25-pct">$1234</p>
-          <router-link class="btn btn-primary mt-20 w-100-pct" to="/checkout">結帳去</router-link>
+          <router-link class="btn btn-primary mt-20 w-100-pct"
+          to="/checkout/order-form">結帳去</router-link>
         </div>
       </div>
     </div>
@@ -154,19 +155,19 @@ export default {
     order: 0;
   }
 }
-.summary {
+.total {
   background-clip: content-box;
   background-color: $cart-bg-color;
 }
-.summary-coupon {
+.total-coupon {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-.summary-coupon-apply-btn {
+.total-coupon-apply-btn {
   padding: 9px 15px 9px 15px;
 }
-.summary-coupon-input {
+.total-coupon-input {
   @include media-breakpoint-up(xs) {
     text-indent: 8px;
     width: 100%;
