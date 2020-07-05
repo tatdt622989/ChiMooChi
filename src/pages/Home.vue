@@ -29,8 +29,11 @@
       </a>
     </div>
     <div class="thin-banner">
-      <a href class="thin-banner-link d-block d-sm-none h-100-pct w-100-pct"></a>
-      <a href="#" class="btn btn-quaternary mr-lg-28 mr-md-20 mr-sm-16 d-none d-sm-block">立即領取</a>
+      <router-link to="promotion"
+      class="thin-banner-link d-block d-sm-none h-100-pct w-100-pct"></router-link>
+      <router-link to="promotion"
+      class="btn btn-quaternary mr-lg-28 mr-md-20 mr-sm-16 d-none d-sm-block"
+      >立即領取</router-link>
     </div>
     <div class="featured-list f-20 row">
       <h2 class="col-12 mb-16 mb-md-20 d-flex justify-content-between">

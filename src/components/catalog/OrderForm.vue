@@ -1,89 +1,111 @@
 <template>
-  <div class="row w-100-pct">
-    <div class="col-8 d-flex flex-wrap justify-content-center offset-2 order-form-wrap">
-      <h1 class="f-lg-30 f-24 mt-16 mb-24 w-100-pct">訂單資料</h1>
+  <div class="row w-100-pct mb-lg-90 mb-md-60 mb-45">
+    <div class="order-form-wrap col-12 col-md-10 col-lg-8 d-flex flex-wrap justify-content-center
+    offset-lg-2 offset-md-1 p-md-24 p-16">
+      <h1 class="f-lg-30 f-24 mt-8 mb-32 w-100-pct">訂單資料</h1>
       <button
         class="order-form-cart-list-btn btn btn-outline-secondary
         d-flex justify-content-center f-16 mb-16"
+        data-toggle="collapse"
+        data-target="#order-form-table"
       >
         購物車清單
         <span class="material-icons">arrow_drop_down</span>
       </button>
-      <div class="order-form-cart-list">
-        <div class="order-form-cart-item d-flex flex-wrap justify-content-between w-100-pct">
-          <p class="order-cart-item-title pl-16 text-overflow">尊爵日式雙人沙發沙發沙發沙發沙發</p>
-          <p class="order-cart-item-quantity">
-            <span>99</span>/個
-          </p>
-          <p class>小計</p>
-          <p class="order-cart-item-price pr-16">$99999999</p>
-          <hr class="w-100-pct" />
-        </div>
-        <div class="order-form-total pr-16">
-          <p class="w-50-pct text-left mb-16">宅配-運費</p>
-          <p class="w-50-pct mb-16">$60</p>
-          <p class="w-50-pct text-left mb-16">優惠券折抵</p>
-          <p class="w-50-pct mb-16">-$60</p>
-          <p class="w-50-pct text-left mb-45">合計</p>
-          <p class="w-50-pct mb-32 text-danger font-weight-bold">$2000</p>
-        </div>
+      <div class="collapse w-100-pct" id="order-form-table">
+        <ShoppingCartListTable />
       </div>
       <form class="order-form">
-        <div class="form-group">
-          <label for="user-name">姓名</label>
-          <input type="text" id="user-name" placeholder="請輸入姓名" autocomplete="name"/>
+        <div class="order-form-group form-group">
+          <label for="user-name" class="w-100-pct text-left">姓名</label>
+          <input
+            type="text"
+            class="order-form-input"
+            id="user-name"
+            placeholder="請輸入姓名"
+            autocomplete="name"
+          />
         </div>
-        <div class="form-group">
+        <div class="order-form-group form-group">
+          <div class="col text-left pl-0 pr-12">
+            <label for="county">縣市</label>
+            <select class="form-control border-0 px-md-24 px-16" id="county">
+              <option selected disabled>請選擇縣市</option>
+              <option></option>
+            </select>
+          </div>
+          <div class="col text-left pr-0 pl-12">
+            <label for="">鄉鎮區</label>
+            <select class="form-control border-0 px-md-24 px-16" id="county">
+              <option selected disabled>請選擇鄉鎮區</option>
+              <option></option>
+            </select>
+          </div>
+        </div>
+        <div class="order-form-group form-group">
           <label for="address">地址</label>
-          <div class="dropdown">
-            <button
-              class="btn btn-outline-secondary dropdown-toggle px-8 px-sm-32"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >請選擇城市</button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-              <button class="dropdown-item" type="button">高到低</button>
-              <button class="dropdown-item" type="button">低到高</button>
-            </div>
-          </div>
-          <div class="dropdown">
-            <button
-              class="btn btn-outline-secondary dropdown-toggle px-8 px-sm-32"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >請選擇地區</button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-              <button class="dropdown-item" type="button">高到低</button>
-              <button class="dropdown-item" type="button">低到高</button>
-            </div>
-          </div>
-          <input type="text" id="address" placeholder="請輸入地址" autocomplete="street-address"/>
+          <input
+            type="text"
+            class="order-form-input"
+            id="address"
+            placeholder="請輸入地址"
+            autocomplete="street-address"
+          />
         </div>
-        <div class="form-group">
+        <div class="order-form-group form-group">
           <label for="cellphone">手機</label>
-          <input type="text" id="cellphone" placeholder="請輸入手機號碼" autocomplete="tel"/>
+          <input
+            type="text"
+            class="order-form-input"
+            id="cellphone"
+            placeholder="請輸入手機號碼"
+            autocomplete="tel"
+          />
         </div>
-        <div class="form-group">
-          <label for="telephone">市話</label>
-          <input type="text" id="telephone" placeholder="請輸入市話號碼" autocomplete="tel-local"/>
+        <div class="order-form-group form-group">
+          <label for="telephone" class="form-label">市話</label>
+          <input
+            type="text"
+            class="order-form-input"
+            id="telephone"
+            placeholder="請輸入市話號碼"
+            autocomplete="tel-local"
+          />
         </div>
-        <div class="form-group">
+        <div class="order-form-group form-group">
           <label for="telephone">電子信箱</label>
-          <input type="email" id="telephone" placeholder="請輸入電子信箱" autocomplete="email"/>
+          <input
+            type="email"
+            class="order-form-input"
+            id="telephone"
+            placeholder="請輸入電子信箱"
+            autocomplete="email"
+          />
         </div>
-        <div class="form-group">
-          <textarea name="" id="" cols="30" rows="10"></textarea>
+        <div class="order-form-group form-group">
+          <label for="notes" class="form-label">備註</label>
+          <textarea class="form-control border-0 form-textarea" id="notes" rows="3"></textarea>
         </div>
       </form>
     </div>
+    <div class="col-12 col-md-10 col-lg-8 d-flex offset-lg-2 mt-md-32 mt-24 offset-md-1
+    justify-content-between p-0">
+      <router-link class="btn btn-dark" to="/shopping-cart">回購物車</router-link>
+      <router-link class="btn btn-primary" to="payment">下一步</router-link>
+    </div>
   </div>
 </template>
+
+<script>
+import ShoppingCartListTable from '@/components/catalog/ShoppingCartListTable.vue';
+
+export default {
+  name: 'OrderForm',
+  components: {
+    ShoppingCartListTable,
+  },
+};
+</script>
 
 <style lang="scss">
 .order-form-wrap {
@@ -98,32 +120,49 @@
   justify-content: flex-end;
   width: 100%;
 }
-.order-cart-item-title {
-  text-align: left;
-  width: 220px;
-}
-.order-cart-item-quantity {
-  width: 48px;
-}
-.order-cart-item-price {
-  display: flex;
-  flex-wrap: wrap;
-  text-align: right;
-  width: 100px;
-}
-.order-form-total {
-  @include media-breakpoint-up(lg) {
-    width: 196px;
-  }
-  @include media-breakpoint-up(xl) {
-    width: 236px;
-  }
-  display: flex;
-  flex-wrap: wrap;
-  text-align: right;
-}
 .order-form {
+  align-items: flex-start;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+}
+.order-form-group {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.order-form-input {
+  @include media-breakpoint-up(xs) {
+    text-indent: 16px;
+  }
+  @include media-breakpoint-up(md) {
+    text-indent: 24px;
+  }
+  border: 0;
+  height: 44px;
+  width: 100%;
+}
+.form-control {
+  resize: none;
+}
+.form-row {
+  margin: 0;
+}
+.form-label {
+  &::after {
+    content: "(選填)";
+    color: $danger;
+  }
+}
+.form-textarea {
+  @include media-breakpoint-up(xs) {
+    text-indent: 16px;
+  }
+  @include media-breakpoint-up(md) {
+    text-indent: 24px;
+  }
+  height: 88px;
+  padding: 8px 0;
 }
 </style>

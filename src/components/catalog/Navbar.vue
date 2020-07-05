@@ -43,8 +43,9 @@
             >本店商品</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link p-0" to="/"
-            active-class="active">折扣優惠</router-link>
+            <router-link to="/promotion" class="nav-link p-0"
+            active-class="active" @click.native="navBarIsActive = false"
+            >超值優惠</router-link>
           </li>
         </ul>
         <form class="search-form form-inline">
@@ -69,7 +70,7 @@
           </button>
         </li>
         <li class="navbar-member-item">
-          <router-link to="/cart" class="navbar-member-link btn-square">
+          <router-link to="/shopping-cart" class="navbar-member-link btn-square">
             <span class="navbar-member-badge badge badge-danger">1</span>
             <span class="material-icons lh-1">shopping_cart</span>
           </router-link>
@@ -203,6 +204,7 @@ export default {
     &:not(.active):hover {
       color: $nav-hover-lg-color;
     }
+    border-bottom: 2px solid #fff;
     height: auto;
     line-height: 1.5;
     padding: 0;
@@ -219,8 +221,8 @@ export default {
   @include media-breakpoint-up(lg) {
     color: $nav-active-lg-color;
     background-color: $nav-active-lg-bg;
+    border-color: $primary;
     padding-bottom: 2px;
-    border-bottom: 2px solid $primary;
   }
 }
 .close-navbar-btn{

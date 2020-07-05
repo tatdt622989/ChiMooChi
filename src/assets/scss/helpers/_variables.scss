@@ -383,7 +383,7 @@ $table-hover-bg:              rgba($black, .075) !default;
 $table-active-bg:             $table-hover-bg !default;
 
 $table-border-width:          $border-width !default;
-$table-border-color:          $border-color !default;
+$table-border-color:          $light !default;
 
 $table-head-bg:               $gray-200 !default;
 $table-head-color:            $gray-700 !default;
@@ -1206,11 +1206,11 @@ $footer-btn-bg-color:               $gray-600;
 $footer-color:                      $white;
 $footer-declaration-bg-color:       $primary;
 
-// Img-link
+// Img link
 $img-link-bg-color:                 $light;
 
-// Cart
-$cart-bg-color:                     $gray-300;
+// Shopping cart
+$shopping-cart-bg-color:                     $gray-300;
 
 // Checkout flowchart
 $flowchart-status-bg-color:         $light;

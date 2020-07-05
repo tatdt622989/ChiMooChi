@@ -2,13 +2,13 @@
   <div class="container d-flex justify-content-center flex-wrap">
     <div class="checkout-flowchart mt-32">
       <div class="checkout-flowchart-status-frame">
-        <div class="checkout-flowchart-status active"></div>
+        <div class="checkout-flowchart-status" :class="{ active : isOrderForm}"></div>
       </div>
       <div class="checkout-flowchart-status-frame">
-        <div class="checkout-flowchart-status"></div>
+        <div class="checkout-flowchart-status" :class="{ active : isPayment}"></div>
       </div>
       <div class="checkout-flowchart-status-frame">
-        <div class="checkout-flowchart-status"></div>
+        <div class="checkout-flowchart-status" :class="{ active : isPaymentStatus}"></div>
       </div>
       <div class="checkout-flowchart-line"></div>
       <ul class="checkout-flowchart-title mb-32">
@@ -22,11 +22,54 @@
 </template>
 
 <script>
+export default {
+  name: 'Checkout',
+  data() {
+    return {
+      isOrderForm: true,
+      isPayment: false,
+      isPaymentStatus: false,
+    };
+  },
+  methods: {
+    changeClass(path) {
+      const vm = this;
+      vm.isOrderForm = false;
+      vm.isPayment = false;
+      vm.isPaymentStatus = false;
+      switch (path) {
+        case '/checkout/order-form':
+          vm.isOrderForm = true;
+          break;
+        case '/checkout/payment':
+          vm.isPayment = true;
+          break;
+        case '/checkout/payment-status':
+          vm.isPaymentStatus = true;
+          break;
+        default:
+          break;
+      }
+    },
+  },
+  created() {
+    const { path } = this.$route;
+    this.changeClass(path);
+  },
+  watch: {
+    $route(to) {
+      this.changeClass(to.path);
+    },
+  },
+};
 </script>
 
 <style lang="scss">
 .checkout-flowchart {
-  @include media-breakpoint-up(lg) {
+  @include media-breakpoint-up(xs) {
+    width: 100%;
+  }
+  @include media-breakpoint-up(md) {
     width: 571px;
   }
   display: flex;
@@ -35,14 +78,17 @@
   position: relative;
 }
 .checkout-flowchart-line {
+  @include media-breakpoint-up(xs) {
+    padding: 0 32px;
+  }
   background-color: $secondary;
+  background-clip: content-box;
   height: 3px;
   left: 0;
   margin: 0 auto;
   position: absolute;
   right: 0;
   top: 15px;
-  width: 507px;
   z-index: 0;
 }
 .checkout-flowchart-status-frame {

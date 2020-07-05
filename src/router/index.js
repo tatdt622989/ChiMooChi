@@ -5,12 +5,14 @@ import Catalog from '@/views/Catalog.vue';
 // Pages
 import Home from '@/pages/Home.vue';
 import Product from '@/pages/Product.vue';
+import Promotion from '@/pages/Promotion.vue';
 import ProductInfo from '@/pages/ProductInfo.vue';
-import Cart from '@/pages/Cart.vue';
+import ShoppingCart from '@/pages/ShoppingCart.vue';
 import Checkout from '@/pages/Checkout.vue';
 // Components
 import OrderForm from '@/components/catalog/OrderForm.vue';
 import Payment from '@/components/catalog/Payment.vue';
+import PaymentStatus from '@/components/catalog/PaymentStatus.vue';
 
 Vue.use(VueRouter);
 
@@ -43,9 +45,9 @@ const routes = [
         component: ProductInfo,
       },
       {
-        path: 'cart',
-        name: 'Cart',
-        component: Cart,
+        path: 'shopping-cart',
+        name: 'ShoppingCart',
+        component: ShoppingCart,
       },
       {
         path: 'checkout',
@@ -63,7 +65,17 @@ const routes = [
             name: 'Payment',
             component: Payment,
           },
+          {
+            path: 'payment-status',
+            name: 'PaymentStatus',
+            component: PaymentStatus,
+          },
         ],
+      },
+      {
+        path: 'promotion',
+        name: 'Promotion',
+        component: Promotion,
       },
     ],
   },

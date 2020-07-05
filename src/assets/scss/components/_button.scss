@@ -119,8 +119,8 @@
 
 .btn-light {
   &:hover{
-    background-color: $secondary;
-    border-color: $secondary;
+    background-color: $dark;
+    border-color: $dark;
     color: #fff;
   }
   &:not(:disabled):not(.disabled):active {
@@ -129,8 +129,32 @@
   }
   &:focus{
     background-color: $light;
-    border-color: $secondary;
+    border-color: $dark;
+    color: #fff;
     box-shadow: 0 0 0.1rem 0.2rem transparentize($light, 0.3);
+    outline: 0;
+  }
+  background-color: $light;
+  border-color: $light;
+  border-style: solid;
+  color: #fff;
+}
+
+.btn-dark {
+  &:hover{
+    background-color: $secondary;
+    border-color: $secondary;
+    color: #fff;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: $dark;
+    color: #fff;
+  }
+  &:focus{
+    background-color: $dark;
+    border-color: $secondary;
+    color: #fff;
+    box-shadow: 0 0 0.1rem 0.2rem transparentize($dark, 0.3);
     outline: 0;
   }
   background-color: $light;
@@ -149,9 +173,7 @@
       color: white;
     }
     &:focus{
-      background-color: $color;
       box-shadow: 0 0 0.1rem 0.2rem transparentize($color, 0.3);
-      color: white;
       outline: 0;
     }
     &.active {
