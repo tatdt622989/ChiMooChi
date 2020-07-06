@@ -60,11 +60,11 @@ export default {
 
 <style lang="scss">
 .payment-wrap {
-  background-color: $gray-300;
+  background-color: $payment-bg-color;
 }
 .orderer-info-table {
   td {
-    border-color: $gray-300;
+    border-color: $payment-broder-color;
   }
   text-align: left;
 }

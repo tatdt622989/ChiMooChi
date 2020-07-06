@@ -1182,8 +1182,8 @@ $nav-hover-xs-color:                white;
 $nav-hover-lg-color:                $primary;
 $nav-close-btn-hover-color:         $primary;
 // Member Nav
-$navbar-member-btn-hover:              $primary;
-$navbar-member-color:                  $secondary;
+$navbar-member-btn-hover:           $primary;
+$navbar-member-color:               $secondary;
 
 // Featured-list
 $featured-list-1-bg-color:          transparentize($primary, 0.15);
@@ -1210,8 +1210,14 @@ $footer-declaration-bg-color:       $primary;
 $img-link-bg-color:                 $light;
 
 // Shopping cart
-$shopping-cart-bg-color:                     $gray-300;
+$shopping-cart-bg-color:            $gray-300;
 
 // Checkout flowchart
 $flowchart-status-bg-color:         $light;
 $flowchart-status-active-bg-color:  $primary;
+$checkout-table-border-color:       $gray-300;
+// Order form
+$order-form-bg-color:               $gray-300;
+// Payment
+$payment-bg-color:                  $gray-300;
+$payment-broder-color:              $gray-300;

@@ -39,7 +39,7 @@
   height: 32px;
 }
 .tbody-tr {
-  border-bottom: 1px solid $gray-300;
+  border-bottom: 1px solid $checkout-table-border-color;
 }
 .table td {
   @include media-breakpoint-up(xs) {

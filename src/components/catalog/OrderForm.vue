@@ -109,7 +109,7 @@ export default {
 
 <style lang="scss">
 .order-form-wrap {
-  background-color: $gray-300;
+  background-color: $order-form-bg-color;
 }
 .order-form-cart-list-btn {
   padding-right: 20px;
