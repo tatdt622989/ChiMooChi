@@ -177,7 +177,7 @@
         <h3 class="d-none d-md-block mb-md-16 mb-lg-24 mb-xl-32 f-16 f-lg-20 f-xl-24">
           即刻入手進口高品質躺椅讓度假不再需要出遠門！
         </h3>
-        <router-link to="/product" class="btn btn-outline-white-primary f-lg-20">
+        <router-link to="/products" class="btn btn-outline-white-primary f-lg-20">
           去逛逛
         </router-link>
       </div>
@@ -191,7 +191,7 @@
         <h3 class="d-none d-md-block mb-md-16 mb-lg-24 mb-xl-32 f-16 f-lg-20 f-xl-24">
           嚴選舒適美學沙發以及精緻抱枕直接一次擁有！
         </h3>
-        <router-link to="/product" class="btn btn-outline-white-dark f-lg-20">
+        <router-link to="/products" class="btn btn-outline-white-dark f-lg-20">
           去逛逛
         </router-link>
       </div>

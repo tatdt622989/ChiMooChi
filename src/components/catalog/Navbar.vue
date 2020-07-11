@@ -35,7 +35,7 @@
           </li>
           <li class="nav-item">
             <router-link
-            to="/product"
+            to="/products"
             class="nav-link p-0"
             href="#"
             active-class="active"
@@ -57,9 +57,9 @@
       </div>
       <ul class="navbar-member navbar-nav">
         <li class="navbar-member-item">
-          <a href="#" class="navbar-member-link btn-square">
+          <router-link to="login" class="navbar-member-link btn-square">
             <span class="material-icons lh-1">account_circle</span>
-          </a>
+          </router-link>
         </li>
         <li class="navbar-member-item">
           <button class="navbar-member-link btn-square"

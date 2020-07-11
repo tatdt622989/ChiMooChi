@@ -4,6 +4,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'App',
+};
+</script>
+
 <style lang="scss">
 // 這裡的scss會套用到全部的元件上，但是因為vue-loader在轉換成css的時候是分元件轉換，所以
 // 變數必須在每一個元件上載入(使用vue.config.js)，才能夠在轉換的時候讀得到變數。

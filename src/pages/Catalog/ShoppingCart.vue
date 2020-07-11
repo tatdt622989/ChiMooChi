@@ -43,7 +43,7 @@
   </div>
 </template>
 <script>
-import Counter from '@/components/catalog/Counter.vue';
+import Counter from '@/components/Catalog/Counter.vue';
 
 export default {
   name: 'Favorite',

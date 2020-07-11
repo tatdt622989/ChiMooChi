@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import Breadcrumb from '@/components/catalog/Breadcrumb.vue';
+import Breadcrumb from '@/components/Catalog/Breadcrumb.vue';
 
 export default {
   name: 'Product',

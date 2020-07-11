@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import ShoppingCartListTable from '@/components/catalog/ShoppingCartListTable.vue';
+import ShoppingCartListTable from '@/components/Catalog/ShoppingCartListTable.vue';
 
 export default {
   name: 'OrderForm',

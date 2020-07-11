@@ -14,7 +14,7 @@
               <img src alt />
             </a>
             <p class="product-title text-overflow mb-8 mb-sm-0">雙噴多功能氣墊椅雙噴多功能氣墊椅</p>
-            <Counter class="ml-0 ml-sm-96 ml-md-0 mt-0 mt-sm-16 mt-md-0"/>
+            <Counter class="ml-0 ml-sm-96 ml-md-0 mt-0 mt-sm-16 mt-md-0" />
             <p class="price font-weight-bold">
               $
               <span>2000</span>
@@ -28,7 +28,7 @@
               </button>
             </div>
           </div>
-          <hr class="my-12 my-sm-16"/>
+          <hr class="my-12 my-sm-16" />
           <div class="favorite-modal-empty">
             <p class="mb-3 fz-3">還沒有最愛的商品喔！</p>
             <a href class="btn btn-primary text-white">去逛逛</a>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import Counter from '@/components/catalog/Counter.vue';
+import Counter from '@/components/Catalog/Counter.vue';
 
 export default {
   name: 'Favorite',
@@ -50,49 +50,51 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.modal-dialog {
-  @include media-breakpoint-up(xs) {
-    margin-top: 76px;
+<style lang="scss" scoped>
+.favorite-modal {
+  .modal-dialog {
+    @include media-breakpoint-up(xs) {
+      margin-top: 76px;
+    }
+    @include media-breakpoint-up(sm) {
+      margin-top: 76px;
+    }
+    @include media-breakpoint-up(md) {
+      margin-top: 76px;
+      max-width: 630px;
+    }
+    @include media-breakpoint-up(lg) {
+      margin-top: 100px;
+      max-width: 730px;
+    }
   }
-  @include media-breakpoint-up(sm) {
-    margin-top: 76px;
+  .modal-content {
+    @include media-breakpoint-up(xs) {
+      min-height: 510px;
+    }
+    @include media-breakpoint-up(sm) {
+      min-height: 570px;
+    }
+    @include media-breakpoint-up(lg) {
+      min-height: 730px;
+    }
+    box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.4);
   }
-  @include media-breakpoint-up(md) {
-    margin-top: 76px;
-    max-width: 630px;
+  .modal-header {
+    @include media-breakpoint-up(xs) {
+      padding: 12px;
+    }
+    @include media-breakpoint-up(sm) {
+      padding: 16px;
+    }
   }
-  @include media-breakpoint-up(lg) {
-    margin-top: 100px;
-    max-width: 730px;
-  }
-}
-.modal-content {
-  @include media-breakpoint-up(xs) {
-    min-height: 510px;
-  }
-  @include media-breakpoint-up(sm) {
-    min-height: 570px;
-  }
-  @include media-breakpoint-up(lg) {
-    min-height: 730px;
-  }
-  box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.4);
-}
-.modal-header {
-  @include media-breakpoint-up(xs) {
-    padding: 12px;
-  }
-  @include media-breakpoint-up(sm) {
-    padding: 16px;
-  }
-}
-.modal-body {
-  @include media-breakpoint-up(xs) {
-    padding: 0 12px 12px 12px;
-  }
-  @include media-breakpoint-up(sm) {
-    padding: 16px;
+  .modal-body {
+    @include media-breakpoint-up(xs) {
+      padding: 0 12px 12px 12px;
+    }
+    @include media-breakpoint-up(sm) {
+      padding: 16px;
+    }
   }
 }
 .favorite-modal-item {
@@ -110,7 +112,8 @@ export default {
   justify-content: space-between;
   position: relative;
 }
-.product-title, .price {
+.product-title,
+.price {
   @include media-breakpoint-up(xs) {
     margin-left: 82px;
   }

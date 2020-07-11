@@ -2,17 +2,19 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 // Views
 import Catalog from '@/views/Catalog.vue';
+import Login from '@/views/Login.vue';
+import Dashboard from '@/views/Dashboard.vue';
 // Pages
-import Home from '@/pages/Home.vue';
-import Product from '@/pages/Product.vue';
-import Promotion from '@/pages/Promotion.vue';
-import ProductInfo from '@/pages/ProductInfo.vue';
-import ShoppingCart from '@/pages/ShoppingCart.vue';
-import Checkout from '@/pages/Checkout.vue';
-// Components
-import OrderForm from '@/components/catalog/OrderForm.vue';
-import Payment from '@/components/catalog/Payment.vue';
-import PaymentStatus from '@/components/catalog/PaymentStatus.vue';
+import Home from '@/pages/Catalog/Home.vue';
+import Products from '@/pages/Catalog/Products.vue';
+import Promotion from '@/pages/Catalog/Promotion.vue';
+import ProductInfo from '@/pages/Catalog/ProductInfo.vue';
+import ShoppingCart from '@/pages/Catalog/ShoppingCart.vue';
+import Checkout from '@/pages/Catalog/Checkout.vue';
+import OrderForm from '@/pages/Catalog/OrderForm.vue';
+import Payment from '@/pages/Catalog/Payment.vue';
+import PaymentStatus from '@/pages/Catalog/PaymentStatus.vue';
+import DashboardProducts from '@/pages/Dashboard/Products.vue';
 
 Vue.use(VueRouter);
 
@@ -35,9 +37,9 @@ const routes = [
         component: Home,
       },
       {
-        path: 'product',
-        name: 'Product',
-        component: Product,
+        path: 'products',
+        name: 'Products',
+        component: Products,
       },
       {
         path: 'product-info',
@@ -79,14 +81,24 @@ const routes = [
       },
     ],
   },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-  // },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
+  {
+    path: '/dashboard',
+    redirect: '/dashboard/products',
+    name: 'Dashboard',
+    component: Dashboard,
+    children: [
+      {
+        path: 'products',
+        name: 'DashboardProducts',
+        component: DashboardProducts,
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({

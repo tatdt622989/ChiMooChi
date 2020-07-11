@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import Breadcrumb from '@/components/catalog/Breadcrumb.vue';
-import Counter from '@/components/catalog/Counter.vue';
+import Breadcrumb from '@/components/Catalog/Breadcrumb.vue';
+import Counter from '@/components/Catalog/Counter.vue';
 
 export default {
   name: 'ProductInfo',

@@ -8,8 +8,10 @@
 
 .btn-square {
   border-width: 1px;
+  cursor: pointer;
   padding: 9px;
   transition: $transition-base;
+  user-select: none;
 }
 
 // color & hover
