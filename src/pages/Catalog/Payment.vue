@@ -1,10 +1,10 @@
 <template>
-  <div class="row w-100-pct mb-lg-90 mb-md-60 mb-45">
+  <div class="row w-100 mb-lg-90 mb-md-60 mb-45">
     <div
       class="payment-wrap col-12 col-md-10 col-lg-8 d-flex flex-wrap justify-content-center
       offset-md-1 offset-lg-2 p-md-24 p-16"
     >
-      <h1 class="f-lg-30 f-24 mt-8 mb-32 w-100-pct">確認付款</h1>
+      <h1 class="f-lg-30 f-24 mt-8 mb-32 w-100">確認付款</h1>
       <ShoppingCartListTable />
       <table class="orderer-info-table table table-white f-14 f-md-16">
         <tbody>

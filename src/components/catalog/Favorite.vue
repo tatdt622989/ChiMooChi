@@ -9,26 +9,27 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="favorite-modal-item flex-wrap">
-            <a href="#" class="favorite-modal-img-link">
-              <img src alt />
-            </a>
-            <p class="product-title text-overflow mb-8 mb-sm-0">雙噴多功能氣墊椅雙噴多功能氣墊椅</p>
-            <Counter class="ml-0 ml-sm-96 ml-md-0 mt-0 mt-sm-16 mt-md-0" />
-            <p class="price font-weight-bold">
-              $
-              <span>2000</span>
-            </p>
-            <div class="btn-group mt-0 mt-sm-16 mt-md-0">
-              <button class="btn-square btn-outline-secondary mr-12">
-                <span class="material-icons">shopping_cart</span>
-              </button>
-              <button class="btn-square btn-outline-danger">
-                <span class="material-icons">delete</span>
-              </button>
-            </div>
-          </div>
-          <hr class="my-12 my-sm-16" />
+          <ul class=" border-bottom border-light m-0 p-0">
+            <li class="favorite-modal-item flex-wrap">
+              <a href="#" class="favorite-modal-img-link">
+                <img src alt />
+              </a>
+              <p class="product-title text-overflow mb-8 mb-sm-0">雙噴多功能氣墊椅雙噴多功能氣墊椅</p>
+              <Counter class="ml-0 ml-sm-96 ml-md-0 mt-0 mt-sm-16 mt-md-0" />
+              <p class="price font-weight-bold">
+                $
+                <span>2000</span>
+              </p>
+              <div class="btn-group mt-0 mt-sm-16 mt-md-0">
+                <button class="btn-square btn-outline-secondary mr-12">
+                  <span class="material-icons">shopping_cart</span>
+                </button>
+                <button class="btn-square btn-outline-danger">
+                  <span class="material-icons">delete</span>
+                </button>
+              </div>
+            </li>
+          </ul>
           <div class="favorite-modal-empty">
             <p class="mb-3 fz-3">還沒有最愛的商品喔！</p>
             <a href class="btn btn-primary text-white">去逛逛</a>
@@ -90,22 +91,24 @@ export default {
   }
   .modal-body {
     @include media-breakpoint-up(xs) {
-      padding: 0 12px 12px 12px;
+      padding: 0 12px 0 12px;
     }
     @include media-breakpoint-up(sm) {
-      padding: 16px;
+      padding: 16px 16px 0 16px;
     }
   }
 }
 .favorite-modal-item {
   @include media-breakpoint-up(xs) {
     align-items: center;
+    margin-bottom: 12px;
   }
   @include media-breakpoint-up(sm) {
     align-items: flex-start;
   }
   @include media-breakpoint-up(md) {
     align-items: center;
+    margin-bottom: 16px;
   }
   display: flex;
   flex-wrap: nowrap;

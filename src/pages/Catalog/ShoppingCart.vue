@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div class="row mb-lg-90 mb-md-60 mb-45">
-      <h1 class="f-lg-30 f-24 mt-lg-30 mb-lg-45 mt-20 mb-30 w-100-pct">購物車清單</h1>
-      <div class="shopping-cart-list col-lg-8 col-md-7">
-        <div class="shopping-cart-list-item p-sm-16 p-12 mb-24">
+      <h1 class="f-lg-30 f-24 mt-lg-30 mb-lg-45 mt-20 mb-30 w-100">購物車清單</h1>
+      <ul class="shopping-cart-list col-lg-8 col-md-7 m-0">
+        <li class="shopping-cart-list-item p-sm-16 p-12 mb-24">
           <a href="" class="shopping-cart-list-item-img-link"></a>
           <h2 class="shopping-cart-list-item-title f-16 m-sm-0
           text-overflow text-left">尊爵日式雙人沙發尊爵日式雙人沙發</h2>
@@ -15,27 +15,27 @@
           mt-sm-16 mt-lg-0">
             <span class="material-icons">delete</span>
           </button>
-        </div>
-      </div>
+        </li>
+      </ul>
       <div class=" col-lg-4 col-md-5 total text-left">
         <div class="align-items-center p-md-16 p-sm-32 p-24 d-flex flex-wrap">
           <p class="flex-grow-1">商品共計</p>
           <p class="flex-grow-1 font-weight-bold text-right">$1000</p>
-          <p class="w-100-pct mb-12 mt-20">配送方式<span class="text-danger">*</span></p>
+          <p class="w-100 mb-12 mt-20">配送方式<span class="text-danger">*</span></p>
           <button class="btn btn-outline-secondary mr-16 home-delivery-btn active px-16">宅配</button>
           <button class="btn btn-outline-secondary cash-on-delivery-btn px-16">貨到付款</button>
-          <p class="mt-20 w-75-pct">運費</p>
-          <p class="mt-20 font-weight-bold text-right w-25-pct">$60</p>
+          <p class="mt-20 w-75">運費</p>
+          <p class="mt-20 font-weight-bold text-right w-25">$60</p>
           <div class="total-coupon mt-20">
             <input class="total-coupon-input mr-16" type="text" placeholder="請輸入優惠券序號">
             <button class="btn btn-secondary flex-shrink-0
             total-coupon-apply-btn">套用</button>
           </div>
-          <p class="mt-20 w-75-pct">優惠券折抵</p>
-          <p class="mt-20 font-weight-bold text-right w-25-pct">-$60</p>
-          <p class="mt-20 w-75-pct">合計</p>
-          <p class="f-24 font-weight-bold mt-20 text-danger text-right w-25-pct">$1234</p>
-          <router-link class="btn btn-primary mt-20 w-100-pct"
+          <p class="mt-20 w-75">優惠券折抵</p>
+          <p class="mt-20 font-weight-bold text-right w-25">-$60</p>
+          <p class="mt-20 w-75">合計</p>
+          <p class="f-24 font-weight-bold mt-20 text-danger text-right w-25">$1234</p>
+          <router-link class="btn btn-primary mt-20 w-100"
           to="/checkout/order-form">結帳去</router-link>
         </div>
       </div>

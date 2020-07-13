@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify-content-center flex-column w-100-pct mt-lg-36 mt-md-20 mt-0">
+  <div class="row justify-content-center flex-column w-100 mt-lg-36 mt-md-20 mt-0">
     <img src="@/assets/images/payment-successful.svg">
     <h1 class="font-weight-bold f-28 f-md-30 mt-20 mt-md-24">付款成功</h1>
     <h2 class="f-16 f-md-20">感謝您的購買！<br>商品將於2-7天內送達</h2>

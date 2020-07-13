@@ -71,6 +71,7 @@ export default {
   },
   data() {
     return {
+      // 靜態資源位址
       publicPath: process.env.BASE_URL,
       // 由左上角開始s型排列
       correctImgNameOrder: [

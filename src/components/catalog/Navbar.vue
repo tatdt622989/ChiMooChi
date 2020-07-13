@@ -57,7 +57,7 @@
       </div>
       <ul class="navbar-member navbar-nav">
         <li class="navbar-member-item">
-          <router-link to="login" class="navbar-member-link btn-square">
+          <router-link to="/login" class="navbar-member-link btn-square">
             <span class="material-icons lh-1">account_circle</span>
           </router-link>
         </li>

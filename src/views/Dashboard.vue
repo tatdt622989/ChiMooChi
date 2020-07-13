@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid d-flex p-0">
     <Sidebar />
     <router-view />
   </div>

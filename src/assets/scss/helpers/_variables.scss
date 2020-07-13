@@ -173,10 +173,10 @@ $sizes: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
 $sizes: map-merge(
   (
-    "25-pct": 25%,
-    "50-pct": 50%,
-    "75-pct": 75%,
-    "100-pct": 100%,
+    "25": 25%,
+    "50": 50%,
+    "75": 75%,
+    "100": 100%,
     auto: auto
   ),
   $sizes
@@ -1185,34 +1185,27 @@ $nav-close-btn-hover-color:         $primary;
 // Member Nav
 $navbar-member-btn-hover:           $primary;
 $navbar-member-color:               $secondary;
-
 // Featured-list
 $featured-list-1-bg-color:          transparentize($primary, 0.15);
 $featured-list-1-bg-img:            url('~@/assets/images/featured-banner-01.jpg');
 $featured-list-2-bg-color:          transparentize($gray-500, 0.15);
 $featured-list-2-bg-img:            url('~@/assets/images/featured-banner-02.jpg');
-
 // Featured banner
 $featured-banner-color:             $white;
 $featured-banner-link-hover:        $primary;
-
 // Newsletter
 $newsletter-color:                  $white;
 $newsletter-bg-img:                 linear-gradient(transparentize($gray-600, 0.4), transparentize($gray-600, 0.4)), url('~@/assets/images/newsletter.png');
-
 // Footer
 $footer-about-bg-color:             $gray-600;
 $footer-btn-color:                  $white;
 $footer-btn-bg-color:               $gray-600;
 $footer-color:                      $white;
 $footer-declaration-bg-color:       $primary;
-
 // Img link
 $img-link-bg-color:                 $light;
-
 // Shopping cart
 $shopping-cart-bg-color:            $gray-300;
-
 // Checkout flowchart
 $flowchart-status-bg-color:         $light;
 $flowchart-status-active-bg-color:  $primary;
@@ -1222,3 +1215,8 @@ $order-form-bg-color:               $gray-300;
 // Payment
 $payment-bg-color:                  $gray-300;
 $payment-broder-color:              $gray-300;
+
+//Dashboard
+//Sidebar
+$sidebar-bg-color:                  $secondary;
+$sidebar-link-color:                $white;

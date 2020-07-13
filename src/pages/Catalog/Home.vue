@@ -30,7 +30,7 @@
     </div>
     <div class="thin-banner">
       <router-link to="promotion"
-      class="thin-banner-link d-block d-sm-none h-100-pct w-100-pct"></router-link>
+      class="thin-banner-link d-block d-sm-none h-100 w-100"></router-link>
       <router-link to="promotion"
       class="btn btn-quaternary mr-lg-28 mr-md-20 mr-sm-16 d-none d-sm-block"
       >立即領取</router-link>
@@ -197,8 +197,8 @@
       </div>
     </div>
     <div class="newsletter">
-      <h2 class="f-24 f-lg-30 f-xl-36 mb-12 w-100-pct">訂閱電子報</h2>
-      <h3 class="f-16 f-lg-20 f-xl-24 mb-20 w-100-pct">立即訂閱「奇木奇奇」，一手掌握所有好康優惠！</h3>
+      <h2 class="f-24 f-lg-30 f-xl-36 mb-12 w-100">訂閱電子報</h2>
+      <h3 class="f-16 f-lg-20 f-xl-24 mb-20 w-100">立即訂閱「奇木奇奇」，一手掌握所有好康優惠！</h3>
       <input type="text" placeholder="請輸入您的電子郵件" class="newsletter-input"/>
       <button value="訂閱" class="btn btn-primary mb-12">訂閱</button>
     </div>

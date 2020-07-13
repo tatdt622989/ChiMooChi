@@ -61,7 +61,7 @@ export default {
 <style lang="scss">
 .toast-list {
   color: $white;
-  position: absolute;
+  position: fixed;
   right: 16px;
   top: 16px;
   z-index: $zindex-toast;

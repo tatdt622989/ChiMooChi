@@ -10,16 +10,16 @@
       <div class="login-panel-body">
           <h1 class="f-30 f-md-36 mb-28 text-left">歡迎來到奇木奇！</h1>
           <form class="d-flex flex-wrap" @submit.prevent="signIn">
-            <label class="text-left w-100-pct" for="username">會員帳號</label>
+            <label class="text-left w-100" for="username">會員帳號</label>
             <input class="login-input" type="text" id="username" autocomplete="username" />
-            <label class="text-left w-100-pct" for="current-password">會員密碼</label>
+            <label class="text-left w-100" for="current-password">會員密碼</label>
             <input
               class="login-input"
               type="text"
               id="current-password"
               autocomplete="current-password"
             />
-            <button class="btn btn-primary mt-28 w-100-pct">登入</button>
+            <button class="btn btn-primary mt-28 w-100">登入</button>
           </form>
         </div>
     </div>
@@ -64,17 +64,17 @@ export default {
 }
 .login-input {
   @include media-breakpoint-up(xs) {
-    border: 1px solid white;
-    color: $white;
+    border: 0;
+    color: $secondary;
   }
   @include media-breakpoint-up(lg) {
     border: 1px solid $secondary;
-    color: $secondary;
   }
-  background-color: rgba(0, 0, 0, 0);
+  background-color: white;
   height: 44px;
   margin-top: 16px;
   margin-bottom: 16px;
+  text-indent: 12px;
   width: 100%;
 }
 .login-panel {

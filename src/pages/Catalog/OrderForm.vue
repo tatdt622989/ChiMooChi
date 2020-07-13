@@ -1,8 +1,8 @@
 <template>
-  <div class="row w-100-pct mb-lg-90 mb-md-60 mb-45">
+  <div class="row w-100 mb-lg-90 mb-md-60 mb-45">
     <div class="order-form-wrap col-12 col-md-10 col-lg-8 d-flex flex-wrap justify-content-center
     offset-lg-2 offset-md-1 p-md-24 p-16">
-      <h1 class="f-lg-30 f-24 mt-8 mb-32 w-100-pct">訂單資料</h1>
+      <h1 class="f-lg-30 f-24 mt-8 mb-32 w-100">訂單資料</h1>
       <button
         class="order-form-cart-list-btn btn btn-outline-secondary
         d-flex justify-content-center f-16 mb-16"
@@ -12,12 +12,12 @@
         購物車清單
         <span class="material-icons">arrow_drop_down</span>
       </button>
-      <div class="collapse w-100-pct" id="order-form-table">
+      <div class="collapse w-100" id="order-form-table">
         <ShoppingCartListTable />
       </div>
       <form class="order-form">
         <div class="order-form-group form-group">
-          <label for="user-name" class="w-100-pct text-left">姓名</label>
+          <label for="user-name" class="w-100 text-left">姓名</label>
           <input
             type="text"
             class="order-form-input"
