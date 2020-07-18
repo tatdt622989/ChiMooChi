@@ -1,0 +1,21 @@
+.fullscreen-bg {
+  @include media-breakpoint-up(xs) {
+    display: block;
+  }
+  @include media-breakpoint-up(lg) {
+    display: none;
+  }
+  background-color: rgba(0, 0, 0, 0.6);
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: $zindex-navbar-bg;
+}
+.bg-fade-enter-active, .bg-fade-leave-active{
+  transition: $transition-fade;
+}
+.bg-fade-enter, .bg-fade-leave-to {
+  opacity: 0;
+}

@@ -6,8 +6,8 @@
     <h3 class="f-16 mt-12 mt-md-16">訂單編號</h3>
     <div class="d-flex justify-content-center">
       <div class="order-num-group">
-        <input type="text" value="ABCD12345678" class="order-num-input border-0" disabled>
-        <button class="order-num-btn btn-square border-0">
+        <input type="text" v-model="orderNum" class="order-num-input border-0" readonly>
+        <button class="order-num-btn btn-square border-0" @click="copyOrderNum">
           <span class="material-icons">content_copy</span>
         </button>
       </div>
@@ -15,8 +15,35 @@
     <div class="d-flex justify-content-center mb-lg-90 mb-md-60 mb-45">
       <router-link class="btn btn-primary" to="/product">繼續選購</router-link>
     </div>
+    <Toast />
   </div>
 </template>
+
+<script>
+import $ from 'jquery';
+import Toast from '@/components/Toast.vue';
+import copyText from '@/copy.js';
+
+export default {
+  name: 'PaymentStatus',
+  data() {
+    return {
+      orderNum: 'ABCD12345678',
+    };
+  },
+  components: {
+    Toast,
+  },
+  methods: {
+    copyOrderNum() {
+      const vm = this;
+      const input = $('.order-num-input')[0];
+      copyText(input);
+      vm.$bus.$emit('message:push', '成功', '訂單編號已經複製到剪貼簿', 'success');
+    },
+  },
+};
+</script>
 
 <style lang="scss">
 .order-num-group {
@@ -29,6 +56,7 @@
 }
 .order-num-input {
   background-color: #fff;
+  color: $secondary;
   height: 42px;
   width: 140px;
 }

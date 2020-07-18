@@ -5,6 +5,7 @@ import Catalog from '@/views/Catalog.vue';
 import Login from '@/views/Login.vue';
 import Dashboard from '@/views/Dashboard.vue';
 // Pages
+// Catalog
 import Home from '@/pages/Catalog/Home.vue';
 import Products from '@/pages/Catalog/Products.vue';
 import Promotion from '@/pages/Catalog/Promotion.vue';
@@ -14,7 +15,10 @@ import Checkout from '@/pages/Catalog/Checkout.vue';
 import OrderForm from '@/pages/Catalog/OrderForm.vue';
 import Payment from '@/pages/Catalog/Payment.vue';
 import PaymentStatus from '@/pages/Catalog/PaymentStatus.vue';
+// Dashboard
 import DashboardProducts from '@/pages/Dashboard/Products.vue';
+import Orders from '@/pages/Dashboard/Orders.vue';
+import Coupons from '@/pages/Dashboard/Coupons.vue';
 
 Vue.use(VueRouter);
 
@@ -96,6 +100,16 @@ const routes = [
         path: 'products',
         name: 'DashboardProducts',
         component: DashboardProducts,
+      },
+      {
+        path: 'orders',
+        name: 'Orders',
+        component: Orders,
+      },
+      {
+        path: 'coupons',
+        name: 'Coupons',
+        component: Coupons,
       },
     ],
   },

@@ -1,40 +1,95 @@
 <template>
-  <div class="sidebar">
-      <img class="my-32 ml-24" src="@/assets/images/white-logo.svg">
+  <div>
+    <div class="sidebar" :class="{'show' : isShow}">
+      <button class="sidebar-close-btn btn-square btn-secondary"
+      @click="closeSidebarRequest">
+        <span class="material-icons">close</span>
+      </button>
+      <img class="my-24 my-md-32 mr-16 mx-lg-24" src="@/assets/images/white-logo.svg">
       <ul class="sidebar-list">
         <li class="sidebar-item">
-          <router-link to="" class="sidebar-link btn btn-secondary">
-            <span class="material-icons mr-8">local_mall</span>
+          <router-link to="/dashboard/products" class="sidebar-link btn btn-secondary"
+          active-class="active">
+            <span class="material-icons">local_mall</span>
             商品管理</router-link></li>
         <li class="sidebar-item">
-          <router-link to="" class="sidebar-link btn btn-secondary">
-            <span class="material-icons mr-8">receipt</span>
+          <router-link to="/dashboard/orders" class="sidebar-link btn btn-secondary"
+          active-class="active">
+            <span class="material-icons">receipt</span>
             訂單管理</router-link></li>
         <li class="sidebar-item">
-          <router-link to="" class="sidebar-link btn btn-secondary">
-            <img class="sidebar-icon mr-8" src="@/assets/images/coupon.svg">
+          <router-link to="/dashboard/coupons" class="sidebar-link btn btn-secondary"
+          active-class="active">
+            <img class="sidebar-icon" src="@/assets/images/coupon.svg">
             優惠券管理</router-link></li>
       </ul>
-    <button class="logout-btn align-self-end btn btn-secondary w-100" @click="signout">
-      <span class="material-icons mr-8">keyboard_backspace</span>
-      登出</button>
+      <button class="logout-btn align-self-end btn btn-secondary w-100" @click="signout">
+        <span class="material-icons">keyboard_backspace</span>
+        登出
+      </button>
+    </div>
+    <transition name="bg-fade">
+      <div v-if="isShow === true" class="fullscreen-bg"
+      @click="closeSidebarRequest">
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import $ from 'jquery';
+
 export default {
   name: 'Sidebar',
+  props: ['isShow'],
+  data() {
+    return {
+    };
+  },
   methods: {
     signout() {
       const vm = this;
       vm.$router.push('/');
     },
+    closeSidebarRequest() {
+      this.$emit('close-sidebar-request');
+    },
+  },
+  created() {
+    const vm = this;
+    // 視窗大小改變，關閉導覽列
+    $(window).resize(() => {
+      vm.$emit('close-sidebar-request');
+      $('body').css('overflow', '');
+    });
+  },
+  destroyed() {
+    // 導覽列移除後，將resize事件也移除
+    $(window).off('resize');
   },
 };
 </script>
 
 <style lang="scss">
 .sidebar {
+  @include media-breakpoint-up(xs) {
+    box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.4);
+    left: -226px;
+    position: absolute;
+    top: 0;
+    width: 220px;
+  }
+  @include media-breakpoint-up(lg) {
+    box-shadow: none;
+    left: auto;
+    position: relative;
+    top: auto;
+    width: 180px;
+  }
+  &.show {
+    left: 0;
+  }
+  align-items: flex-start;
   align-content: flex-start;
   background-color: $sidebar-bg-color;
   display: flex;
@@ -42,10 +97,20 @@ export default {
   flex-wrap: wrap;
   height: 100vh;
   justify-content: flex-start;
-  position: relative;
-  width: 180px;
+  transition: $transition-base;
+  z-index: 1000;
 }
 .sidebar-link {
+  &.btn-secondary:not(:disabled):not(.disabled).active {
+    &:active {
+      background-color: $dark;
+    }
+    &:focus {
+      box-shadow: none;
+    }
+    background-color: $dark;
+    border: 1px solid $dark;
+  }
   align-items: center;
   color: $sidebar-link-color;
   display: flex;
@@ -55,7 +120,13 @@ export default {
   width: 100%;
 }
 .sidebar-list {
-  .material-icons {
+  .material-icons,.sidebar-icon {
+    @include media-breakpoint-up(xs) {
+      margin-right: 26px;
+    }
+    @include media-breakpoint-up(lg) {
+      margin-right: 8px;
+    }
     color: white;
   }
   list-style: none;
@@ -66,11 +137,30 @@ export default {
   display: flex;
 }
 .logout-btn {
+  .material-icons,.sidebar-icon {
+    @include media-breakpoint-up(xs) {
+      margin-right: 26px;
+    }
+    @include media-breakpoint-up(lg) {
+      margin-right: 8px;
+    }
+  }
   bottom: 0;
   display: flex;
   justify-content: flex-start;
   left: 0;
   padding-left: 24px;
   position: absolute;
+}
+.sidebar-close-btn {
+  @include media-breakpoint-up(xs) {
+    display: block;
+  }
+  @include media-breakpoint-up(lg) {
+    display: none;
+  }
+  margin-top: 32px;
+  margin-left: 14px;
+  margin-right: 14px;
 }
 </style>

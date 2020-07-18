@@ -2,7 +2,7 @@
   <div class="toast-list">
     <div class="toast" :class="obj.status" role="alert" aria-live="assertive" aria-atomic="true"
     v-for="(obj, index) in messages" :key="index">
-      <div class="toast-header">
+      <div class="toast-header pb-0">
         <strong class="mr-auto">{{ obj.title }}</strong>
         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"
         @click="removeToast(index)">

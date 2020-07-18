@@ -6,7 +6,7 @@
           class="navbar-toggler"
           type="button"
           aria-label="Toggle navigation"
-          @click="toggleNav"
+          @click="navbarToggler"
         >
           <span class="material-icons">menu</span>
         </button>
@@ -15,8 +15,8 @@
         </router-link>
       </div>
       <div class="navbar-primary"
-          :class="{active : navBarIsActive}">
-        <button class="close-navbar-btn" @click="toggleNav">
+          :class="{show : isShow}">
+        <button class="close-navbar-btn" @click="navbarToggler">
           <span class="material-icons">close</span>
         </button>
         <ul class="navbar-nav">
@@ -27,7 +27,7 @@
               href="#"
               tabindex="-1"
               active-class="active"
-              @click.native="navBarIsActive = false"
+              @click.native="closeNavbar"
             >
               首頁
               <span class="sr-only">(current)</span>
@@ -39,12 +39,12 @@
             class="nav-link p-0"
             href="#"
             active-class="active"
-            @click.native="navBarIsActive = false"
+            @click.native="closeNavbar"
             >本店商品</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/promotion" class="nav-link p-0"
-            active-class="active" @click.native="navBarIsActive = false"
+            active-class="active" @click.native="closeNavbar"
             >超值優惠</router-link>
           </li>
         </ul>
@@ -77,27 +77,50 @@
         </li>
       </ul>
     </div>
-    <div class="black-bg" :class="{active : navBarIsActive}" @click="toggleNav"></div>
+    <transition name="bg-fade">
+      <div v-if="isShow === true" class="fullscreen-bg"  @click="closeNavbar">
+      </div>
+    </transition>
   </nav>
 </template>
 
 <script>
+import $ from 'jquery';
+
 export default {
   name: 'Navbar',
   data() {
     return {
-      navBarIsActive: false,
+      isShow: false,
     };
   },
   methods: {
-    toggleNav() {
+    navbarToggler() {
       const vm = this;
-      if (vm.navBarIsActive) {
-        vm.navBarIsActive = false;
+      vm.isShow = !vm.isShow;
+      if (vm.isShow) {
+        $('body').css('overflow', 'hidden');
       } else {
-        vm.navBarIsActive = true;
+        $('body').css('overflow', '');
       }
     },
+    closeNavbar() {
+      const vm = this;
+      vm.isShow = false;
+      $('body').css('overflow', '');
+    },
+  },
+  created() {
+    const vm = this;
+    // 視窗大小改變，關閉導覽列
+    $(window).resize(() => {
+      vm.isShow = false;
+      $('body').css('overflow', '');
+    });
+  },
+  destroyed() {
+    // 導覽列移除後，將resize事件也移除
+    $(window).off('resize');
   },
 };
 </script>
@@ -120,7 +143,7 @@ export default {
   padding: 0 15px 0 15px;
 }
 
-.navbar-primary.active {
+.navbar-primary.show {
   left: 0;
 }
 .navbar-brand {
@@ -350,27 +373,5 @@ export default {
   right: 0;
   top: 4px;
   width: 17px;
-}
-.black-bg {
-  background-color: rgba(0, 0, 0, 0.6);
-  height: 100vh;
-  left: 0;
-  opacity: 0;
-  position: fixed;
-  pointer-events: none;
-  transition: $transition-fade;
-  top: 0;
-  width: 100%;
-  z-index: $zindex-navbar-bg;
-}
-.black-bg.active {
-  @include media-breakpoint-up(xs) {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  @include media-breakpoint-up(lg) {
-    opacity: 0;
-    pointer-events: none;
-  }
 }
 </style>
