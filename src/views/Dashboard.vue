@@ -56,6 +56,68 @@ export default {
   @include media-breakpoint-up(md) {
     padding: 0 30px;
   }
+  .table {
+    @include media-breakpoint-up(xs) {
+      th {
+        padding: 12px 4px;
+      }
+      td {
+        padding: 12px 4px;
+      }
+      font-size: 14px;
+    }
+    @include media-breakpoint-up(sm) {
+      th {
+        padding: 12px 8px;
+      }
+      td {
+        padding: 12px 8px;
+      }
+    }
+    @include media-breakpoint-up(md) {
+      th {
+        padding: 12px 12px;
+      }
+      td {
+        padding: 18px 12px;
+      }
+      font-size: 16px;
+    }
+    th {
+      border-bottom: 0;
+      white-space: normal;
+    }
+    td {
+      vertical-align: middle;
+      word-break: break-word;
+    }
+    .nowrap {
+      @include media-breakpoint-up(xs) {
+        width: 76px;
+      }
+      @include media-breakpoint-up(sm) {
+        width: 104px;
+      }
+      @include media-breakpoint-up(md) {
+        width: 112px;
+      }
+      @include media-breakpoint-up(lg) {
+        width: 120px;
+      }
+    }
+    table-layout: fixed;
+    min-width: 290px;
+  }
+  .form-group {
+    width: 100%;
+  }
+  .modal-header {
+    .close {
+      color: $dark;
+      opacity: 1;
+      transition: $transition-fade;
+    }
+  }
   display: flex;
   flex-direction: column;
   flex-grow: 1;

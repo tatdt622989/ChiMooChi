@@ -60,16 +60,19 @@ export default {
 
 <style lang="scss">
 .toast-list {
+  .toast {
+  &.success {
+    background-color: $success;
+  }
+  &.danger {
+    background-color: $danger;
+  }
+  opacity: 1;
+  }
   color: $white;
   position: fixed;
   right: 16px;
   top: 16px;
   z-index: $zindex-toast;
 }
-  .toast {
-    &.success {
-      background-color: $success;
-    }
-    opacity: 1;
-  }
 </style>

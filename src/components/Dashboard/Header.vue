@@ -6,7 +6,7 @@
     </button>
     <h1 class="dashboard-header-title f-lg-30 f-24 my-24 ml-0 ml-lg-0">{{ headerText }}管理</h1>
     <button class="btn-square btn-primary d-block d-lg-none" data-toggle="modal"
-      data-target="#dashboardProductsModal">
+      :data-target="targetModal" v-if="targetModal">
       <span class="material-icons">add</span>
     </button>
     <form class="search-form form-inline">
@@ -18,7 +18,8 @@
     <button
       class="btn btn-primary d-none d-lg-block order-2"
       data-toggle="modal"
-      data-target="#dashboardProductsModal"
+      :data-target="targetModal"
+      v-if="targetModal"
     >建立{{ headerText }}</button>
   </div>
 </template>
@@ -29,24 +30,27 @@ export default {
   data() {
     return {
       headerText: '商品',
+      targetModal: '#dashboardProductsModal',
     };
   },
   methods: {
     openSidebarRequest() {
       this.$emit('open-sidebar-request');
     },
-    changeText(path) {
-      console.log(path);
+    updateHeader(path) {
       const vm = this;
       switch (path) {
         case '/dashboard/products':
           vm.headerText = '商品';
+          vm.targetModal = '#dashboardProductsModal';
           break;
         case '/dashboard/orders':
           vm.headerText = '訂單';
+          vm.targetModal = false;
           break;
         case '/dashboard/coupons':
           vm.headerText = '優惠券';
+          vm.targetModal = '#dashboardCouponModal';
           break;
         default:
           break;
@@ -55,11 +59,11 @@ export default {
   },
   created() {
     const { path } = this.$route;
-    this.changeText(path);
+    this.updateHeader(path);
   },
   watch: {
     $route(to) {
-      this.changeText(to.path);
+      this.updateHeader(to.path);
     },
   },
 };

@@ -536,7 +536,7 @@ $form-check-inline-margin-x:            .75rem !default;
 $form-check-inline-input-margin-x:      .3125rem !default;
 
 $form-grid-gutter-width:                10px !default;
-$form-group-margin-bottom:              1rem !default;
+$form-group-margin-bottom:              0rem !default;
 
 $input-group-addon-color:               $input-color !default;
 $input-group-addon-bg:                  $gray-200 !default;
@@ -1103,7 +1103,7 @@ $carousel-control-transition:        opacity .15s ease !default;
 
 $carousel-indicator-width:           12px !default;
 $carousel-indicator-height:          12px !default;
-$carousel-indicator-hit-area-height: 10px !default;
+$carousel-indicator-hit-area-height: 1px !default;
 $carousel-indicator-spacer:          7px !default;
 $carousel-indicator-active-bg:       $primary !default;
 $carousel-indicator-bg:              $white !default;

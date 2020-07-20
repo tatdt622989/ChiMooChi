@@ -1,23 +1,23 @@
 <template>
   <div>
-    <div class="sidebar" :class="{'show' : isShow}">
-      <button class="sidebar-close-btn btn-square btn-secondary"
+    <div class="sidebar" :class="{'show' : isShow}" :style="{ height: windowHeight}">
+      <button class="sidebar-close-btn my-24 my-md-32 btn-square btn-secondary"
       @click="closeSidebarRequest">
         <span class="material-icons">close</span>
       </button>
       <img class="my-24 my-md-32 mr-16 mx-lg-24" src="@/assets/images/white-logo.svg">
       <ul class="sidebar-list">
-        <li class="sidebar-item">
+        <li class="sidebar-item" @click="closeSidebarRequest">
           <router-link to="/dashboard/products" class="sidebar-link btn btn-secondary"
           active-class="active">
             <span class="material-icons">local_mall</span>
             商品管理</router-link></li>
-        <li class="sidebar-item">
+        <li class="sidebar-item" @click="closeSidebarRequest">
           <router-link to="/dashboard/orders" class="sidebar-link btn btn-secondary"
           active-class="active">
             <span class="material-icons">receipt</span>
             訂單管理</router-link></li>
-        <li class="sidebar-item">
+        <li class="sidebar-item" @click="closeSidebarRequest">
           <router-link to="/dashboard/coupons" class="sidebar-link btn btn-secondary"
           active-class="active">
             <img class="sidebar-icon" src="@/assets/images/coupon.svg">
@@ -44,12 +44,19 @@ export default {
   props: ['isShow'],
   data() {
     return {
+      windowHeight: `${window.innerHeight}px`,
     };
   },
   methods: {
     signout() {
+      const api = `${process.env.VUE_APP_APIPATH}/logout`;
       const vm = this;
-      vm.$router.push('/');
+      this.$http.post(api).then((response) => {
+        if (response.data.success) {
+          vm.$router.push('/');
+        }
+      });
+      vm.closeSidebarRequest();
     },
     closeSidebarRequest() {
       this.$emit('close-sidebar-request');
@@ -61,6 +68,7 @@ export default {
     $(window).resize(() => {
       vm.$emit('close-sidebar-request');
       $('body').css('overflow', '');
+      vm.windowHeight = `${window.innerHeight}px`;
     });
   },
   destroyed() {
@@ -95,29 +103,10 @@ export default {
   display: flex;
   flex-shrink: 0;
   flex-wrap: wrap;
-  height: 100vh;
+  height: 100%;
   justify-content: flex-start;
   transition: $transition-base;
   z-index: 1000;
-}
-.sidebar-link {
-  &.btn-secondary:not(:disabled):not(.disabled).active {
-    &:active {
-      background-color: $dark;
-    }
-    &:focus {
-      box-shadow: none;
-    }
-    background-color: $dark;
-    border: 1px solid $dark;
-  }
-  align-items: center;
-  color: $sidebar-link-color;
-  display: flex;
-  padding-left: 24px;
-  padding-right: 0;
-  text-align: left;
-  width: 100%;
 }
 .sidebar-list {
   .material-icons,.sidebar-icon {
@@ -133,6 +122,23 @@ export default {
   padding: 0;
   width: 100%;
 }
+.sidebar-link {
+  &.btn-secondary:not(:disabled):not(.disabled).active {
+    &:active {
+      background-color: $dark;
+    }
+    &:focus {
+      box-shadow: none;
+    }
+    background-color: $dark;
+    border: 1px solid $dark;
+  }
+  align-items: center;
+  color: $sidebar-link-color;
+  display: flex;
+  text-align: left;
+  width: 100%;
+}
 .sidebar-item {
   display: flex;
 }
@@ -145,7 +151,7 @@ export default {
       margin-right: 8px;
     }
   }
-  bottom: 0;
+  bottom: 16px;
   display: flex;
   justify-content: flex-start;
   left: 0;

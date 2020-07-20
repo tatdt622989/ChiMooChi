@@ -1,14 +1,14 @@
 <template>
   <div class="dashboard-products w-100">
     <table class="table mt-24">
-      <thead class="thead-light">
+      <thead>
         <tr>
           <th class="responsive">類別</th>
-          <th>產品名稱</th>
+          <th>名稱</th>
           <th class="responsive">原價</th>
           <th>售價</th>
-          <th>啟用狀態</th>
-          <th>編輯</th>
+          <th class="nowrap">啟用狀態</th>
+          <th class="nowrap">詳情</th>
         </tr>
       </thead>
       <tbody>
@@ -19,19 +19,20 @@
           <td class="font-weight-bold text-danger">1799</td>
           <td class="font-weight-bold text-primary">啟用中</td>
           <td>
-            <button class="btn-square btn-outline-secondary">
-              <span class="material-icons">edit</span>
+            <button class="btn-square btn-outline-secondary" data-toggle="modal"
+            data-target="#dashboardProductsModal">
+              <span class="material-icons">more_horiz</span>
             </button>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="dashboard-poducts-modal modal fade" id="dashboardProductsModal"
-    tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    tabindex="-1" role="dialog" aria-labelledby="dashboardProductsModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">商品建立</h5>
+            <h5 class="modal-title" id="dashboardProductsModalLabel">商品建立</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -60,24 +61,38 @@
               </div>
             </div>
             <div class="col-12 col-md-6 pr-0 pt-20 pt-md-0">
-              <label for="name">名稱</label>
-              <input class="form-control w-100" type="text" id="name">
-              <div class="modal-input-sm w-50">
-                <label for="category">類別</label>
-                <input class="form-control" type="text" id="category">
-                <label for="originPrice">原價</label>
-                <input class="form-control" type="text" id="originPrice">
+              <div class="form-group">
+                <label for="name">名稱</label>
+                <input class="form-control w-100" type="text" id="name">
               </div>
               <div class="modal-input-sm w-50">
-                <label for="product" id="unit">單位</label>
-                <input class="form-control" type="text" id="unit">
-                <label for="price">售價</label>
-                <input class="form-control" type="text" id="price">
+                <div class="form-group">
+                  <label for="category">類別</label>
+                  <input class="form-control" type="text" id="category">
+                </div>
+                <div class="form-group">
+                  <label for="originPrice">原價</label>
+                  <input class="form-control" type="text" id="originPrice">
+                </div>
               </div>
-              <label class="mt-8" for="description">描述</label>
-              <textarea class="form-control" id="description" cols="30" rows="10"></textarea>
-              <label class="mt-8" for="note">備註</label>
-              <textarea class="form-control" id="note" cols="30" rows="10"></textarea>
+              <div class="modal-input-sm w-50">
+                <div class="form-group">
+                  <label for="product" id="unit">單位</label>
+                  <input class="form-control" type="text" id="unit">
+                </div>
+                <div class="form-group">
+                  <label for="price">售價</label>
+                  <input class="form-control" type="text" id="price">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="mt-8" for="description">描述</label>
+                <textarea class="form-control" id="description" cols="30" rows="10"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="mt-8" for="note">備註</label>
+                <textarea class="form-control" id="note" cols="30" rows="10"></textarea>
+              </div>
             </div>
           </div>
           <div class="modal-footer p-20">
@@ -97,10 +112,18 @@ export default {
   data() {
     return {
       isClick: false,
+      isDetail: false,
       method: 'upload',
     };
   },
   methods: {
+  },
+  created() {
+    const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;
+    console.log(api);
+    this.$http.get(api).then((response) => {
+      console.log(response.data);
+    });
   },
 };
 </script>
@@ -111,36 +134,6 @@ export default {
     display: flex;
     justify-content: space-between;
     list-style: none;
-  }
-  .table {
-    @include media-breakpoint-up(xs) {
-      th {
-        padding: 12px 6px;
-      }
-      td {
-        padding: 12px 6px;
-      }
-      font-size: 14px;
-    }
-    @include media-breakpoint-up(md) {
-      th {
-        padding: 12px 24px;
-      }
-      td {
-        padding: 24px;
-      }
-      font-size: 16px;
-    }
-    th {
-      border-bottom: 0;
-      white-space: normal;
-    }
-    td {
-      vertical-align: middle;
-      white-space: normal;
-    }
-    table-layout: fixed;
-    min-width: 320px;
   }
 }
 .dashboard-poducts-modal {
@@ -161,12 +154,6 @@ export default {
   }
   .col-12.col-md-6 {
     .modal-input-sm {
-      &:nth-of-type(1) {
-        padding-right: 10px;
-      }
-      &:nth-of-type(2) {
-        padding-left: 10px;
-      }
       label {
         margin-top: 8px;
       }
@@ -174,6 +161,12 @@ export default {
       flex-direction: column;
       flex-wrap: nowrap;
       width: 50%;
+    }
+    >div:nth-child(2) {
+      padding-right: 10px;
+    }
+    >div:nth-child(3) {
+      padding-left: 10px;
     }
     textarea {
       height: 60px;

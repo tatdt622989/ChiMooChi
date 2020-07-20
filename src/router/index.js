@@ -17,8 +17,8 @@ import Payment from '@/pages/Catalog/Payment.vue';
 import PaymentStatus from '@/pages/Catalog/PaymentStatus.vue';
 // Dashboard
 import DashboardProducts from '@/pages/Dashboard/Products.vue';
-import Orders from '@/pages/Dashboard/Orders.vue';
-import Coupons from '@/pages/Dashboard/Coupons.vue';
+import DashboardOrders from '@/pages/Dashboard/Orders.vue';
+import DashboardCoupons from '@/pages/Dashboard/Coupons.vue';
 
 Vue.use(VueRouter);
 
@@ -95,21 +95,25 @@ const routes = [
     redirect: '/dashboard/products',
     name: 'Dashboard',
     component: Dashboard,
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'products',
         name: 'DashboardProducts',
         component: DashboardProducts,
+        meta: { requiresAuth: true },
       },
       {
         path: 'orders',
         name: 'Orders',
-        component: Orders,
+        component: DashboardOrders,
+        meta: { requiresAuth: true },
       },
       {
         path: 'coupons',
         name: 'Coupons',
-        component: Coupons,
+        component: DashboardCoupons,
+        meta: { requiresAuth: true },
       },
     ],
   },

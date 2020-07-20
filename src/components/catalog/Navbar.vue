@@ -3,7 +3,7 @@
     <div class="container">
       <div class="d-flex align-items-center">
         <button
-          class="navbar-toggler"
+          class="navbar-toggler border-0"
           type="button"
           aria-label="Toggle navigation"
           @click="navbarToggler"
@@ -55,7 +55,7 @@
           <input class="search-input" type="search" placeholder="搜尋" />
         </form>
       </div>
-      <ul class="navbar-member navbar-nav">
+      <ul class="navbar-member">
         <li class="navbar-member-item">
           <router-link to="/login" class="navbar-member-link btn-square">
             <span class="material-icons lh-1">account_circle</span>
@@ -170,7 +170,6 @@ export default {
     transition: $transition-base;
   }
   color: $gray-600;
-  border: 0;
 }
 .navbar-primary {
   @include media-breakpoint-up(xs) {
@@ -345,6 +344,8 @@ export default {
   align-items: center;
   display: flex;
   flex-direction: row;
+  list-style: none;
+  margin: 0;
   width: auto;
 }
 .navbar-member-item {

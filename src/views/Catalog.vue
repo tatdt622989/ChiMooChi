@@ -21,8 +21,6 @@ export default {
     Footer,
   },
   created() {
-    // eslint-disable-next-line no-console
-    console.log(process.env.VUE_APP_API);
   },
 };
 </script>

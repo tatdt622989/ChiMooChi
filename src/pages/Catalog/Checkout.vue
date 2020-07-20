@@ -32,7 +32,7 @@ export default {
     };
   },
   methods: {
-    changeClass(path) {
+    updateClass(path) {
       const vm = this;
       vm.isOrderForm = false;
       vm.isPayment = false;
@@ -54,11 +54,11 @@ export default {
   },
   created() {
     const { path } = this.$route;
-    this.changeClass(path);
+    this.updateClass(path);
   },
   watch: {
     $route(to) {
-      this.changeClass(to.path);
+      this.updateClass(to.path);
     },
   },
 };
