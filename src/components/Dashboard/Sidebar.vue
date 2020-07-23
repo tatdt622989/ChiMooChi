@@ -5,7 +5,9 @@
       @click="closeSidebarRequest">
         <span class="material-icons">close</span>
       </button>
-      <img class="my-24 my-md-32 mr-16 mx-lg-24" src="@/assets/images/white-logo.svg">
+      <router-link to="/">
+        <img class="my-24 my-md-32 mr-16 mx-lg-24" src="@/assets/images/white-logo.svg">
+      </router-link>
       <ul class="sidebar-list">
         <li class="sidebar-item" @click="closeSidebarRequest">
           <router-link to="/dashboard/products" class="sidebar-link btn btn-secondary"
@@ -72,6 +74,7 @@ export default {
     });
   },
   destroyed() {
+    $('body').css('overflow', '');
     // 導覽列移除後，將resize事件也移除
     $(window).off('resize');
   },
@@ -136,6 +139,7 @@ export default {
   align-items: center;
   color: $sidebar-link-color;
   display: flex;
+  padding-left: 24px;
   text-align: left;
   width: 100%;
 }

@@ -1188,15 +1188,15 @@ $navbar-member-btn-hover:           $primary;
 $navbar-member-color:               $secondary;
 // Featured-list
 $featured-list-1-bg-color:          transparentize($primary, 0.15);
-$featured-list-1-bg-img:            url('~@/assets/images/featured-banner-01.jpg');
+$featured-list-1-bg-img:            url('~@/assets/images/featured-banner-01.png');
 $featured-list-2-bg-color:          transparentize($gray-500, 0.15);
-$featured-list-2-bg-img:            url('~@/assets/images/featured-banner-02.jpg');
+$featured-list-2-bg-img:            url('~@/assets/images/featured-banner-02.png');
 // Featured banner
 $featured-banner-color:             $white;
 $featured-banner-link-hover:        $primary;
 // Newsletter
 $newsletter-color:                  $white;
-$newsletter-bg-img:                 linear-gradient(transparentize($gray-600, 0.4), transparentize($gray-600, 0.4)), url('~@/assets/images/newsletter.png');
+$newsletter-bg-img:                 url('~@/assets/images/newsletter.png');
 // Footer
 $footer-about-bg-color:             $gray-600;
 $footer-btn-color:                  $white;

@@ -1,10 +1,10 @@
 <template>
   <div class="header container-fluid d-flex p-0">
-    <Sidebar :is-show="willShow"
+    <Sidebar :is-show="isShow"
     @close-sidebar-request = "closeSidebar"/>
     <div class="dashboard-body">
-      <Header @open-sidebar-request = "openSidebar"/>
-      <router-view/>
+      <Header @open-sidebar-request = "openSidebar" :isNewModal.sync="isNewModal"/>
+      <router-view :isNewModal.sync="isNewModal"/>
     </div>
   </div>
 </template>
@@ -25,20 +25,21 @@ export default {
       // 這筆資料使用動態props傳到子元件Sidebar內後，
       // 以資料isShow接收，用來在子元件Sidebar內更新畫面，
       // 在子元件Sidebar和Header內則使用emit來修改此資料。
-      willShow: false,
+      isShow: false,
+      isNewModal: false,
     };
   },
   methods: {
-    // 子元件Sidebar和Header使用emit觸發的事件，用來修改資料willShow
+    // 子元件Header使用emit觸發的事件，用來修改資料isShow
     openSidebar() {
       const vm = this;
-      vm.willShow = true;
+      vm.isShow = true;
       $('body').css('overflow', 'hidden');
     },
-    // 子元件Sidebar和Header使用emit觸發的事件，用來修改資料willShow
+    // 子元件Sidebar使用emit觸發的事件，用來修改資料isShow
     closeSidebar() {
       const vm = this;
-      vm.willShow = false;
+      vm.isShow = false;
       $('body').css('overflow', '');
     },
   },

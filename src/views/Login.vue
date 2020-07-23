@@ -8,39 +8,38 @@
         <router-link to="/" class="login-panel-logo"></router-link>
       </div>
       <div class="login-panel-content">
-        <div class="login-panel-body">
-          <h1 class="f-30 f-md-36 mb-28 text-left">歡迎來到奇木奇！</h1>
-          <ValidationObserver ref="form">
-            <form class="d-flex flex-wrap" @submit.prevent="signIn">
-              <ValidationProvider class="form-group mb-16" rules="email|required"
-              v-slot="{ errors, invalid, touched, failed }" tag="div">
-                <label class="text-left w-100" for="username">會員帳號</label>
-                <input
+        <h1 class="f-30 f-md-36 mt-12 mt-md-0 mb-12 mb-md-28 text-left">歡迎來到奇木奇！</h1>
+        <ValidationObserver ref="form">
+          <form class="d-flex flex-wrap" @submit.prevent="signIn">
+            <ValidationProvider class="form-group mb-16" rules="email|required"
+            v-slot="{ errors, invalid, touched, failed }" tag="div">
+              <label class="text-left w-100" for="username">會員帳號</label>
+              <input
                 class="login-input form-control"
                 :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
                 type="email" id="username"
                 autocomplete="username"
-                v-model="user.username"/>
-                <div class="invalid-feedback">{{ errors[0] }}</div>
-              </ValidationProvider>
-              <ValidationProvider class="form-group mb-16" rules="required"
-              v-slot="{ errors, invalid, touched, failed }" tag="div">
-                <label class="text-left w-100" for="current-password">會員密碼</label>
-                <input
-                  class="login-input form-control"
-                  :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
-                  type="password"
-                  id="current-password"
-                  autocomplete="current-password"
-                  v-model="user.password"
-                />
-                <div class="invalid-feedback">{{ errors[0] }}</div>
-              </ValidationProvider>
-              <button class="btn btn-primary mt-28 w-100" type="submit">登入</button>
-            </form>
-          </ValidationObserver>
-        </div>
-        </div>
+                v-model="user.username"
+              />
+              <div class="invalid-feedback">{{ errors[0] }}</div>
+            </ValidationProvider>
+            <ValidationProvider class="form-group mb-16" rules="required"
+            v-slot="{ errors, invalid, touched, failed }" tag="div">
+              <label class="text-left w-100" for="current-password">會員密碼</label>
+              <input
+                class="login-input form-control"
+                :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                type="password"
+                id="current-password"
+                autocomplete="current-password"
+                v-model="user.password"
+              />
+              <div class="invalid-feedback">{{ errors[0] }}</div>
+            </ValidationProvider>
+            <button class="btn btn-primary mt-28 w-100" type="submit">登入</button>
+          </form>
+        </ValidationObserver>
+      </div>
     </div>
     <Toast />
   </div>
@@ -59,6 +58,7 @@ export default {
         username: '',
         password: '',
       },
+      loader: '',
     };
   },
   methods: {
@@ -67,20 +67,22 @@ export default {
       const vm = this;
       vm.$refs.form.validate().then((success) => {
         if (success) {
+          vm.loader = this.$loading.show({},
+            { default: this.$createElement('LogoLoadingAnimation') });
           this.$http.post(api, vm.user).then((response) => {
             if (response.data.success) {
               vm.$router.push('dashboard/products');
             } else {
+              vm.loader.hide();
               vm.$bus.$emit('message:push', '錯誤', '帳號或密碼錯誤', 'danger');
             }
           });
-        } else {
-          vm.isSubmit = true;
         }
       });
     },
   },
-  created() {
+  destroyed() {
+    this.loader.hide();
   },
 };
 </script>
@@ -98,12 +100,7 @@ export default {
   height: 100vh;
 }
 .login-panel-logo {
-  @include media-breakpoint-up(xs) {
-    background-image: url('~@/assets/images/white-logo.svg');
-  }
-  @include media-breakpoint-up(lg) {
-    background-image: url('~@/assets/images/logo.svg');
-  }
+  background-image: url('~@/assets/images/logo.svg');
   background-repeat: no-repeat;
   background-position: center center;
   height: 44px;
@@ -111,12 +108,7 @@ export default {
   width: 100px;
 }
 .login-input {
-  @include media-breakpoint-up(xs) {
-    border: 0;
-  }
-  @include media-breakpoint-up(lg) {
-    border: 1px solid $secondary;
-  }
+  border: 1px solid $secondary;
   margin-top: 16px;
   margin-bottom: 0;
 }
@@ -125,14 +117,15 @@ export default {
     width: 100%;
   }
   @include media-breakpoint-up(xs) {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(255, 255, 255, 0.85);
     height: 100vh;
-    padding: 0 12px;
+    padding: 0;
     width: 100%;
+  }
+  @include media-breakpoint-up(sm) {
   }
   @include media-breakpoint-up(lg) {
     background-color: #fff;
-    color: $secondary;
     padding: 0 24px;
     width: 60%;
   }
@@ -154,12 +147,7 @@ export default {
     left: 24px;
   }
   .material-icons {
-    @include media-breakpoint-up(xs) {
-      color: white;
-    }
-    @include media-breakpoint-up(lg) {
-      color: inherit;
-    }
+    color: inherit;
   }
   display: flex;
   position: absolute;
@@ -168,16 +156,13 @@ export default {
 .login-panel-content {
   @include media-breakpoint-up(xs) {
     max-width: 375px;
+    padding: 12px;
   }
   @include media-breakpoint-up(md) {
     max-width: 510px;
     width: 510px;
   }
-  background-color: rgba(255, 255, 255, 0.8);
   margin: auto;
-}
-.login-panel-body {
-  margin: 12px;
 }
 @keyframes change-color {
   from {

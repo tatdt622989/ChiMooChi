@@ -57,7 +57,7 @@
       </div>
       <ul class="navbar-member">
         <li class="navbar-member-item">
-          <router-link to="/login" class="navbar-member-link btn-square">
+          <router-link to="/dashboard/products" class="navbar-member-link btn-square">
             <span class="material-icons lh-1">account_circle</span>
           </router-link>
         </li>
@@ -158,7 +158,7 @@ export default {
   @include media-breakpoint-up(xs) {
     height: 40px;
   }
-  @include media-breakpoint-up(xs) {
+  @include media-breakpoint-up(md) {
     height: 44px;
   }
 }
@@ -346,6 +346,7 @@ export default {
   flex-direction: row;
   list-style: none;
   margin: 0;
+  padding: 0;
   width: auto;
 }
 .navbar-member-item {

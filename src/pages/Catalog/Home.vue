@@ -280,19 +280,22 @@
 }
 .thin-banner {
   @include media-breakpoint-up(xs) {
-    background: no-repeat url("~@/assets/images/thin-banner-xs.svg");
+    background:
+      no-repeat center url("~@/assets/images/thin-banner-content-xs.svg"),
+      no-repeat center url("~@/assets/images/thin-banner-bg-xs.svg"),
+      ;
     height: 76px;
     margin-bottom: 28px;
   }
   @include media-breakpoint-up(sm) {
-    background: no-repeat url("~@/assets/images/thin-banner-sm.png");
+    background: no-repeat url("~@/assets/images/thin-banner-sm.svg");
   }
   @include media-breakpoint-up(md) {
-    background: no-repeat url("~@/assets/images/thin-banner-md.png");
+    background: no-repeat url("~@/assets/images/thin-banner-md.svg");
     margin-bottom: 35px;
   }
   @include media-breakpoint-up(lg) {
-    background: no-repeat url("~@/assets/images/thin-banner-xl.png");
+    background: no-repeat url("~@/assets/images/thin-banner-xl.svg");
     height: 100px;
     margin-bottom: 45px;
   }
@@ -387,11 +390,10 @@
   }
   align-content: center;
   align-items: center;
-  background-attachment: fixed, fixed;
-  background-image: $newsletter-bg-img;
-  background-position: 0 0, 0 0;
-  background-repeat: no-repeat, no-repeat;
-  background-size: auto, cover;
+  background:
+    linear-gradient(transparentize($gray-600, 0.4),
+    transparentize($gray-600, 0.4)) no-repeat top/cover fixed,
+    $newsletter-bg-img no-repeat center/150% fixed;
   color: $newsletter-color;
   display: flex;
   flex-wrap: wrap;

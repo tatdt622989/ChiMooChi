@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 import {
   ValidationProvider,
   ValidationObserver,
@@ -11,14 +13,27 @@ import {
 import { required, email } from 'vee-validate/dist/rules';
 import TW from 'vee-validate/dist/locale/zh_TW.json';
 import 'bootstrap';
+import LogoLoadingAnimation from '@/components/LogoLoadingAnimation.vue';
 import App from './App.vue';
 import router from './router';
 import './bus';
+import currencyFilter from './filters/currency';
 
 Vue.config.productionTip = false;
+
+Vue.use(Loading, {
+  opacity: 0.8,
+  zIndex: 1060,
+});
 Vue.use(VueAxios, axios);
+axios.defaults.withCredentials = true;
+
+Vue.component('LogoLoadingAnimation', LogoLoadingAnimation);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+
+Vue.filter('currency', currencyFilter);
+
 localize('zh_TW', TW);
 
 extend('required', {

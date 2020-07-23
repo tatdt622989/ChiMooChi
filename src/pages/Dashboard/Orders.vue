@@ -36,12 +36,23 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body text-left">
           <p>訂單時間:{{'\xa0'}}<span>2020-07-19 00:00:00</span></p>
           <p>訂單編號:{{'\xa0'}}<span>L9tH8jxVb2Ka_DYPwng</span></p>
           <div class="form-group">
             <label for=""></label>
             <input type="text">
+          </div>
+          <div class="form-group">
+            <label for="paymentMethodSelect">付款狀態</label>
+            <select class="form-control" id="paymentMethodSelect">
+              <option>未付款</option>
+              <option>已付款</option>
+            </select>
+            <select class="form-control" id="paymentStatusSelect">
+              <option>未付款</option>
+              <option>已付款</option>
+            </select>
           </div>
         </div>
         <div class="modal-footer p-20">

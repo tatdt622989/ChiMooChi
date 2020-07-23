@@ -5,8 +5,11 @@
       <span class="material-icons">menu</span>
     </button>
     <h1 class="dashboard-header-title f-lg-30 f-24 my-24 ml-0 ml-lg-0">{{ headerText }}管理</h1>
-    <button class="btn-square btn-primary d-block d-lg-none" data-toggle="modal"
-      :data-target="targetModal" v-if="targetModal">
+    <button
+      class="btn-square btn-primary d-block d-lg-none"
+      v-if="targetModal"
+      @click="openModal"
+    >
       <span class="material-icons">add</span>
     </button>
     <form class="search-form form-inline">
@@ -17,14 +20,15 @@
     </form>
     <button
       class="btn btn-primary d-none d-lg-block order-2"
-      data-toggle="modal"
-      :data-target="targetModal"
+      @click="openModal"
       v-if="targetModal"
     >建立{{ headerText }}</button>
   </div>
 </template>
 
 <script>
+import $ from 'jquery';
+
 export default {
   name: 'Header',
   data() {
@@ -36,6 +40,11 @@ export default {
   methods: {
     openSidebarRequest() {
       this.$emit('open-sidebar-request');
+    },
+    openModal() {
+      const vm = this;
+      vm.$emit('update:isNewModal', true);
+      $(vm.targetModal).modal('show');
     },
     updateHeader(path) {
       const vm = this;
@@ -50,7 +59,7 @@ export default {
           break;
         case '/dashboard/coupons':
           vm.headerText = '優惠券';
-          vm.targetModal = '#dashboardCouponModal';
+          vm.targetModal = '#dashboardCouponsModal';
           break;
         default:
           break;
