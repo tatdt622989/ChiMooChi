@@ -1,0 +1,6 @@
+.textarea-form-label {
+  &::after {
+    content: "(選填)";
+    color: $danger;
+  }
+}

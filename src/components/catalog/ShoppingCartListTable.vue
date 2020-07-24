@@ -34,7 +34,7 @@
   </table>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tfoot-td {
   height: 32px;
 }

@@ -47,9 +47,6 @@ export default {
 </script>
 
 <style lang="scss">
-.dashboard {
-  position: relative;
-}
 .dashboard-body {
   @include media-breakpoint-up(xs) {
     padding: 0 15px;
@@ -109,6 +106,9 @@ export default {
     table-layout: fixed;
     min-width: 290px;
   }
+  select {
+    cursor: pointer;
+  }
   .form-group {
     width: 100%;
   }
@@ -117,6 +117,14 @@ export default {
       color: $dark;
       opacity: 1;
       transition: $transition-fade;
+    }
+  }
+  .responsive {
+    @include media-breakpoint-up(xs) {
+      display: none;
+    }
+    @include media-breakpoint-up(md) {
+      display: table-cell;
     }
   }
   display: flex;

@@ -49,53 +49,63 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="col-12 col-md-6 pl-0">
+            <div class="col-12 col-md-6 pl-0 pr-0 pr-md-12 d-flex flex-column
+            justify-content-between">
               <div class="img-frame">
                 <img :src="tempProduct.imageUrl">
               </div>
-              <p class="mb-12 mt-20 w-100">圖片來源</p>
-              <button
-                class="btn btn-outline-secondary mr-20"
-                @click="imgLoadMethod = 'upload';"
-                :class='{active : imgLoadMethod === "upload"}'>上傳
-              </button>
-              <button class="btn btn-outline-secondary"
-              @click="imgLoadMethod = 'URL'" :class='{active : imgLoadMethod === "URL"}'>網址</button>
-              <div class="custom-file mt-12" v-if="imgLoadMethod === 'upload'">
-                <input
-                  type="file"
-                  class="custom-file-input"
-                  id="customFile"
-                  ref="files"
-                  @change="uploadImg"
-                >
-                <label
-                  class="custom-file-label text-overflow"
-                  for="customFile"
-                >{{ tempProduct.image || '未選擇圖片檔案' }}</label>
+              <div>
+                <p class="mb-12 w-100 mt-16 mt-md-0">圖片來源</p>
+                <div>
+                  <button
+                  class="btn btn-outline-secondary mr-16"
+                  @click="imgLoadMethod = 'upload';"
+                  :class='{active : imgLoadMethod === "upload"}'>上傳
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary"
+                    @click="imgLoadMethod='URL'"
+                    :class='{active : imgLoadMethod === "URL"}'
+                  >網址</button>
+                </div>
+                <div class="custom-file mt-16" v-if="imgLoadMethod === 'upload'">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="customFile"
+                    ref="files"
+                    @change="uploadImg"
+                  >
+                  <label
+                    class="custom-file-label text-overflow"
+                    for="customFile"
+                  >{{ tempProduct.image || '未選擇圖片檔案' }}</label>
+                </div>
+                <div class="URL-input-group mt-12" v-if="imgLoadMethod === 'URL'">
+                  <input class="form-control w-100" type="text"
+                  placeholder="請輸入圖片網址" v-model="tempProduct.imageUrl">
+                  <button class="check-btn btn btn-secondary flex-shrink-0">確認</button>
+                </div>
               </div>
-              <div class="URL-input-group mt-12" v-if="imgLoadMethod === 'URL'">
-                <input class="form-control w-100" type="text"
-                placeholder="請輸入圖片網址" v-model="tempProduct.imageUrl">
-                <button class="check-btn btn btn-secondary flex-shrink-0">確認</button>
-              </div>
-              <p class="mb-12 mt-20 w-100">啟用狀態</p>
-              <div class="switch-group">
-                <input
-                  class="switch-checkbox"
-                  type="checkbox"
-                  id="productSwitch"
-                  v-model="tempProduct.is_enabled"
-                >
-                <label class="switch-label" for="productSwitch"></label>
+              <div>
+                <p class="mb-12 w-100 mt-16 mt-md-0">啟用狀態</p>
+                <div class="switch-group">
+                  <input
+                    class="switch-checkbox"
+                    type="checkbox"
+                    id="productSwitch"
+                    v-model="tempProduct.is_enabled"
+                  />
+                  <label class="switch-label" for="productSwitch"></label>
+                </div>
               </div>
             </div>
-            <div class="col-12 col-md-6 pr-0 pt-20 pt-md-0">
+            <div class="col-12 col-md-6 pr-0 pl-0 pl-md-12 pt-20 pt-md-0">
               <div class="form-group">
                 <label for="name">名稱</label>
                 <input class="form-control w-100" type="text" id="name" v-model="tempProduct.title">
               </div>
-              <div class="modal-input-sm w-50">
+              <div class="modal-input-sm w-50 pr-8">
                 <div class="form-group">
                   <label for="category">類別</label>
                   <input class="form-control" type="text" id="category"
@@ -107,7 +117,7 @@
                     v-model="tempProduct.origin_price">
                 </div>
               </div>
-              <div class="modal-input-sm w-50">
+              <div class="modal-input-sm w-50 pl-8">
                 <div class="form-group">
                   <label for="product" id="unit">單位</label>
                   <input class="form-control" type="text" id="unit" v-model="tempProduct.unit">
@@ -129,10 +139,10 @@
               </div>
             </div>
           </div>
-          <div class="modal-footer p-20">
+          <div class="modal-footer">
             <button
               type="button"
-              class="btn my-0 mr-20"
+              class="btn my-0 mr-16"
               :class="[isNewModal? 'btn-dark': 'btn-danger']"
               data-dismiss="modal"
             >{{ isNewModal?'取消':'刪除' }}</button>
@@ -149,7 +159,7 @@
 
 <script>
 import $ from 'jquery';
-import Toast from '@//components/Toast.vue';
+import Toast from '@/components/Toast.vue';
 
 export default {
   name: 'Products',
@@ -290,31 +300,9 @@ export default {
       flex-wrap: nowrap;
       width: 50%;
     }
-    >div:nth-child(2) {
-      padding-right: 10px;
-    }
-    >div:nth-child(3) {
-      padding-left: 10px;
-    }
     textarea {
       height: 60px;
       width: 100%;
-    }
-    &:nth-of-type(1) {
-      @include media-breakpoint-up(xs) {
-        padding-right: 0px;
-      }
-      @include media-breakpoint-up(md) {
-        padding-right: 10px;
-      }
-    }
-    &:nth-of-type(2) {
-      @include media-breakpoint-up(xs) {
-        padding-left: 0px;
-      }
-      @include media-breakpoint-up(md) {
-        padding-left: 10px;
-      }
     }
     .custom-file-input {
       cursor: pointer;
@@ -334,12 +322,12 @@ export default {
       height: 180px;
     }
     @include media-breakpoint-up(sm) {
-      height: 264px;
-      width: 470px;
+      height: 269px;
+      width: 478px;
     }
     @include media-breakpoint-up(md) {
-      width: 320px;
-      height: 180px;
+      width: 322px;
+      height: 182px;
     }
     background-color: $img-link-bg-color;
     overflow: hidden;
@@ -353,6 +341,7 @@ export default {
     justify-content: flex-end;
   }
   display: flex;
+  padding: 16px;
 }
 .URL-input-group {
   .check-btn {
@@ -368,14 +357,6 @@ export default {
   }
   @include media-breakpoint-up(lg) {
     display: none;
-  }
-}
-.responsive {
-  @include media-breakpoint-up(xs) {
-    display: none;
-  }
-  @include media-breakpoint-up(md) {
-    display: table-cell;
   }
 }
 .custom-file-label {

@@ -5,7 +5,7 @@
       <h1 class="f-lg-30 f-24 mt-8 mb-32 w-100">訂單資料</h1>
       <button
         class="order-form-cart-list-btn btn btn-outline-secondary
-        d-flex justify-content-center f-16 mb-16"
+        d-flex justify-content-center f-16 mb-20"
         data-toggle="collapse"
         data-target="#order-form-table"
       >
@@ -35,8 +35,8 @@
             </select>
           </div>
           <div class="col text-left pr-0 pl-12">
-            <label for="">鄉鎮區</label>
-            <select class="form-control border-0 px-md-24 px-16" id="county">
+            <label for="region">鄉鎮區</label>
+            <select class="form-control border-0 px-md-24 px-16" id="region">
               <option selected disabled>請選擇鄉鎮區</option>
               <option></option>
             </select>
@@ -63,27 +63,17 @@
           />
         </div>
         <div class="order-form-group form-group">
-          <label for="telephone" class="form-label">市話</label>
-          <input
-            type="text"
-            class="order-form-input"
-            id="telephone"
-            placeholder="請輸入市話號碼"
-            autocomplete="tel-local"
-          />
-        </div>
-        <div class="order-form-group form-group">
-          <label for="telephone">電子信箱</label>
+          <label for="email">電子信箱</label>
           <input
             type="email"
             class="order-form-input"
-            id="telephone"
+            id="email"
             placeholder="請輸入電子信箱"
             autocomplete="email"
           />
         </div>
         <div class="order-form-group form-group">
-          <label for="notes" class="form-label">備註</label>
+          <label for="notes" class="textarea-form-label">備註</label>
           <textarea class="form-control border-0 form-textarea" id="notes" rows="3"></textarea>
         </div>
       </form>
@@ -130,6 +120,7 @@ export default {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 16px;
   width: 100%;
 }
 .order-form-input {
@@ -148,12 +139,6 @@ export default {
 }
 .form-row {
   margin: 0;
-}
-.form-label {
-  &::after {
-    content: "(選填)";
-    color: $danger;
-  }
 }
 .form-textarea {
   @include media-breakpoint-up(xs) {
