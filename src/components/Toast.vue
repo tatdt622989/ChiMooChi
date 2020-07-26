@@ -63,13 +63,21 @@ export default {
   .toast {
   &.success {
     background-color: $success;
+    color: $white;
   }
   &.danger {
     background-color: $danger;
+    color: $white;
   }
+  &.warning {
+    background-color: $warning;
+    color: black;
+  }
+  .toast-header {
+      color: inherit;
+    }
   opacity: 1;
   }
-  color: $white;
   position: fixed;
   right: 16px;
   top: 16px;

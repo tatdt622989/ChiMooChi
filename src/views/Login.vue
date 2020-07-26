@@ -9,7 +9,7 @@
       </div>
       <div class="login-panel-content">
         <h1 class="f-30 f-md-36 mt-12 mt-md-0 mb-12 mb-md-28 text-left">歡迎來到奇木奇！</h1>
-        <ValidationObserver ref="form">
+        <ValidationObserver ref="form" slim>
           <form class="d-flex flex-wrap" @submit.prevent="signIn">
             <ValidationProvider class="form-group mb-16" rules="email|required"
             v-slot="{ errors, invalid, touched, failed }" tag="div">

@@ -10,7 +10,14 @@ import {
   localize,
   configure,
 } from 'vee-validate';
-import { required, email } from 'vee-validate/dist/rules';
+import {
+  required,
+  email,
+  // eslint-disable-next-line camelcase
+  alpha_dash,
+  max,
+  numeric,
+} from 'vee-validate/dist/rules';
 import TW from 'vee-validate/dist/locale/zh_TW.json';
 import 'bootstrap';
 import LogoLoadingAnimation from '@/components/LogoLoadingAnimation.vue';
@@ -38,13 +45,29 @@ localize('zh_TW', TW);
 
 extend('required', {
   ...required,
-  message: '此欄位不可留白',
+  message: '此欄位為必填',
 });
 
 // Add the email rule
 extend('email', {
   ...email,
   message: '此欄位需為電子郵件',
+});
+
+extend('alpha_dash', {
+  // eslint-disable-next-line camelcase
+  ...alpha_dash,
+  message: '此欄位需為英文字母或數字',
+});
+
+extend('max', {
+  ...max,
+  message: '此欄位最大不可超過{length}個字元',
+});
+
+extend('numeric', {
+  ...numeric,
+  message: '此欄位需為數字',
 });
 
 configure({

@@ -260,8 +260,7 @@ export default {
     },
   },
   created() {
-    const vm = this;
-    vm.getProducts();
+    this.getProducts();
   },
 };
 </script>
