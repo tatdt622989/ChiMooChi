@@ -36,35 +36,12 @@
       <button class="btn text-hover-primary product-category-btn">沙發/沙發床</button>
     </div>
     <div class="row product-list">
-      <div class="col-lg-3 col-md-4 col-6 d-lg-block mb-16 mb-lg-0">
-        <div class="card">
-          <a href="#" title class="card-img-link">
-            <!-- <img src="..." class="card-img-top" alt="..."> -->
-          </a>
-          <div class="card-body">
-            <a class="card-title" href="#">
-              <h3>超強鋁合金雙渦輪動力按摩椅</h3>
-            </a>
-            <div class="product-price">
-              <p class="original-price">
-                $
-                <del>9999</del>
-              </p>
-              <p class="on-sale-price">
-                $
-                <span>1000</span>
-              </p>
-            </div>
-            <div class="card-btn-group">
-              <button class="btn-square btn-light mr-12">
-                <span class="material-icons">favorite_border</span>
-              </button>
-              <button class="btn-square btn-primary">
-                <span class="material-icons">shopping_cart</span>
-              </button>
-            </div>
-          </div>
-        </div>
+      <div
+        class="col-lg-3 col-md-4 col-6 d-lg-block mb-30 mb-sm-45"
+        v-for="item in products"
+        :key="item.id"
+      >
+      <Card :item="item"></Card>
       </div>
     </div>
     <nav aria-label="Page navigation example" class="mt-32 mb-60">
@@ -95,11 +72,37 @@
 
 <script>
 import Breadcrumb from '@/components/Catalog/Breadcrumb.vue';
+import Card from '@/components/Catalog/Card.vue';
 
 export default {
   name: 'Product',
   components: {
     Breadcrumb,
+    Card,
+  },
+  data() {
+    return {
+      products: [],
+    };
+  },
+  methods: {
+    getProducts(page = 1, loadMethod) {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products?page=:${page}`;
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      this.$http.get(api).then((response) => {
+        vm.products = response.data.products;
+        loader.hide();
+        if (loadMethod === 'update') {
+          vm.$bus.$emit('message:push', '成功', '資料載入成功', 'success');
+        }
+      });
+    },
+  },
+  created() {
+    this.getProducts();
   },
 };
 </script>

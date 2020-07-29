@@ -1,28 +1,88 @@
 <template>
   <div class="dashboard-products w-100">
-    <table class="table mt-24">
+    <table class="table">
       <thead>
         <tr>
-          <th class="responsive">類別</th>
-          <th>名稱</th>
-          <th class="responsive">原價</th>
-          <th>售價</th>
-          <th class="nowrap">啟用狀態</th>
-          <th class="nowrap">詳情編輯</th>
+          <th class="responsive">
+            <button
+              class="btn font-weight-bold p-0"
+              @click="sortProducts('category')"
+            >
+              類別
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'category',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th>
+            <button
+              class="btn p-0 font-weight-bold"
+              @click="sortProducts('title')"
+            >
+              名稱
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'title',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="responsive">
+            <button
+              class="btn font-weight-bold p-0"
+              @click="sortProducts('origin_price')"
+            >
+              原價
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'origin_price',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="pl-12">
+            <button
+              class="btn p-0 font-weight-bold"
+              @click="sortProducts('price')"
+            >
+              售價
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'price',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="nowrap">
+            <button
+              class="btn p-0 font-weight-bold"
+              @click="sortProducts('is_enabled')"
+            >
+              啟用狀態
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'is_enabled',
+                reverse : isReverse}"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="nowrap text-center info-edit"><p>詳情編輯</p></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for=" item in products" :key="item.id">
+        <tr v-for=" item in showProducts" :key="item.id">
           <td class="responsive">{{ item.category }}</td>
           <td>{{ item.title }}</td>
           <td class="responsive">{{ item.origin_price | currency}}</td>
-          <td class="font-weight-bold text-danger">{{ item.price | currency }}</td>
+          <td class="font-weight-bold text-danger pl-12">{{ item.price | currency }}</td>
           <td
-            class="font-weight-bold"
+            class="font-weight-bold nowrap status"
             :class="[item.is_enabled ? 'text-primary' : 'text-light']"
           >{{ item.is_enabled ? '啟用中' : '未啟用' }}
           </td>
-          <td>
+          <td class="text-center nowrap info-edit">
             <button class="btn-square btn-outline-secondary" @click="openEditModal(item)">
               <span class="material-icons">edit</span>
             </button>
@@ -48,108 +108,163 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
-            <div class="col-12 col-md-6 pl-0 pr-0 pr-md-12 d-flex flex-column
-            justify-content-between">
-              <div class="img-frame">
-                <img :src="tempProduct.imageUrl">
-              </div>
-              <div>
-                <p class="mb-12 w-100 mt-16 mt-md-0">圖片來源</p>
-                <div>
-                  <button
-                  class="btn btn-outline-secondary mr-16"
-                  @click="imgLoadMethod = 'upload';"
-                  :class='{active : imgLoadMethod === "upload"}'>上傳
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    @click="imgLoadMethod='URL'"
-                    :class='{active : imgLoadMethod === "URL"}'
-                  >網址</button>
+            <ValidationObserver
+              ref="form"
+              tag="form"
+              @submit.prevent="updateProducts(isNewModal ? '建立' : '修改')"
+            >
+              <div class="modal-body">
+                <div class="col-12 col-md-6 pl-0 pr-0 pr-md-12 d-flex flex-column
+                justify-content-between">
+                  <div class="img-frame">
+                    <img :src="tempProduct.imageUrl">
+                  </div>
+                  <div>
+                    <div class="d-flex align-items-center mb-12 mt-16 mt-md-0">
+                      <p class="mr-8">圖片來源</p>
+                      <div class="spinner-border" :class="{ 'show' : isLoading }" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                    </div>
+                    <div>
+                      <button
+                      class="btn btn-outline-secondary mr-16"
+                      type="button"
+                      @click="imgLoadMethod = 'upload';"
+                      :class='{active : imgLoadMethod === "upload"}'>上傳
+                      </button>
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        @click="imgLoadMethod='URL'"
+                        :class='{active : imgLoadMethod === "URL"}'
+                      >網址</button>
+                    </div>
+                    <div class="custom-file mt-16" v-if="imgLoadMethod === 'upload'">
+                      <input
+                        type="file"
+                        class="custom-file-input"
+                        id="customFile"
+                        ref="files"
+                        @change="uploadImg"
+                      >
+                      <label
+                        class="custom-file-label text-overflow"
+                        for="customFile"
+                      >{{ tempProduct.image || '未選擇圖片檔案' }}</label>
+                    </div>
+                    <div class="URL-input-group mt-16" v-if="imgLoadMethod === 'URL'">
+                      <input class="form-control w-100" type="text"
+                      placeholder="請輸入圖片網址" v-model="tempProduct.imageUrl">
+                      <button class="check-btn btn btn-secondary flex-shrink-0">確認</button>
+                    </div>
+                  </div>
+                  <div>
+                    <p class="mb-12 w-100 mt-16 mt-md-0">啟用狀態</p>
+                    <div class="switch-group">
+                      <input
+                        class="switch-checkbox"
+                        type="checkbox"
+                        id="productSwitch"
+                        v-model="tempProduct.is_enabled"
+                      />
+                      <label class="switch-label" for="productSwitch"></label>
+                    </div>
+                  </div>
                 </div>
-                <div class="custom-file mt-16" v-if="imgLoadMethod === 'upload'">
-                  <input
-                    type="file"
-                    class="custom-file-input"
-                    id="customFile"
-                    ref="files"
-                    @change="uploadImg"
+                <div class="col-12 col-md-6 pr-0 pl-0 pl-md-12 pt-20 pt-md-0">
+                  <ValidationProvider
+                    class="form-group"
+                    tag="div"
+                    rules="required"
+                    v-slot="{ errors, failed }"
                   >
-                  <label
-                    class="custom-file-label text-overflow"
-                    for="customFile"
-                  >{{ tempProduct.image || '未選擇圖片檔案' }}</label>
-                </div>
-                <div class="URL-input-group mt-12" v-if="imgLoadMethod === 'URL'">
-                  <input class="form-control w-100" type="text"
-                  placeholder="請輸入圖片網址" v-model="tempProduct.imageUrl">
-                  <button class="check-btn btn btn-secondary flex-shrink-0">確認</button>
+                    <label for="name">名稱</label>
+                    <input
+                      class="form-control w-100"
+                      :class="{ 'is-invalid' : failed }"
+                      type="text"
+                      id="name"
+                      v-model="tempProduct.title"
+                    >
+                    <div class="invalid-feedback">{{ errors[0] }}</div>
+                  </ValidationProvider>
+                  <div class="modal-input-sm w-50 pr-8">
+                    <div class="form-group">
+                      <label for="category">類別</label>
+                      <input class="form-control" type="text" id="category"
+                        v-model="tempProduct.category">
+                    </div>
+                    <ValidationProvider
+                      class="form-group"
+                      tag="div"
+                      rules="required|numeric"
+                      v-slot="{ errors, failed }"
+                    >
+                      <label for="originPrice">原價</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        id="originPrice"
+                        v-model="tempProduct.origin_price"
+                        :class="{ 'is-invalid' : failed }"
+                      >
+                      <div class="invalid-feedback">{{ errors[0] }}</div>
+                    </ValidationProvider>
+                  </div>
+                  <div class="modal-input-sm w-50 pl-8">
+                    <div class="form-group">
+                      <label for="product" id="unit">單位</label>
+                      <input class="form-control" type="text" id="unit" v-model="tempProduct.unit">
+                    </div>
+                    <ValidationProvider
+                      class="form-group"
+                      tag="div"
+                      rules="numeric"
+                      v-slot="{ errors, failed }"
+                    >
+                      <label for="price">售價</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        id="price"
+                        v-model="tempProduct.price"
+                        :class="{ 'is-invalid' : failed }"
+                      >
+                      <div class="invalid-feedback">{{ errors[0] }}</div>
+                    </ValidationProvider>
+                  </div>
+                  <div class="form-group">
+                    <label class="mt-8" for="description">描述</label>
+                    <textarea class="form-control" id="description" cols="30" rows="10"
+                      v-model="tempProduct.description"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label class="mt-8" for="note">備註</label>
+                    <textarea class="form-control" id="note" cols="30" rows="10"
+                      v-model="tempProduct.content"></textarea>
+                  </div>
                 </div>
               </div>
-              <div>
-                <p class="mb-12 w-100 mt-16 mt-md-0">啟用狀態</p>
-                <div class="switch-group">
-                  <input
-                    class="switch-checkbox"
-                    type="checkbox"
-                    id="productSwitch"
-                    v-model="tempProduct.is_enabled"
-                  />
-                  <label class="switch-label" for="productSwitch"></label>
-                </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn my-0 mr-16"
+                  :class="[isNewModal? 'btn-dark': 'btn-danger']"
+                  @click="openDeleteModal"
+                >{{ isNewModal ? '取消' : '刪除' }}</button>
+                <button
+                  type="submit"
+                  class="btn btn-primary m-0"
+                >
+                  {{ isNewModal ? '建立' : '修改' }}
+                </button>
+                <Delete
+                  :isOpenDeleteModal.sync="isOpenDeleteModal"
+                  @deleteData="updateProducts('刪除')"
+                >商品</Delete>
               </div>
-            </div>
-            <div class="col-12 col-md-6 pr-0 pl-0 pl-md-12 pt-20 pt-md-0">
-              <div class="form-group">
-                <label for="name">名稱</label>
-                <input class="form-control w-100" type="text" id="name" v-model="tempProduct.title">
-              </div>
-              <div class="modal-input-sm w-50 pr-8">
-                <div class="form-group">
-                  <label for="category">類別</label>
-                  <input class="form-control" type="text" id="category"
-                    v-model="tempProduct.category">
-                </div>
-                <div class="form-group">
-                  <label for="originPrice">原價</label>
-                  <input class="form-control" type="text" id="originPrice"
-                    v-model="tempProduct.origin_price">
-                </div>
-              </div>
-              <div class="modal-input-sm w-50 pl-8">
-                <div class="form-group">
-                  <label for="product" id="unit">單位</label>
-                  <input class="form-control" type="text" id="unit" v-model="tempProduct.unit">
-                </div>
-                <div class="form-group">
-                  <label for="price">售價</label>
-                  <input class="form-control" type="text" id="price" v-model="tempProduct.price">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="mt-8" for="description">描述</label>
-                <textarea class="form-control" id="description" cols="30" rows="10"
-                  v-model="tempProduct.description"></textarea>
-              </div>
-              <div class="form-group">
-                <label class="mt-8" for="note">備註</label>
-                <textarea class="form-control" id="note" cols="30" rows="10"
-                  v-model="tempProduct.content"></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn my-0 mr-16"
-              :class="[isNewModal? 'btn-dark': 'btn-danger']"
-              data-dismiss="modal"
-            >{{ isNewModal?'取消':'刪除' }}</button>
-            <button type="button" class="btn btn-primary m-0" @click="updateProducts">
-              {{ isNewModal?'建立':'修改' }}
-            </button>
-          </div>
+            </ValidationObserver>
         </div>
       </div>
     </div>
@@ -160,34 +275,44 @@
 <script>
 import $ from 'jquery';
 import Toast from '@/components/Toast.vue';
+import Delete from '@/components/Delete.vue';
 
 export default {
   name: 'Products',
   components: {
     Toast,
+    Delete,
   },
   // 從Header傳過來的資料，用來判斷開啟的modal是否為建立內容的狀態
-  props: ['isNewModal'],
+  props: ['isNewModal', 'search'],
   data() {
     return {
       products: [],
       tempProduct: {},
+      searchProducts: [],
       imgLoadMethod: 'upload',
+      sortAttr: '',
+      isLoading: false,
+      isOpenDeleteModal: false,
+      isReverse: false,
     };
   },
   methods: {
     getProducts(page = 1, loadMethod) {
       const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products?page=:${page}`;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/products?page=:${page}`;
       const loader = vm.$loading.show({}, {
         default: this.$createElement('LogoLoadingAnimation'),
       });
       this.$http.get(api).then((response) => {
         vm.products = response.data.products;
+        console.log(vm.products);
         loader.hide();
         if (loadMethod === 'update') {
           vm.$bus.$emit('message:push', '成功', '資料載入成功', 'success');
         }
+        vm.sortAttr = '';
+        vm.sortProducts();
       });
     },
     // 使用編輯商品的方式開啟modal
@@ -198,23 +323,39 @@ export default {
       vm.tempProduct = { ...item };
       $('#dashboardProductsModal').modal('show');
     },
-    updateProducts() {
+    updateProducts(prdouctHandlingMethod) {
+      const vm = this;
+      let api;
+      let httpMethod;
+      if (!vm.tempProduct.is_enabled) { vm.tempProduct.is_enabled = false; }
+      if (!vm.tempProduct.price) { vm.tempProduct.price = vm.tempProduct.origin_price; }
+      if (prdouctHandlingMethod === '建立') {
+        api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product`;
+        httpMethod = 'post';
+      } else if (prdouctHandlingMethod === '修改') {
+        api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product/${vm.tempProduct.id}`;
+        httpMethod = 'put';
+      } else if (prdouctHandlingMethod === '刪除') {
+        api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product/${vm.tempProduct.id}`;
+        httpMethod = 'delete';
+        vm.isOpenDeleteModal = false;
+        // 刪除的方法不需要經過表單驗證，即可將資料刪除
+        vm.updateProductsMethods(httpMethod, api, prdouctHandlingMethod);
+        return;
+      }
+      // 經過表單驗證才能建立或修改資料
+      vm.$refs.form.validate().then((success) => {
+        if (success) {
+          vm.$refs.form.reset();
+          vm.updateProductsMethods(httpMethod, api, prdouctHandlingMethod);
+        }
+      });
+    },
+    updateProductsMethods(httpMethod, api, msg) {
       const vm = this;
       const loader = vm.$loading.show({}, {
         default: this.$createElement('LogoLoadingAnimation'),
       });
-      let api;
-      let httpMethod;
-      let msg;
-      if (vm.isNewModal) {
-        api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product`;
-        httpMethod = 'post';
-        msg = '建立';
-      } else {
-        api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product/${vm.tempProduct.id}`;
-        httpMethod = 'put';
-        msg = '修改';
-      }
       vm.$http[httpMethod](api, { data: vm.tempProduct }).then((response) => {
         loader.hide();
         if (response.data.success) {
@@ -233,34 +374,103 @@ export default {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/upload`;
       formData.append('file-to-upload', uploadImg);
       vm.tempProduct.image = uploadImg.name;
+      vm.isLoading = true;
       vm.$http.post(api, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       }).then((response) => {
         if (response.data.success) {
-          /*
-          因為imageUrl這個屬性未事先定義，
-          所以綁定v-model的表單必須要填入內容之後才會建立屬性和值並且雙向綁定，
-          而這裡並沒有通過v-modal建立屬性並賦值，
-          所以需要使用$set將imageUrl雙向綁定
-          */
+          /* 因為imageUrl這個屬性未事先定義，
+          所以需要使用$set將imageUrl雙向綁定 */
           vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl);
+          vm.$bus.$emit('message:push', '成功', '圖片上傳成功', 'success');
+        } else if (typeof response.data.message !== 'string') {
+          vm.tempProduct.image = '';
+          vm.$bus.$emit('message:push', '失敗', '檔案過大，需小於1MB', 'danger');
+        } else {
+          vm.tempProduct.image = '';
+          vm.$bus.$emit('message:push', '失敗', response.data.message, 'danger');
         }
+        vm.isLoading = false;
       });
+    },
+    openDeleteModal() {
+      const vm = this;
+      if (vm.isNewModal) {
+        $('#dashboardProductsModal').modal('hide');
+      } else {
+        vm.isOpenDeleteModal = true;
+      }
+    },
+    sortProducts(attr = 'category') {
+      const vm = this;
+      const sortTarget = vm.search ? vm.searchProducts : vm.products;
+      if (vm.sortAttr === attr) {
+        vm.isReverse = !vm.isReverse;
+      } else {
+        vm.isReverse = false;
+      }
+      sortTarget.sort((a, b) => {
+        if (attr === 'origin_price' || attr === 'price') {
+          return vm.isReverse ? a[attr] - b[attr] : b[attr] - a[attr];
+        }
+        if (attr === 'is_enabled') {
+          return vm.isReverse ? +a[attr] - +b[attr] : +b[attr] - +a[attr];
+        }
+        return vm.isReverse ? b[attr].localeCompare(a[attr], 'zh-hant') : a[attr].localeCompare(b[attr], 'zh-hant');
+      });
+      vm.sortAttr = attr;
     },
   },
   watch: {
-    isNewModal() {
+    search() {
       const vm = this;
-      if (vm.isNewModal) {
-        // 如果使用建立新商品的方式開啟modal，則清空modal內容
-        vm.tempProduct = {};
+      if (vm.search) {
+        const result = vm.products.filter((obj) => {
+          const str = obj.category
+          + obj.title
+          + obj.origin_price
+          + obj.price;
+          if (str.indexOf(vm.search) > -1) {
+            return obj;
+          }
+          return false;
+        });
+        if (result.length) {
+          vm.searchProducts = result;
+        } else {
+          vm.searchProducts = [];
+        }
       }
+    },
+  },
+  computed: {
+    showProducts() {
+      const vm = this;
+      return vm.search ? vm.searchProducts : vm.products;
     },
   },
   created() {
     this.getProducts();
+  },
+  mounted() {
+    const vm = this;
+    $('#dashboardProductsModal').on('hide.bs.modal', () => {
+      // 關閉modal時，清空tempProduct
+      vm.tempProduct = {};
+      vm.isOpenDeleteModal = false;
+      // 關閉modal時，重置表單
+      vm.$refs.form.reset();
+      /* 關閉modal時，清除已經置入到input的圖片
+      ，避免上傳相同圖片時，change事件不會觸發 */
+      if (vm.imgLoadMethod === 'upload') {
+        vm.$refs.files.value = '';
+      }
+    });
+  },
+  destroyed() {
+    $('#dashboardProductsModal').off('hide.bs.modal');
   },
 };
 </script>
@@ -315,6 +525,7 @@ export default {
   .img-frame {
     img {
       width: 100%;
+      object-fit: cover;
     }
     @include media-breakpoint-up(xs) {
       width: 100%;
@@ -329,7 +540,16 @@ export default {
       height: 182px;
     }
     background-color: $img-link-bg-color;
+    display: flex;
+    align-items: center;
     overflow: hidden;
+  }
+  .spinner-border {
+    &.show {
+      opacity: 1;
+    }
+    opacity: 0;
+    transition: $transition-fade;
   }
 }
 .modal-footer {

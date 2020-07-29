@@ -3,24 +3,87 @@
     <table class="table mt-24">
       <thead>
         <tr>
-          <th>名稱</th>
-          <th>序號</th>
-          <th>折扣</th>
-          <th class="responsive">截止日期</th>
-          <th>啟用狀態</th>
-          <th>詳情編輯</th>
+          <th>
+            <button
+              class="btn font-weight-bold p-0"
+              @click="sortProducts('title')"
+            >
+              名稱
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'title',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="responsive">
+            <button
+              class="btn font-weight-bold p-0"
+              @click="sortProducts('code')"
+            >
+              序號
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'code',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="pl-12">
+            <button
+              class="btn font-weight-bold p-0"
+              @click="sortProducts('percent')"
+            >
+              折扣
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'percent',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="responsive">
+            <button
+              class="btn font-weight-bold p-0"
+              @click="sortProducts('due_date')"
+            >
+              截止日期
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'due_date',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="nowrap">
+            <button
+              class="btn font-weight-bold p-0"
+              @click="sortProducts('is_enabled')"
+            >
+              啟用狀態
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'is_enabled',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="text-center nowrap info-edit"><p>詳情編輯</p></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in coupons" :key="item.id">
+        <tr v-for="item in showCoupon" :key="item.id">
           <td>{{ item.title }}</td>
-          <td>{{ item.code }}</td>
-          <td class="font-weight-bold text-danger">{{ item.percent }}折</td>
+          <td class="responsive">{{ item.code }}</td>
+          <td class="font-weight-bold text-danger pl-12">{{ item.percent }}折</td>
           <td class="responsive">{{ getTime(item.due_date) }}</td>
-          <td class="font-weight-bold" :class="[item.is_enabled ? 'text-primary' : 'text-light']">
+          <td
+            class="font-weight-bold nowrap"
+            :class="[item.is_enabled ? 'text-primary' : 'text-light']"
+          >
             {{ item.is_enabled ? '已啟用' : '未啟用' }}
           </td>
-          <td>
+          <td class="text-center nowrap info-edit">
             <button
               class="btn-square btn-outline-secondary"
               data-toggle="modal"
@@ -42,23 +105,29 @@
       <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">優惠券建立</h5>
+          <h5 class="modal-title" id="exampleModalLongTitle">
+            {{ isNewModal ? '優惠券建立' : '優惠券編輯'}}
+          </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <ValidationObserver tag="form" ref="form" @submit.prevent="upadateCoupons">
+        <ValidationObserver
+          tag="form"
+          ref="form"
+          @submit.prevent="upadateCoupons(isNewModal ? '建立' : '修改')"
+        >
         <div class="modal-body pt-0 text-left">
             <ValidationProvider
               class="form-group"
               rules="required"
-              v-slot="{ errors, invalid, touched, failed }"
+              v-slot="{ errors, failed }"
               tag="div"
             >
               <label for="name">名稱</label>
               <input
                 class="form-control"
-                :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                :class="{ 'is-invalid' : failed }"
                 type="text"
                 id="name"
                 autocomplete="name"
@@ -70,13 +139,13 @@
               <ValidationProvider
                 class="form-group pr-8"
                 rules="required|alpha_dash|max:16"
-                v-slot="{ errors, invalid, touched, failed }"
+                v-slot="{ errors, failed }"
                 tag="div"
               >
                 <label for="code">序號</label>
                 <input
                   class="form-control"
-                  :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                  :class="{ 'is-invalid' : failed }"
                   type="text"
                   id="code"
                   autocomplete="on"
@@ -87,13 +156,13 @@
               <ValidationProvider
                 class="form-group ml-sm-8"
                 rules="required|numeric|max:2"
-                v-slot="{ errors, invalid, touched, failed }"
+                v-slot="{ errors, failed }"
                 tag="div"
               >
                 <label for="discount">優惠折數</label>
                 <input
                   class="form-control"
-                  :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                  :class="{ 'is-invalid' : failed }"
                   type="text"
                   id="discount"
                   autocomplete="on"
@@ -107,12 +176,12 @@
             <ValidationProvider
               class="form-group mr-8"
               rules="required"
-              v-slot="{ errors, invalid, touched, failed }"
+              v-slot="{ errors, failed }"
               tag="div"
             >
               <select
                 class="form-control"
-                :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                :class="{ 'is-invalid' : failed }"
                 id="year"
                 @change="updateOption('year')"
                 v-model="selectTime.year"
@@ -127,12 +196,12 @@
             <ValidationProvider
               class="form-group mx-8"
               rules="required"
-              v-slot="{ errors, invalid, touched, failed }"
+              v-slot="{ errors, failed }"
               tag="div"
             >
               <select
                 class="form-control"
-                :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                :class="{ 'is-invalid' : failed }"
                 id="month"
                 @change="updateOption('month')"
                 v-model="selectTime.month"
@@ -151,12 +220,12 @@
             <ValidationProvider
               class="form-group ml-8"
               rules="required"
-              v-slot="{ errors, invalid, touched, failed }"
+              v-slot="{ errors, failed }"
               tag="div"
             >
               <select
                 class="form-control"
-                :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                :class="{ 'is-invalid' : failed }"
                 id="day"
                 @change="updateOption('day')"
                 v-model="selectTime.day"
@@ -177,42 +246,42 @@
             <ValidationProvider
               class="form-group mr-8"
               rules="required"
-              v-slot="{ errors, invalid, touched, failed }"
+              v-slot="{ errors, failed }"
               tag="div"
             >
               <select
                 class="form-control"
-                :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                :class="{ 'is-invalid' : failed }"
                 id="hour"
                 v-model="selectTime.hour"
               >
                 <option disabled value="">時</option>
                 <option
-                  v-for="n in 24"
+                  v-for="n in isThisYear ? 24 - now.hour : 24"
                   :key="n"
-                  :value="n - 1"
-                >{{ timeStr(n - 1) }}</option>
+                  :value="isThisYear ? now.hour + n - 1 : n"
+                >{{ timeStr(isThisYear ? now.hour + n - 1 : n) }}</option>
               </select>
               <div class="invalid-feedback">{{ errors[0] }}</div>
             </ValidationProvider>
             <ValidationProvider
               class="form-group ml-8"
               rules="required"
-              v-slot="{ errors, invalid, touched, failed }"
+              v-slot="{ errors, failed }"
               tag="div"
             >
               <select
                 class="form-control"
-                :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                :class="{ 'is-invalid' : failed }"
                 id="minute"
                 v-model="selectTime.minute"
               >
                 <option disabled value="">分</option>
                 <option
-                  v-for="n in 60"
+                  v-for="n in isThisYear ? 60 - now.minute -1 : 60"
                   :key="n"
-                  :value="n - 1"
-                >{{ timeStr(n - 1) }}</option>
+                  :value="isThisYear ? now.minute + n - 1 : n"
+                >{{ timeStr(isThisYear ? now.minute + n - 1 : n) }}</option>
               </select>
               <div class="invalid-feedback">{{ errors[0] }}</div>
             </ValidationProvider>
@@ -231,13 +300,18 @@
         <div class="modal-footer p-16">
           <button
             type="button"
-            class="btn btn-secondary m-0 mr-sm-8"
-            data-dismiss="modal"
-          >取消</button>
+            class="btn my-0 mr-16"
+            :class="[isNewModal ? 'btn-dark': 'btn-danger']"
+            @click="openDeleteModal"
+          >{{ isNewModal ? '取消' : '刪除' }}</button>
           <button
             type="submit"
             class="btn btn-primary m-0 ml-sm-8"
-          >建立</button>
+          >{{ isNewModal ? '建立' : '修改' }}</button>
+          <Delete
+            :isOpenDeleteModal.sync="isOpenDeleteModal"
+            @deleteData="upadateCoupons('刪除')"
+          >優惠券</Delete>
         </div>
         </ValidationObserver>
       </div>
@@ -250,17 +324,20 @@
 <script>
 import $ from 'jquery';
 import Toast from '@/components/Toast.vue';
+import Delete from '@/components/Delete.vue';
 
 export default {
   name: 'Coupons',
   components: {
     Toast,
+    Delete,
   },
-  props: ['isNewModal'],
+  props: ['isNewModal', 'search'],
   data() {
     return {
       coupons: [],
       tempCoupon: {},
+      searchCoupons: [],
       now: {},
       selectTime: {
         year: '',
@@ -270,8 +347,10 @@ export default {
         minute: '',
       },
       daysInMonth: 31,
+      sortAttr: '',
       isThisYear: false,
-      isLeapYear: false,
+      isOpenDeleteModal: false,
+      isReverse: false,
     };
   },
   methods: {
@@ -289,9 +368,10 @@ export default {
           vm.$bus.$emit('message:push', '成功', '資料載入成功', 'success');
         }
       });
+      vm.sortAttr = '';
+      vm.sortProducts();
     },
-    upadateCoupons() {
-      console.log('提交');
+    upadateCoupons(couponHandlingmethod) {
       const vm = this;
       const dueDate = new Date(
         vm.selectTime.year,
@@ -302,36 +382,43 @@ export default {
       );
       let api;
       let httpMethod;
-      let msg;
+      if (!vm.tempCoupon.is_enabled) { vm.tempCoupon.is_enabled = false; }
       // 將使用者輸入的時間轉換成至1970年以來的毫秒數
       vm.tempCoupon.due_date = dueDate.getTime();
-      if (vm.isNewModal) {
+      if (couponHandlingmethod === '建立') {
         api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupon`;
-        console.log(api);
         httpMethod = 'post';
-        msg = '建立';
-      } else {
+      } else if (couponHandlingmethod === '修改') {
         api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupon/${vm.tempCoupon.id}`;
         httpMethod = 'put';
-        msg = '修改';
+      } else if (couponHandlingmethod === '刪除') {
+        api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupon/${vm.tempCoupon.id}`;
+        httpMethod = 'delete';
+        vm.openDeleteModal = false;
+        vm.updateCouponsMethods(httpMethod, api, couponHandlingmethod);
+        return;
       }
       vm.$refs.form.validate().then((success) => {
         if (success) {
-          const loader = vm.$loading.show({}, {
-            default: this.$createElement('LogoLoadingAnimation'),
-          });
-          vm.$http[httpMethod](api, { data: vm.tempCoupon }).then((response) => {
-            loader.hide();
-            console.log(response.data);
-            if (response.data.success) {
-              vm.$bus.$emit('message:push', '成功', `資料${msg}成功`, 'success');
-            } else {
-              vm.$bus.$emit('message:push', '失敗', response.data.message, 'danger');
-            }
-            $('#dashboardCouponsModal').modal('hide');
-            vm.getCoupons(1, 'update');
-          });
+          vm.$refs.form.reset();
+          vm.updateCouponsMethods(httpMethod, api, couponHandlingmethod);
         }
+      });
+    },
+    updateCouponsMethods(httpMethod, api, msg) {
+      const vm = this;
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      vm.$http[httpMethod](api, { data: vm.tempCoupon }).then((response) => {
+        loader.hide();
+        if (response.data.success) {
+          vm.$bus.$emit('message:push', '成功', `資料${msg}成功`, 'success');
+        } else {
+          vm.$bus.$emit('message:push', '失敗', response.data.message, 'danger');
+        }
+        $('#dashboardCouponsModal').modal('hide');
+        vm.getCoupons(1, 'update');
       });
     },
     openEditModal(item) {
@@ -342,11 +429,7 @@ export default {
       vm.tempCoupon = { ...item };
       console.log('now', vm.now.timestamp, 'due_date', item.due_date);
       if (vm.now.timestamp > item.due_date) {
-        vm.selectTime.year = '';
-        vm.selectTime.month = '';
-        vm.selectTime.day = '';
-        vm.selectTime.hour = '';
-        vm.selectTime.minute = '';
+        vm.resetTimeSelect();
         vm.$bus.$emit('message:push', '提醒', '此優惠券已經過期，請更新日期', 'warning');
       } else {
         vm.selectTime.year = dueDate.getFullYear();
@@ -389,6 +472,8 @@ export default {
       vm.now.year = now.getFullYear();
       vm.now.month = now.getMonth() + 1;
       vm.now.day = now.getDate();
+      vm.now.hour = now.getHours();
+      vm.now.minute = now.getMinutes();
       vm.now.timestamp = now.getTime();
     },
     getTime(timestamp) {
@@ -399,20 +484,84 @@ export default {
       const str = `${dueDate.getFullYear()}-${month}-${day}`;
       return str;
     },
-  },
-  watch: {
-    isNewModal() {
+    openDeleteModal() {
       const vm = this;
       if (vm.isNewModal) {
-        // 如果使用建立新商品的方式開啟modal，則清空modal內容
-        vm.tempCoupon = {};
+        $('#dashboardCouponsModal').modal('hide');
+      } else {
+        vm.isOpenDeleteModal = true;
       }
+    },
+    resetTimeSelect() {
+      const vm = this;
+      vm.selectTime.year = '';
+      vm.selectTime.month = '';
+      vm.selectTime.day = '';
+      vm.selectTime.hour = '';
+      vm.selectTime.minute = '';
+    },
+    sortProducts(attr = 'title') {
+      const vm = this;
+      const sortTarget = vm.search ? vm.searchCoupons : vm.coupons;
+      if (vm.sortAttr === attr) {
+        vm.isReverse = !vm.isReverse;
+      } else {
+        vm.isReverse = false;
+      }
+      sortTarget.sort((a, b) => {
+        if (attr === 'percent' || attr === 'due_date') {
+          return vm.isReverse ? a[attr] - b[attr] : b[attr] - a[attr];
+        }
+        if (attr === 'is_enabled') {
+          return vm.isReverse ? +a[attr] - +b[attr] : +b[attr] - +a[attr];
+        }
+        return vm.isReverse ? b[attr].localeCompare(a[attr], 'zh-hant') : a[attr].localeCompare(b[attr], 'zh-hant');
+      });
+      vm.sortAttr = attr;
+    },
+  },
+  watch: {
+    search() {
+      const vm = this;
+      if (vm.search) {
+        const result = vm.coupons.filter((obj) => {
+          const str = obj.title + obj.code + vm.getTime(obj.due_date) + obj.percent;
+          if (str.indexOf(vm.search) > -1) {
+            return obj;
+          }
+          return false;
+        });
+        if (result.length) {
+          vm.searchCoupons = result;
+        } else {
+          vm.searchCoupons = [];
+        }
+      }
+    },
+  },
+  computed: {
+    showCoupon() {
+      const vm = this;
+      return vm.search ? vm.searchCoupons : vm.coupons;
     },
   },
   created() {
     const vm = this;
     vm.getCoupons();
     vm.getCurrentTime();
+  },
+  mounted() {
+    const vm = this;
+    $('#dashboardCouponsModal').on('hide.bs.modal', () => {
+      console.log('關閉視窗');
+      vm.tempCoupon = {};
+      vm.resetTimeSelect();
+      vm.isOpenDeleteModal = false;
+      vm.$refs.form.reset();
+    });
+  },
+  destroyed() {
+    $('#dashboardCouponsModal').off('hide.bs.modal');
   },
 };
 </script>

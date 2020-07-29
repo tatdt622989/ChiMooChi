@@ -16,7 +16,13 @@
       <button class="search-btn">
         <span class="material-icons lh-1">search</span>
       </button>
-      <input class="search-input" type="search" placeholder="搜尋" />
+      <input
+        class="search-input"
+        type="search"
+        placeholder="搜尋"
+        ref="search"
+        @input="$emit('update:search', $refs.search.value)"
+      />
     </form>
     <button
       class="btn btn-primary d-none d-lg-block order-2"
@@ -31,6 +37,7 @@ import $ from 'jquery';
 
 export default {
   name: 'Header',
+  props: ['search'],
   data() {
     return {
       headerText: '商品',

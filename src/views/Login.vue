@@ -12,11 +12,11 @@
         <ValidationObserver ref="form" slim>
           <form class="d-flex flex-wrap" @submit.prevent="signIn">
             <ValidationProvider class="form-group mb-16" rules="email|required"
-            v-slot="{ errors, invalid, touched, failed }" tag="div">
+            v-slot="{ errors, failed }" tag="div">
               <label class="text-left w-100" for="username">會員帳號</label>
               <input
                 class="login-input form-control"
-                :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                :class="{ 'is-invalid' : failed }"
                 type="email" id="username"
                 autocomplete="username"
                 v-model="user.username"
@@ -24,11 +24,11 @@
               <div class="invalid-feedback">{{ errors[0] }}</div>
             </ValidationProvider>
             <ValidationProvider class="form-group mb-16" rules="required"
-            v-slot="{ errors, invalid, touched, failed }" tag="div">
+            v-slot="{ errors, failed }" tag="div">
               <label class="text-left w-100" for="current-password">會員密碼</label>
               <input
                 class="login-input form-control"
-                :class="{ 'is-invalid' : invalid && touched || invalid && failed }"
+                :class="{ 'is-invalid' : failed }"
                 type="password"
                 id="current-password"
                 autocomplete="current-password"
@@ -77,6 +77,7 @@ export default {
               vm.$bus.$emit('message:push', '錯誤', '帳號或密碼錯誤', 'danger');
             }
           });
+          vm.$refs.form.reset();
         }
       });
     },
