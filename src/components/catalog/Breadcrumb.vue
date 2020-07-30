@@ -1,9 +1,10 @@
 <template>
   <nav aria-label="breadcrumb">
-    <ol class="breadcrumb pt-4 pt-sm-12">
+    <ol class="breadcrumb pt-8 pb-0 f-14 f-md-16">
       <li class="breadcrumb-item">
-        <a href="#">
-          <span class="material-icons">location_on</span>首頁
+        <a href="#" class="d-flex align-items-center">
+          <span class="material-icons f-20 f-md-24">location_on</span>
+          首頁
         </a>
       </li>
       <li class="breadcrumb-item">
@@ -13,3 +14,16 @@
     </ol>
   </nav>
 </template>
+
+<script>
+export default {
+  name: 'Breadcrumb',
+};
+</script>
+
+<style lang="scss">
+.breadcrumb {
+  @include media-breakpoint-up(xs) {
+  }
+}
+</style>

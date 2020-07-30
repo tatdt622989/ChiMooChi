@@ -7,7 +7,7 @@
             <img src="@/assets/images/white-logo.svg" alt="logo-white" />
             <p>奇木奇成立於2020年，已經有超過一年的歷史，將產品做到最好，是我們一直以來的原則。</p>
           </div>
-          <div class="offset-xl-5 offset-lg-2 col-xl-4 col-lg-6 col-md-7 col-12 footer-nav">
+          <div class="offset-xl-4 offset-lg-2 col-xl-5 col-lg-6 col-md-7 col-12 footer-nav">
             <h4>聯絡我們</h4>
             <h4>關注我們</h4>
             <div class="email">
@@ -53,35 +53,6 @@ footer {
     p {
       margin-bottom: 16px;
     }
-    .footer-nav {
-      .email,.phone {
-        flex-basis: 100%;
-        justify-content: center;
-        margin: 0;
-      }
-      .email {
-        order: 1;
-      }
-      .phone {
-        order: 2;
-      }
-      h4 {
-        margin:  20px 0 12px 0;
-        &:nth-last-of-type(1){
-          order: 3;
-        }
-        flex-basis: 100%;
-      }
-      a {
-        margin-right: 30px;
-        order: 4;
-      }
-      .twitter-logo{
-        margin-right: 0;
-      }
-      align-items: center;
-      justify-content: center;
-    }
     padding-top: 28px;
     padding-bottom: 22px;
     text-align: center;
@@ -94,11 +65,54 @@ footer {
       margin-top: 18px;
       margin-bottom: 6px;
     }
-    .footer-nav {
-      .email,.phone {
+    padding-top: 45px;
+    padding-bottom: 39px;
+    text-align: left;
+  }
+  h4 {
+    font-size: 20px;
+  }
+  span {
+    color: $footer-btn-color;
+  }
+  background-color: $footer-about-bg-color;
+}
+
+.footer-nav {
+  @include media-breakpoint-up(xs) {
+    .email,.phone {
+      flex-basis: 100%;
+      justify-content: center;
+      margin: 0;
+    }
+    .email {
+      order: 1;
+    }
+    .phone {
+      order: 2;
+    }
+    h4 {
+      margin:  20px 0 12px 0;
+      &:nth-last-of-type(1){
+        order: 3;
+      }
+      flex-basis: 100%;
+    }
+    a {
+      margin-right: 30px;
+      order: 4;
+    }
+    .twitter-logo{
+      margin-right: 0;
+    }
+    align-items: center;
+    justify-content: center;
+  }
+  @include media-breakpoint-up(md) {
+    .email,.phone {
         flex-basis: auto;
         justify-content: flex-end;
-        margin-right: 10px;
+        margin-right: 25px;
         order: 0;
       }
       h4 {
@@ -106,7 +120,7 @@ footer {
           order: 0;
         }
         flex-basis: auto;
-        margin: 0 0 0 30px
+        margin: 0 0 0 45px
       }
       .facebook-logo, .twitter-logo {
         margin-right: -10px;
@@ -121,69 +135,52 @@ footer {
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
-    }
-    padding-top: 45px;
-    padding-bottom: 39px;
-    text-align: left;
   }
-  @include media-breakpoint-up(lg) {
+  a {
+    &:hover {
+      opacity: 0.8;
+    }
+    background: no-repeat center/auto;
+    height: 44px;
+    transition: $transition-base;
+    width: 44px;
   }
-  @include media-breakpoint-up(xl) {
+  button {
+    span {
+      font-size: 28px;
+      line-height: 44px;
+    }
+    &:focus {
+      outline: 0;
+    }
+    &:hover {
+      opacity: 0.8;
+    }
+    background-color: $footer-btn-bg-color;
+    border: 0;
+    height: 44px;
+    padding: 0 7px 0 7px;
+    transition: $transition-base;
+    width: 44px;
   }
-  .footer-nav {
-    a {
-      &:hover {
-        opacity: 0.8;
-      }
-      background: no-repeat center/auto;
-      height: 44px;
-      transition: $transition-base;
-      width: 44px;
-    }
-    button {
-      span {
-        font-size: 30px;
-        line-height: 44px;
-      }
-      &:focus {
-        outline: 0;
-      }
-      &:hover {
-        opacity: 0.8;
-      }
-      background-color: $footer-btn-bg-color;
-      border: 0;
-      height: 44px;
-      padding: 0 7px 0 7px;
-      transition: $transition-base;
-      width: 44px;
-    }
-    .email, .phone {
-      align-items: center;
-      display: flex;
-    }
-    .facebook-logo {
-      background-image: url("~@/assets/images/facebook-logo.svg");
-    }
-    .instagram-logo {
-      background-image: url("~@/assets/images/instagram-logo.svg");
-    }
-    .twitter-logo {
-      background-image: url("~@/assets/images/twitter-logo.svg");
-    }
-    .youtube-logo {
-      background-image: url("~@/assets/images/youtube-logo.svg");
-    }
+  .email, .phone {
+    align-items: center;
     display: flex;
-    flex-wrap: wrap;
   }
-  h4 {
-    font-size: 20px;
+  .facebook-logo {
+    background-image: url("~@/assets/images/facebook-logo.svg");
   }
-  span {
-    color: $footer-btn-color;
+  .instagram-logo {
+    background-image: url("~@/assets/images/instagram-logo.svg");
   }
-  background-color: $footer-about-bg-color;
+  .twitter-logo {
+    background-image: url("~@/assets/images/twitter-logo.svg");
+  }
+  .youtube-logo {
+    background-image: url("~@/assets/images/youtube-logo.svg");
+  }
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .copyright {

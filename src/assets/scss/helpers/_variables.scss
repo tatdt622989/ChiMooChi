@@ -825,14 +825,14 @@ $pagination-line-height:            1.25 !default;
 $pagination-color:                  $link-color !default;
 $pagination-bg:                     $white !default;
 $pagination-border-width:           $border-width !default;
-$pagination-border-color:           $gray-300 !default;
+$pagination-border-color:           $light !default;
 
 $pagination-focus-box-shadow:       $input-btn-focus-box-shadow !default;
 $pagination-focus-outline:          0 !default;
 
 $pagination-hover-color:            $link-hover-color !default;
 $pagination-hover-bg:               $gray-200 !default;
-$pagination-hover-border-color:     $gray-300 !default;
+$pagination-hover-border-color:     $light !default;
 
 $pagination-active-color:           $component-active-color !default;
 $pagination-active-bg:              $component-active-bg !default;
@@ -840,7 +840,7 @@ $pagination-active-border-color:    $pagination-active-bg !default;
 
 $pagination-disabled-color:         $gray-600 !default;
 $pagination-disabled-bg:            $white !default;
-$pagination-disabled-border-color:  $gray-300 !default;
+$pagination-disabled-border-color:  $light !default;
 
 
 // Jumbotron
@@ -1077,9 +1077,9 @@ $figure-caption-color:              $gray-600 !default;
 
 // Breadcrumbs
 
-$breadcrumb-font-size:              null !default;
+$breadcrumb-font-size:              16px !default;
 
-$breadcrumb-padding-y:              .75rem !default;
+$breadcrumb-padding-y:              .5rem !default;
 $breadcrumb-padding-x:              0rem !default;
 $breadcrumb-item-padding:           .5rem !default;
 

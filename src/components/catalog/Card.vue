@@ -20,6 +20,14 @@
         </button>
       </div>
     </div>
+    <div
+      class="sold-out"
+      v-if="!item.is_enabled"
+    >
+    <div class="border border-white">
+      <p>已售完</p>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -32,9 +40,10 @@ export default {
 
 <style lang="scss">
 .card {
-  height: auto;
-  display: flex;
   align-content: space-between;
+  display: flex;
+  height: auto;
+  position: relative;
 }
 
 .card-img-link {
@@ -160,5 +169,26 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.sold-out {
+  p {
+    @include media-breakpoint-up(xs) {
+      margin: 10px 16px;
+    }
+    @include media-breakpoint-up(md) {
+      margin: 10px 32px;
+    }
+  }
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  display: flex;
+  font-size: 28px;
+  font-weight: bold;
+  height: 100%;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
 }
 </style>

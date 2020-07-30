@@ -87,6 +87,7 @@ router.beforeEach((to, from, next) => {
     const api = `${process.env.VUE_APP_APIPATH}/api/user/check`;
     // 在這裡不使用this而是直接使用axios來使用套件
     axios.post(api).then((response) => {
+      console.log(response.data);
       // 確認使用者是否登入
       if (response.data.success) {
         next();

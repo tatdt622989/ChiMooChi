@@ -12,18 +12,11 @@
     >
       <span class="material-icons">add</span>
     </button>
-    <form class="search-form form-inline">
-      <button class="search-btn">
-        <span class="material-icons lh-1">search</span>
-      </button>
-      <input
-        class="search-input"
-        type="search"
-        placeholder="搜尋"
-        ref="search"
-        @input="$emit('update:search', $refs.search.value)"
-      />
-    </form>
+    <Search
+      class="search-form"
+      v-bind="$attrs"
+      v-on="$listeners"
+    />
     <button
       class="btn btn-primary d-none d-lg-block order-2"
       @click="openModal"
@@ -34,10 +27,13 @@
 
 <script>
 import $ from 'jquery';
+import Search from '@/components/Search.vue';
 
 export default {
   name: 'Header',
-  props: ['search'],
+  components: {
+    Search,
+  },
   data() {
     return {
       headerText: '商品',
@@ -99,19 +95,6 @@ export default {
     border: 0;
     height: 44px;
     padding: 0;
-  }
-  .search-input {
-    @include media-breakpoint-up(xs) {
-      width: 100%;
-    }
-    @include media-breakpoint-up(lg) {
-      width: 180px;
-    }
-    height: 44px;
-  }
-  .search-btn {
-    height: 42px;
-    padding: 0 10px;
   }
   align-items: center;
   display: flex;

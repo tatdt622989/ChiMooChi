@@ -300,13 +300,14 @@ export default {
   methods: {
     getProducts(page = 1, loadMethod) {
       const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/products?page=:${page}`;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/products?page=${page}`;
       const loader = vm.$loading.show({}, {
         default: this.$createElement('LogoLoadingAnimation'),
       });
+      console.log(api);
       this.$http.get(api).then((response) => {
         vm.products = response.data.products;
-        console.log(vm.products);
+        console.log(response.data);
         loader.hide();
         if (loadMethod === 'update') {
           vm.$bus.$emit('message:push', '成功', '資料載入成功', 'success');

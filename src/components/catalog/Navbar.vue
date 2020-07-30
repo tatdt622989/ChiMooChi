@@ -48,12 +48,6 @@
             >超值優惠</router-link>
           </li>
         </ul>
-        <form class="search-form form-inline">
-          <button class="search-btn">
-            <span class="material-icons lh-1">search</span>
-          </button>
-          <input class="search-input" type="search" placeholder="搜尋" />
-        </form>
       </div>
       <ul class="navbar-member">
         <li class="navbar-member-item">
@@ -265,69 +259,6 @@ export default {
     display: none;
   }
   align-self: flex-end;
-}
-.search-form{
-  @include media-breakpoint-up(xs) {
-    border: 0;
-    margin-bottom: 33px;
-    order: 0;
-    padding: 0;
-  }
-  @include media-breakpoint-up(md) {
-    margin-bottom: 44px;
-  }
-  @include media-breakpoint-up(lg) {
-    border-right: 1px solid $gray-500;
-    margin-bottom: 0;
-    order: 1;
-    padding-right: 30px;
-  }
-  display: flex;
-  font-size: 14px;
-  flex-wrap: nowrap;
-  position: relative;
-}
-.search-btn {
-  @include media-breakpoint-up(xs) {
-    height: 42px;
-    left: 1px;
-    padding: 0 10px 0 10px;
-  }
-  @include media-breakpoint-up(lg) {
-    height: 30px;
-  }
-  &:focus {
-    outline: 0;
-  }
-  background-color: #fff;
-  border: 0;
-  position: absolute;
-  text-align: center;
-  top: 1px;
-}
-.search-input {
-  @include media-breakpoint-up(xs) {
-    font-size: 14px;
-    height: 44px;
-    text-indent: 44px;
-    width: 132px;
-  }
-  @include media-breakpoint-up(md) {
-    font-size: 16px;
-    width: 209px;
-  }
-  @include media-breakpoint-up(lg) {
-    font-size: 14px;
-    height: 32px;
-    text-indent: 44px;
-    width: 160px;
-  }
-  &:focus {
-    border: 1px solid $primary;
-    outline: 0px;
-  }
-  border: 1px solid $secondary;
-  transition: $transition-base;
 }
 .nav-item {
   @include media-breakpoint-up(xs) {
