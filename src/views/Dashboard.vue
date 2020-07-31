@@ -62,6 +62,9 @@ export default {
   @include media-breakpoint-up(md) {
     padding: 0 30px;
   }
+  @include media-breakpoint-up(lg) {
+    margin-left: 180px;
+  }
   .table {
     @include media-breakpoint-up(xs) {
       th {

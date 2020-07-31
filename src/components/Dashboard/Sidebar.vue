@@ -86,15 +86,11 @@ export default {
   @include media-breakpoint-up(xs) {
     box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.4);
     left: -226px;
-    position: absolute;
-    top: 0;
     width: 220px;
   }
   @include media-breakpoint-up(lg) {
     box-shadow: none;
-    left: auto;
-    position: relative;
-    top: auto;
+    left: 0;
     width: 180px;
   }
   &.show {
@@ -108,6 +104,8 @@ export default {
   flex-wrap: wrap;
   height: 100%;
   justify-content: flex-start;
+  position: fixed;
+  top: 0;
   transition: $transition-base;
   z-index: 1000;
 }

@@ -185,6 +185,7 @@
                 id="year"
                 @change="updateOption('year')"
                 v-model="selectTime.year"
+                required
               >
                 <option disabled value="">年</option>
                 <option v-for="n in 100" :key="n" :value="now.year - 1 + n">
@@ -205,6 +206,7 @@
                 id="month"
                 @change="updateOption('month')"
                 v-model="selectTime.month"
+                required
               >
                 <option disabled value="">月</option>
                 <option
@@ -229,6 +231,7 @@
                 id="day"
                 @change="updateOption('day')"
                 v-model="selectTime.day"
+                required
               >
                 <option disabled value="">日</option>
                 <option
@@ -254,6 +257,7 @@
                 :class="{ 'is-invalid' : failed }"
                 id="hour"
                 v-model="selectTime.hour"
+                required
               >
                 <option disabled value="">時</option>
                 <option
@@ -275,6 +279,7 @@
                 :class="{ 'is-invalid' : failed }"
                 id="minute"
                 v-model="selectTime.minute"
+                required
               >
                 <option disabled value="">分</option>
                 <option

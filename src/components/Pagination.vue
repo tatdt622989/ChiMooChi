@@ -1,12 +1,12 @@
 <template>
   <nav aria-label="Page navigation" class="mt-32 mb-60">
     <ul class="pagination justify-content-center">
-      <li class="page-item disabled">
+      <li class="page-item" :class="{ disabled : !pagination.has_pre }">
         <a
           class="page-link previous-link"
           href="#"
           aria-label="Previous"
-          @click.prevent="$emit('change-page', pagination.current_page - 1)"
+          @click.prevent="changePage(pagination.current_page - 1)"
         >
           <span class="material-icons">keyboard_arrow_left</span>
         </a>
@@ -17,14 +17,14 @@
         v-for="n in pagination.total_pages"
         :key="n"
       >
-        <a class="page-link num-link" href="#" @click.prevent="$emit('change-page', n)">{{ n }}</a>
+        <a class="page-link num-link" href="#" @click.prevent="changePage(n)">{{ n }}</a>
       </li>
-      <li class="page-item">
+      <li class="page-item" :class="{ disabled : !pagination.has_next }">
         <a
           class="page-link next-link"
           href="#"
           aria-label="Next"
-          @click.prevent="$emit('change-page', pagination.current_page + 1)"
+          @click.prevent="changePage(pagination.current_page + 1)"
         >
           <span class="material-icons">keyboard_arrow_right</span>
         </a>
@@ -37,6 +37,12 @@
 export default {
   name: 'Pagination',
   props: ['pagination'],
+  methods: {
+    changePage(page) {
+      this.$emit('change-page', page);
+      window.scrollTo(0, 0);
+    },
+  },
 };
 </script>
 

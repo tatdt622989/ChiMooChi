@@ -21,6 +21,15 @@ import {
 import TW from 'vee-validate/dist/locale/zh_TW.json';
 import 'bootstrap';
 import LogoLoadingAnimation from '@/components/LogoLoadingAnimation.vue';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faFacebookSquare,
+  faInstagramSquare,
+  faYoutubeSquare,
+  faTwitterSquare,
+} from '@fortawesome/free-brands-svg-icons';
+import { faEnvelopeSquare, faPhoneSquare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './App.vue';
 import router from './router';
 import './bus';
@@ -35,9 +44,19 @@ Vue.use(Loading, {
 Vue.use(VueAxios, axios);
 axios.defaults.withCredentials = true;
 
+library.add(
+  faFacebookSquare,
+  faInstagramSquare,
+  faYoutubeSquare,
+  faTwitterSquare,
+  faEnvelopeSquare,
+  faPhoneSquare,
+);
+
 Vue.component('LogoLoadingAnimation', LogoLoadingAnimation);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.filter('currency', currencyFilter);
 

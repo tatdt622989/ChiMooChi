@@ -122,7 +122,7 @@ export default {
 <style lang="scss">
 .navbar {
   @include media-breakpoint-up(xs) {
-    height: 60px;
+    height: 64px;
   }
   @include media-breakpoint-up(md) {
     height: 76px;
@@ -164,6 +164,7 @@ export default {
     transition: $transition-base;
   }
   color: $gray-600;
+  margin-left: -10px;
 }
 .navbar-primary {
   @include media-breakpoint-up(xs) {

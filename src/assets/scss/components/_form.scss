@@ -4,3 +4,10 @@
     color: $danger;
   }
 }
+
+select:required:invalid {
+  color: $light;
+}
+select, option {
+  color: $secondary;
+}

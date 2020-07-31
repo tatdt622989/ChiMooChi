@@ -68,7 +68,7 @@
               >keyboard_arrow_down</span>
             </button>
           </th>
-          <th class="nowrap text-center info-edit"><p>詳情編輯</p></th>
+          <th class="nowrap text-right info-edit"><p>詳情編輯</p></th>
         </tr>
       </thead>
       <tbody>
@@ -82,7 +82,7 @@
             :class="[item.is_enabled ? 'text-primary' : 'text-light']"
           >{{ item.is_enabled ? '啟用中' : '未啟用' }}
           </td>
-          <td class="text-center nowrap info-edit">
+          <td class="text-right nowrap info-edit">
             <button class="btn-square btn-outline-secondary" @click="openEditModal(item)">
               <span class="material-icons">edit</span>
             </button>
@@ -189,16 +189,38 @@
                     >
                     <div class="invalid-feedback">{{ errors[0] }}</div>
                   </ValidationProvider>
-                  <div class="modal-input-sm w-50 pr-8">
-                    <div class="form-group">
-                      <label for="category">類別</label>
-                      <input class="form-control" type="text" id="category"
-                        v-model="tempProduct.category">
-                    </div>
+                  <div class="modal-forms-group">
                     <ValidationProvider
-                      class="form-group"
+                      class="form-group mr-8"
                       tag="div"
-                      rules="required|numeric"
+                      rules="required"
+                      v-slot="{ errors, failed }"
+                    >
+                      <label for="category">類別</label>
+                      <select
+                      class="form-control"
+                      :class="{ 'is-invalid' : failed }"
+                      v-model="tempProduct.category"
+                      >
+                        <option value="" disabled>類別</option>
+                        <option
+                          v-for="item in category"
+                          :key="item"
+                          :value="item"
+                        >{{ item }}</option>
+                      </select>
+                      <div class="invalid-feedback">{{ errors[0] }}</div>
+                    </ValidationProvider>
+                    <div class="form-group ml-8">
+                      <label for="product" id="unit">單位</label>
+                      <input class="form-control" type="text" id="unit" v-model="tempProduct.unit">
+                    </div>
+                  </div>
+                  <div class="modal-forms-group">
+                    <ValidationProvider
+                      class="form-group mr-8"
+                      tag="div"
+                      rules="numeric"
                       v-slot="{ errors, failed }"
                     >
                       <label for="originPrice">原價</label>
@@ -211,16 +233,10 @@
                       >
                       <div class="invalid-feedback">{{ errors[0] }}</div>
                     </ValidationProvider>
-                  </div>
-                  <div class="modal-input-sm w-50 pl-8">
-                    <div class="form-group">
-                      <label for="product" id="unit">單位</label>
-                      <input class="form-control" type="text" id="unit" v-model="tempProduct.unit">
-                    </div>
                     <ValidationProvider
-                      class="form-group"
+                      class="form-group ml-8"
                       tag="div"
-                      rules="numeric"
+                      rules="required|numeric"
                       v-slot="{ errors, failed }"
                     >
                       <label for="price">售價</label>
@@ -288,13 +304,17 @@ export default {
   data() {
     return {
       products: [],
-      tempProduct: {},
+      tempProduct: {
+        category: '',
+        is_enabled: false,
+      },
       searchProducts: [],
       imgLoadMethod: 'upload',
       sortAttr: '',
       isLoading: false,
       isOpenDeleteModal: false,
       isReverse: false,
+      category: ['特色推薦', '經典設計', '木椅', '塑膠椅', '金屬椅', '沙發/沙發床'],
     };
   },
   methods: {
@@ -328,8 +348,7 @@ export default {
       const vm = this;
       let api;
       let httpMethod;
-      if (!vm.tempProduct.is_enabled) { vm.tempProduct.is_enabled = false; }
-      if (!vm.tempProduct.price) { vm.tempProduct.price = vm.tempProduct.origin_price; }
+      if (!vm.tempProduct.origin_price) { vm.tempProduct.origin_price = vm.tempProduct.price; }
       if (prdouctHandlingMethod === '建立') {
         api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product`;
         httpMethod = 'post';
@@ -501,14 +520,13 @@ export default {
     }
   }
   .col-12.col-md-6 {
-    .modal-input-sm {
+    .modal-forms-group {
       label {
         margin-top: 8px;
       }
       display: flex;
-      flex-direction: column;
       flex-wrap: nowrap;
-      width: 50%;
+      width: 100%;
     }
     textarea {
       height: 60px;

@@ -11,21 +11,29 @@
             <h4>聯絡我們</h4>
             <h4>關注我們</h4>
             <div class="email">
-              <span>chimoochi@example.com</span>
+              <p class="mr-12 my-0">chimoochi@example.com</p>
               <button>
-                <span class="material-icons">mail_outline</span>
+                <font-awesome-icon :icon="['fas', 'envelope-square']" />
               </button>
             </div>
-            <a href="#" class="instagram-logo"></a>
-            <a href="#" class="facebook-logo"></a>
+            <a href="#" class="instagram-logo">
+              <font-awesome-icon :icon="['fab', 'instagram-square']" />
+            </a>
+            <a href="#" class="youtube-logo">
+              <font-awesome-icon :icon="['fab', 'youtube-square']" />
+            </a>
             <div class="phone">
-              <span>0800-xxx-xxx</span>
+              <p class="mr-12 my-0">0800-xxx-xxx</p>
               <button>
-                <span class="material-icons">phone</span>
+                <font-awesome-icon :icon="['fas', 'phone-square']" />
               </button>
             </div>
-            <a href="#" class="youtube-logo"></a>
-            <a href="#" class="twitter-logo"></a>
+            <a href="#" class="facebook-logo">
+              <font-awesome-icon :icon="['fab', 'facebook-square']" />
+            </a>
+            <a href="#" class="twitter-logo">
+              <font-awesome-icon :icon="['fab', 'twitter-square']" />
+            </a>
           </div>
         </div>
       </div>
@@ -122,10 +130,10 @@ footer {
         flex-basis: auto;
         margin: 0 0 0 45px
       }
-      .facebook-logo, .twitter-logo {
+      .youtube-logo, .twitter-logo {
         margin-right: -10px;
       }
-      .instagram-logo, .youtube-logo {
+      .instagram-logo, .facebook-logo {
         margin-right: 12px;
       }
       a {
@@ -136,12 +144,18 @@ footer {
       flex-direction: row;
       justify-content: flex-end;
   }
+  a, button {
+    color: #fff;
+    font-size: 28px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+  }
   a {
     &:hover {
       opacity: 0.8;
     }
     background: no-repeat center/auto;
-    height: 44px;
     transition: $transition-base;
     width: 44px;
   }
@@ -158,7 +172,6 @@ footer {
     }
     background-color: $footer-btn-bg-color;
     border: 0;
-    height: 44px;
     padding: 0 7px 0 7px;
     transition: $transition-base;
     width: 44px;
@@ -166,18 +179,6 @@ footer {
   .email, .phone {
     align-items: center;
     display: flex;
-  }
-  .facebook-logo {
-    background-image: url("~@/assets/images/facebook-logo.svg");
-  }
-  .instagram-logo {
-    background-image: url("~@/assets/images/instagram-logo.svg");
-  }
-  .twitter-logo {
-    background-image: url("~@/assets/images/twitter-logo.svg");
-  }
-  .youtube-logo {
-    background-image: url("~@/assets/images/youtube-logo.svg");
   }
   display: flex;
   flex-wrap: wrap;
