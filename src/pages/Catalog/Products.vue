@@ -3,16 +3,21 @@
     <div class="row">
       <div class="products-header col-12">
         <div class="products-title mt-8 mt-lg-0">
-          <h1 class="f-24 f-md-30 mr-12 mr-md-20 mb-0 font-weight-bold">全部商品</h1>
-          <h2 class="f-16 mb-0">共29件商品</h2>
+          <h1 class="f-24 f-md-30 mr-12 mr-md-20 mb-0 font-weight-bold">
+            {{ search ? `搜尋關鍵詞：${search}` : currentCategory }}
+          </h1>
+          <h2 class="f-16 mb-0">
+            共{{ search ? searchProducts.length : categorizedProducts.length }}件商品
+          </h2>
         </div>
         <div class="products-filter mt-16 mt-lg-0 mb-24 mb-md-0">
-          <Search class="search-form mb-8 mb-md-0"/>
+          <Search class="search-form mb-8 mb-md-0" :search.sync="search" />
           <select
           class="form-control flex-shrink-0
           mr-8 mr-md-16 mr-lg-20 mb-0"
-          v-model="sortMethod.time"
-          @change="getProducts(currentCategory, pagination.current_page)"
+          v-model="sortMethods.time"
+          @change="productsFilter(search ? '' : currentCategory,
+          sortMethods.time)"
           required
           >
           <option value="" disabled>時間</option>
@@ -21,8 +26,9 @@
           </select>
           <select
             class="price form-control mr-8 mr-md-0"
-            v-model="sortMethod.price"
-            @change="getProducts(currentCategory, pagination.current_page)"
+            v-model="sortMethods.price"
+            @change="productsFilter(search ? '' : currentCategory,
+            sortMethods.price)"
             required
           >
             <option value="" disabled>價格</option>
@@ -32,7 +38,7 @@
           <select
             class="category form-control"
             v-model="currentCategory"
-            @change="getProducts(currentCategory, pagination.current_page)"
+            @change="productsFilter(currentCategory, currentSortMethod, pagination.current_page)"
             required
           >
             <option>類別</option>
@@ -51,19 +57,26 @@
         v-for="(item, index) in category"
         :key="index"
         :class="{ active : currentCategory === item }"
-        @click="getProducts(item, pagination.current_page)"
+        @click="productsFilter(item, currentSortMethod, pagination.current_page)"
       >{{ item }}</button>
     </div>
     <div class="row product-list">
       <div
         class="col-lg-3 col-md-4 col-6 d-lg-block mb-30 mb-sm-45"
-        v-for="item in renderProducts"
+        v-for="item in paginatedProducts"
         :key="item.id"
       >
       <Card :item="item"></Card>
       </div>
     </div>
-    <Pagination :pagination="pagination" @change-page="changePage"/>
+    <p
+    v-if="search && searchProducts.length === 0 || !search && categorizedProducts.length === 0"
+    class="f-30 font-weight-bold text-dark mt-20 mb-45"
+    >查無有關"{{ search || currentCategory }}"的商品</p>
+    <Pagination :pagination="pagination"
+      @change-page="changePage"
+      v-else
+    />
   </div>
 </template>
 
@@ -83,19 +96,21 @@ export default {
     return {
       products: [],
       categorizedProducts: [],
-      renderProducts: [],
+      searchProducts: [],
+      paginatedProducts: [],
       pagination: {},
       category: ['全部商品', '特色推薦', '經典設計', '木椅', '塑膠椅', '金屬椅', '沙發/沙發床'],
       currentCategory: '全部商品',
-      sortMethod: {
+      sortMethods: {
         time: '新到舊',
         price: '',
       },
+      currentSortMethod: '',
+      search: '',
     };
   },
   methods: {
-    getProducts(category = '全部商品', page = 1) {
-      console.log(page);
+    getProducts() {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;
       const loader = vm.$loading.show({}, {
@@ -106,16 +121,31 @@ export default {
         console.log(response.data);
         // 取得所有商品
         vm.products = response.data.products;
-        // 將商品分類
-        vm.currentCategory = category;
-        vm.categorizeProducts(category);
-        // 將分類後的商品排序
-        vm.sortProducts();
-        // 將排序後的商品分頁
-        vm.getPagination(page);
-        vm.paginateProducts();
+        vm.productsFilter();
         loader.hide();
       });
+    },
+    productsFilter(category = '全部商品', currentSortMethod = '新到舊', page = 1) {
+      const vm = this;
+      console.log(category);
+      // category === '' 代表非更換類別狀態
+      // category !== '' 代表觸發更換類別
+      if (vm.search && category !== '') {
+        vm.search = '';
+        vm.currentCategory = category;
+      } else if (!vm.search && category !== '') {
+        vm.currentCategory = category;
+      }
+      vm.categorizeProducts(vm.currentCategory);
+      const target = vm.search ? vm.searchProducts : vm.categorizedProducts;
+      console.log(target);
+      console.log(vm.search);
+      // 將分類後的商品排序
+      vm.currentSortMethod = currentSortMethod;
+      vm.sortProducts(target);
+      // 將排序後的商品分頁
+      vm.getPagination(page, target);
+      vm.paginateProducts(target);
     },
     categorizeProducts(category) {
       const vm = this;
@@ -131,41 +161,41 @@ export default {
         });
         vm.categorizedProducts = result;
       } else {
-        vm.categorizedProducts = vm.products;
+        vm.categorizedProducts = [...vm.products];
       }
     },
-    sortProducts() {
+    sortProducts(array) {
       const vm = this;
-      console.log(vm.sortMethod);
-
-      if (vm.sortMethod.time) {
-        vm.sortMethod.price = '';
-      } else if (vm.sortMethod.price) {
-        vm.sortMethod.time = '';
+      let target = array;
+      if (vm.currentSortMethod === vm.sortMethods.time) {
+        vm.sortMethods.price = '';
+      } else if (vm.currentSortMethod === vm.sortMethods.price) {
+        vm.sortMethods.time = '';
       }
-      if (vm.sortMethod.time === '舊到新') {
-        vm.categorizedProducts = vm.categorizedProducts.reverse();
+      if (vm.sortMethods.time === '舊到新') {
+        target = target.reverse();
       }
-      vm.categorizedProducts.sort((a, b) => {
-        if (vm.sortMethod.price === '低到高') {
+      target.sort((a, b) => {
+        if (vm.sortMethods.price === '低到高') {
           return a.price - b.price;
         }
-        if (vm.sortMethod.price === '高到低') {
+        if (vm.sortMethods.price === '高到低') {
           return b.price - a.price;
         }
         return false;
       });
     },
-    getPagination(page) {
+    getPagination(page, array) {
       const vm = this;
-      const categorizedProductsLen = vm.categorizedProducts.length;
+      const target = array;
+      const targetLen = target.length;
       console.log(page);
       vm.$set(vm.pagination, 'current_page', page);
-      console.log(Math.floor(categorizedProductsLen / 12));
-      if (categorizedProductsLen % 12 !== 0) {
-        vm.$set(vm.pagination, 'total_pages', Math.floor(categorizedProductsLen / 12) + 1);
+      console.log(Math.floor(targetLen / 12));
+      if (targetLen % 12 !== 0) {
+        vm.$set(vm.pagination, 'total_pages', Math.floor(targetLen / 12) + 1);
       } else {
-        vm.$set(vm.pagination, 'total_pages', Math.floor(categorizedProductsLen / 12));
+        vm.$set(vm.pagination, 'total_pages', Math.floor(targetLen / 12));
       }
       if (page === 1) {
         vm.$set(vm.pagination, 'has_pre', false);
@@ -178,25 +208,50 @@ export default {
         vm.$set(vm.pagination, 'has_next', false);
       }
     },
-    paginateProducts() {
+    paginateProducts(array) {
       const vm = this;
+      const target = array;
+      console.log(target);
       const startIndex = (vm.pagination.current_page - 1) * 12;
-      const result = vm.categorizedProducts.filter((obj, index) => {
+      const result = target.filter((obj, index) => {
         if (startIndex <= index && startIndex + 11 >= index) {
           return obj;
         }
         return false;
       });
-      vm.renderProducts = result;
+      vm.paginatedProducts = result;
     },
     changePage(page) {
       /*
-      換頁是由子元件觸發，並且需要經過getProducts來處理，
-      而getProducts有一些參數並不存在子元件，
+      換頁是由子元件觸發，並且需要經過getRenderProducts來處理，
+      而getRenderProducts有一些參數並不存在子元件，
       所以改由子元件觸發此函式，再來觸發getproducts，實現換頁。
       */
       const vm = this;
-      vm.getProducts(vm.currentCategory, page);
+      vm.productsFilter(vm.search ? '' : vm.currentCategory, vm.currentSortMethod, page);
+    },
+  },
+  watch: {
+    search() {
+      const vm = this;
+      if (vm.search) {
+        const result = vm.products.filter((obj) => {
+          const str = obj.category
+          + obj.title
+          + obj.origin_price
+          + obj.price;
+          if (str.indexOf(vm.search) > -1) {
+            return obj;
+          }
+          return false;
+        });
+        if (result.length) {
+          vm.searchProducts = result;
+        } else {
+          vm.searchProducts = [];
+        }
+      }
+      vm.productsFilter('');
     },
   },
   created() {
@@ -308,6 +363,9 @@ export default {
   }
   &.active {
     color: $primary;
+  }
+  &:focus {
+    box-shadow: none;
   }
   flex-shrink: 0;
 }

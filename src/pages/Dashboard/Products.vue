@@ -11,7 +11,7 @@
               類別
               <span
                 class="material-icons"
-                :class="{ active : sortAttr === 'category',
+                :class="{ active : sortBy === 'category',
                 reverse : isReverse }"
               >keyboard_arrow_down</span>
             </button>
@@ -24,7 +24,7 @@
               名稱
               <span
                 class="material-icons"
-                :class="{ active : sortAttr === 'title',
+                :class="{ active : sortBy === 'title',
                 reverse : isReverse }"
               >keyboard_arrow_down</span>
             </button>
@@ -37,7 +37,7 @@
               原價
               <span
                 class="material-icons"
-                :class="{ active : sortAttr === 'origin_price',
+                :class="{ active : sortBy === 'origin_price',
                 reverse : isReverse }"
               >keyboard_arrow_down</span>
             </button>
@@ -50,7 +50,7 @@
               售價
               <span
                 class="material-icons"
-                :class="{ active : sortAttr === 'price',
+                :class="{ active : sortBy === 'price',
                 reverse : isReverse }"
               >keyboard_arrow_down</span>
             </button>
@@ -63,7 +63,7 @@
               啟用狀態
               <span
                 class="material-icons"
-                :class="{ active : sortAttr === 'is_enabled',
+                :class="{ active : sortBy === 'is_enabled',
                 reverse : isReverse}"
               >keyboard_arrow_down</span>
             </button>
@@ -310,7 +310,7 @@ export default {
       },
       searchProducts: [],
       imgLoadMethod: 'upload',
-      sortAttr: '',
+      sortBy: '',
       isLoading: false,
       isOpenDeleteModal: false,
       isReverse: false,
@@ -318,21 +318,20 @@ export default {
     };
   },
   methods: {
-    getProducts(page = 1, loadMethod) {
+    getProducts(loadMethod) {
       const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/products?page=${page}`;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/products/all`;
       const loader = vm.$loading.show({}, {
         default: this.$createElement('LogoLoadingAnimation'),
       });
       console.log(api);
       this.$http.get(api).then((response) => {
-        vm.products = response.data.products;
-        console.log(response.data);
+        vm.products = Object.values(response.data.products).map((item) => item);
         loader.hide();
         if (loadMethod === 'update') {
           vm.$bus.$emit('message:push', '成功', '資料載入成功', 'success');
         }
-        vm.sortAttr = '';
+        vm.sortBy = '';
         vm.sortProducts();
       });
     },
@@ -384,7 +383,7 @@ export default {
           vm.$bus.$emit('message:push', '失敗', response.data.message, 'danger');
         }
         $('#dashboardProductsModal').modal('hide');
-        vm.getProducts(1, 'update');
+        vm.getProducts('update');
       });
     },
     uploadImg() {
@@ -425,13 +424,14 @@ export default {
     },
     sortProducts(attr = 'category') {
       const vm = this;
-      const sortTarget = vm.search ? vm.searchProducts : vm.products;
-      if (vm.sortAttr === attr) {
+      const target = vm.search ? vm.searchProducts : vm.products;
+      console.log(target);
+      if (vm.sortBy === attr) {
         vm.isReverse = !vm.isReverse;
       } else {
         vm.isReverse = false;
       }
-      sortTarget.sort((a, b) => {
+      target.sort((a, b) => {
         if (attr === 'origin_price' || attr === 'price') {
           return vm.isReverse ? a[attr] - b[attr] : b[attr] - a[attr];
         }
@@ -440,7 +440,7 @@ export default {
         }
         return vm.isReverse ? b[attr].localeCompare(a[attr], 'zh-hant') : a[attr].localeCompare(b[attr], 'zh-hant');
       });
-      vm.sortAttr = attr;
+      vm.sortBy = attr;
     },
   },
   watch: {

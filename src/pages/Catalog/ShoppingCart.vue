@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row mb-lg-90 mb-md-60 mb-45">
-      <h1 class="f-lg-30 f-24 mt-lg-30 mb-lg-45 mt-20 mb-30 w-100">購物車清單</h1>
+      <h1 class="f-lg-30 f-24 mt-lg-16 mb-lg-45 mt-12 mb-30 w-100">購物車清單</h1>
       <ul class="shopping-cart-list col-lg-8 col-md-7 m-0">
         <li class="shopping-cart-list-item p-sm-16 p-12 mb-24">
           <a href="" class="shopping-cart-list-item-img-link"></a>
@@ -49,6 +49,29 @@ export default {
   name: 'Favorite',
   components: {
     Counter,
+  },
+  data() {
+    return {
+      shoppingCarts: [],
+    };
+  },
+  methods: {
+    getShoppingCart() {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      this.$http.get(api).then((response) => {
+        console.log(response.data);
+        // 取得所有商品
+        vm.shoppingCarts = response.data.products;
+        loader.hide();
+      });
+    },
+  },
+  created() {
+    this.getShoppingCart();
   },
 };
 </script>

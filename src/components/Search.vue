@@ -10,6 +10,7 @@
       placeholder="搜尋"
       id="search"
       ref="search"
+      :value="search"
       @input="$emit('update:search', $refs.search.value)"
     >
   </div>
