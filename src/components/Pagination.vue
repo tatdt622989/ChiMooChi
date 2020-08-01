@@ -52,6 +52,14 @@ export default {
     font-size: 20px;
   }
 }
+.page-item {
+  &.disabled {
+    .previous-link, .next-link {
+      background-color: $gray-300;
+      color: $dark;
+    }
+  }
+}
 .previous-link, .next-link {
   padding: 11px;
 }

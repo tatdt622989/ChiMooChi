@@ -15,7 +15,7 @@
         <button class="btn-square btn-light mr-12">
           <span class="material-icons">favorite_border</span>
         </button>
-        <button class="btn-square btn-primary">
+        <button class="btn-square btn-primary" @click="addToShoppingCart(item.id)">
           <span class="material-icons">shopping_cart</span>
         </button>
       </div>
@@ -35,6 +35,26 @@
 export default {
   name: 'Card',
   props: ['item'],
+  data() {
+    return {
+      product: {},
+    };
+  },
+  methods: {
+    addToShoppingCart(productId) {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      vm.product.product_id = productId;
+      vm.product.qty = 1;
+      this.$http.post(api, { data: vm.product }).then((response) => {
+        console.log(response.data);
+        loader.hide();
+      });
+    },
+  },
 };
 </script>
 
@@ -65,7 +85,18 @@ export default {
     height: 229px;
     margin: 12px 12px 14px 12px;
   }
-  background-color: $img-link-bg-color;
+  animation: product-loading 1s ease-in-out infinite normal;
+  @keyframes product-loading {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 100% 100%;
+    }
+  }
+  background: no-repeat
+  linear-gradient(90deg, $light 0%, $light 20%, $gray-300 40%,
+  $gray-300 60%, $light 80%, $light 100% ) 0/1000%;
   display: flex;
   justify-content: center;
   overflow: hidden;
