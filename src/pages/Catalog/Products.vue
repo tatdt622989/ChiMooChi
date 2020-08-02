@@ -66,7 +66,7 @@
         v-for="item in paginatedProducts"
         :key="item.id"
       >
-      <Card :item="item"></Card>
+      <Card :item="item" @push-message="pushMessage"></Card>
       </div>
     </div>
     <p
@@ -77,6 +77,7 @@
       @change-page="changePage"
       v-else
     />
+    <Toast />
   </div>
 </template>
 
@@ -84,6 +85,7 @@
 import Card from '@/components/Catalog/Card.vue';
 import Pagination from '@/components/Pagination.vue';
 import Search from '@/components/Search.vue';
+import Toast from '@/components/Toast.vue';
 
 export default {
   name: 'Product',
@@ -91,6 +93,7 @@ export default {
     Card,
     Pagination,
     Search,
+    Toast,
   },
   data() {
     return {
@@ -172,7 +175,7 @@ export default {
       } else if (vm.currentSortMethod === vm.sortMethods.price) {
         vm.sortMethods.time = '';
       }
-      if (vm.sortMethods.time === '舊到新') {
+      if (vm.sortMethods.time === '新到舊') {
         target = target.reverse();
       }
       target.sort((a, b) => {
@@ -229,6 +232,9 @@ export default {
       */
       const vm = this;
       vm.productsFilter(vm.search ? '' : vm.currentCategory, vm.currentSortMethod, page);
+    },
+    pushMessage() {
+      this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
     },
   },
   watch: {

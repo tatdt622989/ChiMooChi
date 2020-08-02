@@ -75,7 +75,7 @@ export default {
   }
   .toast-header {
       color: inherit;
-    }
+  }
   opacity: 1;
   }
   position: fixed;

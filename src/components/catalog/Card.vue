@@ -32,6 +32,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'Card',
   props: ['item'],
@@ -52,6 +53,7 @@ export default {
       this.$http.post(api, { data: vm.product }).then((response) => {
         console.log(response.data);
         loader.hide();
+        vm.$emit('push-message');
       });
     },
   },

@@ -53,127 +53,13 @@
           <span class="material-icons f-20 mr-8 lh-1-5">play_arrow</span>
         </a>
       </h2>
-      <div class="col-lg-3 col-md-4 col-6 d-lg-block mb-16 mb-lg-0">
-        <div class="card">
-          <a href="#" title class="card-img-link">
-            <img src="" class="card-img-top" alt="">
-          </a>
-          <div class="card-body">
-            <a class="card-title" href="#">
-              <h3>超強鋁合金雙渦輪動力按摩椅</h3>
-            </a>
-            <div class="product-price">
-              <p class="original-price">
-                $
-                <del>9999</del>
-              </p>
-              <p class="on-sale-price">
-                $
-                <span>1000</span>
-              </p>
-            </div>
-            <div class="card-btn-group">
-              <button class="btn-square btn-light mr-12">
-                <span class="material-icons">favorite_border</span>
-              </button>
-              <button class="btn-square btn-primary">
-                <span class="material-icons">shopping_cart</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-4 col-6 d-lg-block mb-16 mb-lg-0">
-        <div class="card">
-          <router-link to="/product-info" title="card-img-link" class="card-img-link">
-            <img src="" class="card-img-top" alt="">
-          </router-link>
-          <div class="card-body">
-            <a class="card-title" href="#">
-              <h3>超強鋁合金雙渦輪動力按摩椅</h3>
-            </a>
-            <div class="product-price">
-              <p class="original-price">
-                $
-                <del>9999</del>
-              </p>
-              <p class="on-sale-price">
-                $
-                <span>1000</span>
-              </p>
-            </div>
-            <div class="card-btn-group">
-              <button class="btn-square btn-light mr-12">
-                <span class="material-icons">favorite_border</span>
-              </button>
-              <button class="btn-square btn-primary">
-                <span class="material-icons">shopping_cart</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-4 col-6 d-lg-block">
-        <div class="card">
-          <a href="#" title class="card-img-link">
-            <img src="" class="card-img-top" alt="">
-          </a>
-
-          <div class="card-body">
-            <a class="card-title" href="#">
-              <h3>超強鋁合金雙渦輪動力按摩椅</h3>
-            </a>
-            <div class="product-price">
-              <p class="original-price">
-                $
-                <del>9999</del>
-              </p>
-              <p class="on-sale-price">
-                $
-                <span>1000</span>
-              </p>
-            </div>
-            <div class="card-btn-group">
-              <button class="btn-square btn-light mr-12">
-                <span class="material-icons">favorite_border</span>
-              </button>
-              <button class="btn-square btn-primary">
-                <span class="material-icons">shopping_cart</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 d-md-none col-6 d-lg-block">
-        <div class="card">
-          <a href="#" title class="card-img-link">
-            <img src="" class="card-img-top" alt="">
-          </a>
-
-          <div class="card-body">
-            <a class="card-title" href="#">
-              <h3>超強鋁合金雙渦輪動力按摩椅</h3>
-            </a>
-            <div class="product-price">
-              <p class="original-price">
-                $
-                <del>9999</del>
-              </p>
-              <p class="on-sale-price">
-                $
-                <span>1000</span>
-              </p>
-            </div>
-            <div class="card-btn-group">
-              <button class="btn-square btn-light mr-12">
-                <span class="material-icons">favorite_border</span>
-              </button>
-              <button class="btn-square btn-primary">
-                <span class="material-icons">shopping_cart</span>
-              </button>
-            </div>
-          </div>
-        </div>
+      <div
+        class="card-wrap col-lg-3 col-md-4 col-6 d-lg-block mb-30 mb-sm-45"
+        :class="{ hide : index === 3  }"
+        v-for="(item, index) in recommendProducts"
+        :key="item.id"
+      >
+      <Card :item="item" @push-message="pushMessage"></Card>
       </div>
     </div>
     <div class="featured-banner-top row">
@@ -213,7 +99,56 @@
   </div>
 </template>
 
-<script></script>
+<script>
+import Card from '@/components/Catalog/Card.vue';
+
+export default {
+  name: 'Home',
+  components: {
+    Card,
+  },
+  data() {
+    return {
+      products: [],
+      recommendProducts: [],
+    };
+  },
+  methods: {
+    getProducts() {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      console.log(api);
+      this.$http.get(api).then((response) => {
+        console.log(response.data);
+        // 取得所有商品
+        vm.products = response.data.products;
+        vm.productsFilter();
+        loader.hide();
+      });
+    },
+    productsFilter() {
+      const vm = this;
+      let result = vm.products.filter((obj) => {
+        if (obj.category === '特色推薦') {
+          return obj;
+        }
+        return false;
+      });
+      result = result.reverse().slice(0, 4);
+      vm.recommendProducts = result;
+    },
+    pushMessage() {
+      this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
+    },
+  },
+  created() {
+    this.getProducts();
+  },
+};
+</script>
 
 <style lang="scss">
 .carousel {
@@ -306,13 +241,12 @@
 
 .featured-list {
   @include media-breakpoint-up(xs) {
-    margin-bottom: 35px;
+    margin-bottom: 0;
   }
   @include media-breakpoint-up(md) {
-    margin-bottom: 45px;
   }
   @include media-breakpoint-up(xl) {
-    margin-bottom: 60px;
+    margin-bottom: 15px;
   }
 }
 
@@ -412,5 +346,13 @@
   border: 0;
   height: 44px;
   margin-bottom: 12px;
+}
+.card-wrap.hide {
+  @include media-breakpoint-up(md) {
+    display: none;
+  }
+  @include media-breakpoint-up(lg) {
+    display: block;
+  }
 }
 </style>

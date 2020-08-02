@@ -9,7 +9,7 @@
     <div class="counter-quantity">
       <input
         class=" w-100 border-0 p-0 text-secondary"
-        type="text"
+        type="number"
         ref="qty"
         @input="$emit('update:qty', $refs.qty.value)"
         :value="qty"
