@@ -1,28 +1,31 @@
 <template>
   <div class="card">
     <router-link to="product-info" class="card-img-link">
-      <img :src="item.imageUrl" class="card-img" />
+      <img :src="obj.imageUrl" class="card-img" />
     </router-link>
     <div class="card-body">
       <a class="card-title" href="#">
-        <h3>{{ item.title }}</h3>
+        <h3>{{ obj.title }}</h3>
       </a>
       <div class="product-price">
-        <del class="original-price">{{ item.origin_price | currency }}</del>
-        <p class="on-sale-price">{{ item.price | currency }}</p>
+        <del class="original-price">{{ obj.origin_price | currency }}</del>
+        <p class="on-sale-price">{{ obj.price | currency }}</p>
       </div>
       <div class="card-btn-group">
-        <button class="btn-square btn-light mr-12">
+        <button
+          class="btn-square btn-light mr-12"
+          @click="addToFavorite(obj)"
+        >
           <span class="material-icons">favorite_border</span>
         </button>
-        <button class="btn-square btn-primary" @click="addToShoppingCart(item.id)">
+        <button class="btn-square btn-primary" @click="addToShoppingCart(obj.id)">
           <span class="material-icons">shopping_cart</span>
         </button>
       </div>
     </div>
     <div
       class="sold-out"
-      v-if="!item.is_enabled"
+      v-if="!obj.is_enabled"
     >
     <div class="border border-white">
       <p>已售完</p>
@@ -35,13 +38,17 @@
 
 export default {
   name: 'Card',
-  props: ['item'],
+  props: ['obj'],
   data() {
     return {
       product: {},
     };
   },
   methods: {
+    addToFavorite(obj) {
+      const vm = this;
+      vm.$bus.$emit('favorite-notification:update', 'add', obj);
+    },
     addToShoppingCart(productId) {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
@@ -53,7 +60,8 @@ export default {
       this.$http.post(api, { data: vm.product }).then((response) => {
         console.log(response.data);
         loader.hide();
-        vm.$emit('push-message');
+        vm.$emit('push-toast');
+        vm.$bus.$emit('shopping-cart-notification:update');
       });
     },
   },
@@ -110,8 +118,9 @@ export default {
     transform: scale(1.2);
   }
   transition: $transition-base;
-  width: 100%;
+  height: 100%;
   object-fit: cover;
+  width: 100%;
 }
 
 .card-btn-group {

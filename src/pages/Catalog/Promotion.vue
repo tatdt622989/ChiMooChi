@@ -1,6 +1,5 @@
 <template>
   <div class="promotion container mb-lg-90 mb-md-60 mb-45">
-    <Toast />
     <div class="row">
       <div class="col-12 d-flex justify-content-center flex-column">
         <img class="px-12" src="@/assets/images/promotion-title.svg" />
@@ -61,13 +60,11 @@
 
 <script>
 import $ from 'jquery';
-import Toast from '@/components/Toast.vue';
 import copyText from '@/copy.js';
 
 export default {
   name: 'Promotion',
   components: {
-    Toast,
   },
   data() {
     return {

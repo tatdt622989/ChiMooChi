@@ -48,18 +48,18 @@
         <span>
           <span class="material-icons f-20 mr-8 lh-1-5">thumb_up</span>特色推薦商品
         </span>
-        <a href="#" class="text-primary">
+        <router-link to="products" class="text-primary">
           查看更多
           <span class="material-icons f-20 mr-8 lh-1-5">play_arrow</span>
-        </a>
+        </router-link>
       </h2>
       <div
         class="card-wrap col-lg-3 col-md-4 col-6 d-lg-block mb-30 mb-sm-45"
         :class="{ hide : index === 3  }"
-        v-for="(item, index) in recommendProducts"
-        :key="item.id"
+        v-for="(obj, index) in recommendProducts"
+        :key="obj.id"
       >
-      <Card :item="item" @push-message="pushMessage"></Card>
+      <Card :obj="obj" @push-message="pushMessage"></Card>
       </div>
     </div>
     <div class="featured-banner-top row">

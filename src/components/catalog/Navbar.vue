@@ -59,13 +59,23 @@
           <button class="navbar-member-link btn-square"
                   data-toggle="modal"
                   data-target="#exampleModal">
-            <span class="navbar-member-badge badge badge-danger">1</span>
+            <transition name="base">
+              <span
+                class="navbar-member-badge badge badge-danger"
+                v-if="notification.favorite"
+              >{{ notification.favorite }}</span>
+            </transition>
             <span class="material-icons lh-1">favorite</span>
           </button>
         </li>
         <li class="navbar-member-item">
           <router-link to="/shopping-cart" class="navbar-member-link btn-square">
-            <span class="navbar-member-badge badge badge-danger">1</span>
+            <transition name="base">
+              <span
+                class="navbar-member-badge badge badge-danger"
+                v-if="notification.shoppingCart"
+              >{{ notification.shoppingCart }}</span>
+            </transition>
             <span class="material-icons lh-1">shopping_cart</span>
           </router-link>
         </li>
@@ -83,9 +93,14 @@ import $ from 'jquery';
 
 export default {
   name: 'Navbar',
+  props: ['favoriteLength'],
   data() {
     return {
       isShow: false,
+      notification: {
+        shoppingCart: 0,
+        favorite: 0,
+      },
     };
   },
   methods: {
@@ -103,6 +118,26 @@ export default {
       vm.isShow = false;
       $('body').css('overflow', '');
     },
+    getCart(shoppingCartLength) {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+      if (shoppingCartLength) {
+        vm.notification.shoppingCart = shoppingCartLength;
+        return;
+      }
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      vm.$http.get(api).then((response) => {
+        vm.notification.shoppingCart = response.data.data.carts.length;
+        loader.hide();
+      });
+    },
+  },
+  watch: {
+    favoriteLength() {
+      this.notification.favorite = this.favoriteLength;
+    },
   },
   created() {
     const vm = this;
@@ -110,6 +145,11 @@ export default {
     $(window).resize(() => {
       vm.isShow = false;
       $('body').css('overflow', '');
+    });
+    vm.notification.favorite = vm.favoriteLength;
+    vm.getCart();
+    vm.$bus.$on('shopping-cart-notification:update', (shoppingCartLength) => {
+      vm.getCart(shoppingCartLength);
     });
   },
   destroyed() {

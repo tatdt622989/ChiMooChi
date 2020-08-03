@@ -63,10 +63,10 @@
     <div class="row product-list">
       <div
         class="col-lg-3 col-md-4 col-6 d-lg-block mb-30 mb-sm-45"
-        v-for="item in paginatedProducts"
-        :key="item.id"
+        v-for="obj in paginatedProducts"
+        :key="obj.id"
       >
-      <Card :item="item" @push-message="pushMessage"></Card>
+      <Card :obj="obj" @push-toast="pushMessage"></Card>
       </div>
     </div>
     <p
@@ -77,7 +77,6 @@
       @change-page="changePage"
       v-else
     />
-    <Toast />
   </div>
 </template>
 
@@ -85,7 +84,6 @@
 import Card from '@/components/Catalog/Card.vue';
 import Pagination from '@/components/Pagination.vue';
 import Search from '@/components/Search.vue';
-import Toast from '@/components/Toast.vue';
 
 export default {
   name: 'Product',
@@ -93,7 +91,6 @@ export default {
     Card,
     Pagination,
     Search,
-    Toast,
   },
   data() {
     return {

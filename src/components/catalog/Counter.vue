@@ -9,11 +9,11 @@
     <div class="counter-quantity">
       <input
         class=" w-100 border-0 p-0 text-secondary"
-        type="number"
+        type="text"
         ref="qty"
         @input="$emit('update:qty', $refs.qty.value)"
         :value="qty"
-      ><span>{{ unit }}</span>
+      ><span class="unit">{{ unit }}</span>
     </div>
     <button
       class="counter-btn btn-square btn-outline-secondary"
@@ -35,27 +35,44 @@ export default {
 <style lang="scss">
 .counter {
   @include media-breakpoint-up(xs) {
-    .counter-quantity {
-      width: 60px;
-    }
     font-size: 16px;
     order: 0;
   }
   @include media-breakpoint-up(md) {
     order: 0;
   }
+  .counter-quantity {
+    @include media-breakpoint-up(xs) {
+      width: 40px;
+    }
+    @include media-breakpoint-up(sm) {
+      width: 60px;
+    }
+  }
+  .unit {
+    @include media-breakpoint-up(xs) {
+      display: none;
+    }
+    @include media-breakpoint-up(sm) {
+      display: block;
+    }
+  }
   display: flex;
 }
 .counter-quantity {
+  @include media-breakpoint-up(xs) {
+    padding: 0 4px;
+  }
+  @include media-breakpoint-up(sm) {
+    padding: 0 12px;
+  }
     align-items: center;
     display: flex;
-    font-weight: bold;
     justify-content: center;
     overflow: hidden;
-    padding: 0 12px 0 12px;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
+}
 .counter-btn {
   &.btn-outline-secondary:disabled {
     border-color: $dark;

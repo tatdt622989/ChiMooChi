@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row mb-lg-90 mb-md-60 mb-45">
+    <div class="row mb-lg-60 mb-md-45 mb-32">
       <h1 class="f-lg-30 f-24 mt-lg-16 mb-lg-45 mt-12 mb-30 w-100">購物車清單</h1>
       <div class="col-lg-8 col-md-7">
         <ul class="shopping-cart-list p-0 m-0">
@@ -16,7 +16,9 @@
             text-overflow text-left">{{ obj.product.title }}</h2>
             <p class="unit">{{ `${obj.qty} / ${obj.product.unit}` }}</p>
             <p class="price font-weight-bold">
-              {{ obj.product.price | currency }}
+              {{ obj.coupon ? obj.total * (obj.coupon.percent / 100)
+              : obj.total | currency }}
+              <br><span v-if="obj.coupon" class="f-14 text-primary">已套用優惠券</span>
             </p>
             <button
               class="btn-square btn-outline-danger shopping-cart-list-item-delete-btn"
@@ -79,10 +81,9 @@
               </ValidationProvider>
             </ValidationObserver>
           </div>
-          <p class="text-dark mt-20 w-100">尚未套用優惠券</p>
           <p class="mt-20 w-75">優惠券折抵</p>
           <p class="mt-20 font-weight-bold text-right w-25">
-            {{ shoppingCartPrice.final_total - shoppingCartPrice.total | currency }}
+            {{ shoppingCartPrice.total - shoppingCartPrice.final_total | currency }}
           </p>
           <p class="mt-20 w-25">合計</p>
           <p class="f-24 font-weight-bold mt-20 text-danger text-right w-75">
@@ -123,18 +124,14 @@
       </div>
     </div>
     </div>
-    <Toast />
   </div>
 </template>
 <script>
 import $ from 'jquery';
-import Toast from '@/components/Toast.vue';
 
 export default {
   name: 'ShoppingCart',
-  components: {
-    Toast,
-  },
+  props: ['updateShoppingCart'],
   data() {
     return {
       shoppingCart: [],
@@ -146,21 +143,24 @@ export default {
       deleteModalMsg: '',
       isFixed: false,
       coupon: '',
+      couponMessage: '',
     };
   },
   methods: {
-    getShoppingCart() {
+    getShoppingCart(method) {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
       const loader = vm.$loading.show({}, {
         default: this.$createElement('LogoLoadingAnimation'),
       });
       this.$http.get(api).then((response) => {
-        console.log(response.data.data.carts);
         vm.shoppingCart = response.data.data.carts;
         vm.shoppingCartPrice.total = response.data.data.total;
         vm.shoppingCartPrice.final_total = response.data.data.final_total;
         loader.hide();
+        if (method !== 'apply-coupon') {
+          vm.$bus.$emit('shopping-cart-notification:update', vm.shoppingCart.length);
+        }
       });
     },
     openDeleteModal(product) {
@@ -191,18 +191,27 @@ export default {
           const loader = vm.$loading.show({}, {
             default: this.$createElement('LogoLoadingAnimation'),
           });
-          this.$http.post(api, { data: { code: vm.coupon } }).then((response) => {
-            console.log(response.data);
+          vm.$http.post(api, { data: { code: vm.coupon } }).then((response) => {
+            console.log(this);
             if (response.data.success) {
-              this.$bus.$emit('message:push', '成功', response.data.message, 'success');
+              vm.couponMessage = response.data.message;
+              vm.$bus.$emit('message:push', '成功', response.data.message, 'success');
             } else {
-              this.$bus.$emit('message:push', '錯誤', response.data.message, 'danger');
+              vm.$bus.$emit('message:push', '錯誤', response.data.message, 'danger');
             }
             loader.hide();
-            vm.getShoppingCart();
+            vm.getShoppingCart('apply-coupon');
           });
         }
       });
+    },
+  },
+  watch: {
+    updateShoppingCart() {
+      if (this.updateShoppingCart) {
+        this.$emit('update:updateShoppingCart', false);
+        this.getShoppingCart();
+      }
     },
   },
   created() {
@@ -260,6 +269,7 @@ export default {
       width: 100px;
     }
     img {
+      height: 100%;
       object-fit: cover;
       width: 100%;
     }
@@ -269,16 +279,16 @@ export default {
   }
   .tilte {
     @include media-breakpoint-up(xs) {
-      margin: 0 0 12px 12px;
+      margin: 0 0 6px 12px;
       order: -2;
       width: 100%
     }
     @include media-breakpoint-up(sm) {
       margin: 0 6px 0 12px;
-      width: auto;
+      width: 100px;
     }
     @include media-breakpoint-up(md) {
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       width: 45%;
     }
     @include media-breakpoint-up(lg) {
@@ -289,7 +299,7 @@ export default {
     }
     @include media-breakpoint-up(xl) {
       padding: 0 8px 0 16px;
-      width: 120px;
+      width: 132px;
     }
     flex-grow: 1;
   }
@@ -336,16 +346,18 @@ export default {
       width: auto;
     }
     @include media-breakpoint-up(md) {
-      margin: 0 12px 12px 6px;
+      margin: 0 12px 8px 6px;
       text-align: right;
     }
     @include media-breakpoint-up(lg) {
       padding: 0 0 0 24px;
       margin: 0;
       text-align: left;
+      width: 45px;
     }
     @include media-breakpoint-up(xl) {
       padding: 0 0 0 32px;
+      width: 60px;
     }
     flex-grow: 1;
   }
@@ -390,6 +402,7 @@ export default {
 }
 .total {
   font-size: 16px;
+  padding-bottom: 24px;
 }
 .total-body {
   @include media-breakpoint-up(xs) {
@@ -400,7 +413,7 @@ export default {
   }
   &.fixed {
     @include media-breakpoint-up(md) {
-      position: fixed;
+      position: sticky;
       top: 24px;
       width: 270px;
     }
@@ -441,9 +454,9 @@ export default {
   flex-grow: 1;
   width: 100%;
 }
-.home-delivery-btn:active,  .cash-on-delivery-btn:active{
-  background-color: $secondary;
-}
+// .home-delivery-btn:active,  .cash-on-delivery-btn:active{
+//   background-color: $secondary;
+// }
 .delete-modal-content {
   background-color: $danger;
   color: #fff;

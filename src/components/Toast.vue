@@ -1,6 +1,6 @@
 <template>
   <div class="toast-list">
-    <div class="toast" :class="obj.status" role="alert" aria-live="assertive" aria-atomic="true"
+    <div class="toast" :class="obj.mode" role="alert" aria-live="assertive" aria-atomic="true"
     v-for="(obj, index) in messages" :key="index">
       <div class="toast-header pb-0">
         <strong class="mr-auto">{{ obj.title }}</strong>
@@ -23,13 +23,13 @@ export default {
     };
   },
   methods: {
-    pushToast(title, message, status) {
+    pushToast(title, message, mode) {
       const vm = this;
       const timestamp = Math.floor(new Date() / 1000);
       vm.messages.push({
         title,
         message,
-        status,
+        mode,
         timestamp,
       });
       vm.removeToastWithTiming(timestamp);
@@ -50,9 +50,10 @@ export default {
     },
   },
   created() {
+    console.log('建立');
     const vm = this;
-    vm.$bus.$on('message:push', (title, message, status) => {
-      vm.pushToast(title, message, status);
+    vm.$bus.$on('message:push', (title, message, mode) => {
+      vm.pushToast(title, message, mode);
     });
   },
 };

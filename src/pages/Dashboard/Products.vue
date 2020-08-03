@@ -211,10 +211,22 @@
                       </select>
                       <div class="invalid-feedback">{{ errors[0] }}</div>
                     </ValidationProvider>
-                    <div class="form-group ml-8">
+                    <ValidationProvider
+                      class="form-group ml-8"
+                      tag="div"
+                      rules="required"
+                      v-slot="{ errors, failed }"
+                    >
                       <label for="product" id="unit">單位</label>
-                      <input class="form-control" type="text" id="unit" v-model="tempProduct.unit">
-                    </div>
+                      <input
+                        class="form-control"
+                        type="text"
+                        id="unit"
+                        v-model="tempProduct.unit"
+                        :class="{ 'is-invalid' : failed }"
+                      >
+                      <div class="invalid-feedback">{{ errors[0] }}</div>
+                    </ValidationProvider>
                   </div>
                   <div class="modal-forms-group">
                     <ValidationProvider
@@ -284,19 +296,16 @@
         </div>
       </div>
     </div>
-    <Toast />
   </div>
 </template>
 
 <script>
 import $ from 'jquery';
-import Toast from '@/components/Toast.vue';
 import Delete from '@/components/Delete.vue';
 
 export default {
   name: 'Products',
   components: {
-    Toast,
     Delete,
   },
   // 從Header傳過來的資料，用來判斷開啟的modal是否為建立內容的狀態

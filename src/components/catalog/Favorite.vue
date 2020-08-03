@@ -9,28 +9,43 @@
           </button>
         </div>
         <div class="modal-body">
-          <ul class=" border-bottom border-light m-0 p-0">
-            <li class="favorite-modal-item flex-wrap">
+          <ul class="m-0 p-0">
+            <li
+              class="favorite-modal-item flex-wrap border-bottom border-light"
+              v-for="(obj, index) in products"
+              :key="obj.id"
+            >
               <a href="#" class="favorite-modal-img-link">
-                <img src alt />
+                <img :src="obj.imageUrl" />
               </a>
-              <p class="product-title text-overflow mb-8 mb-sm-0">雙噴多功能氣墊椅雙噴多功能氣墊椅</p>
-              <Counter class="ml-0 ml-sm-96 ml-md-0 mt-0 mt-sm-16 mt-md-0" />
+              <p class="product-title text-overflow">{{ obj.title }}</p>
+              <Counter
+                :qty.sync="obj.qty"
+                :unit.sync="obj.unit"
+              />
               <p class="price font-weight-bold">
-                $
-                <span>2000</span>
+                {{ obj.price * obj.qty | currency }}
               </p>
-              <div class="btn-group mt-0 mt-sm-16 mt-md-0">
-                <button class="btn-square btn-outline-secondary mr-12">
+              <div class="btn-group">
+                <button
+                  class="btn-square btn-outline-secondary mr-16"
+                  @click="addToShoppingCart(obj)"
+                >
                   <span class="material-icons">shopping_cart</span>
                 </button>
-                <button class="btn-square btn-outline-danger">
+                <button
+                  class="btn-square btn-outline-danger"
+                  @click="updateFavorite('delete', null, index)"
+                >
                   <span class="material-icons">delete</span>
                 </button>
               </div>
             </li>
           </ul>
-          <div class="favorite-modal-empty">
+          <div
+            class="favorite-modal-empty"
+            v-if="products.length === 0"
+          >
             <p class="mb-3 fz-3">還沒有最愛的商品喔！</p>
             <a href class="btn btn-primary text-white">去逛逛</a>
           </div>
@@ -47,6 +62,67 @@ export default {
   name: 'Favorite',
   components: {
     Counter,
+  },
+  data() {
+    return {
+      products: [],
+      product: {},
+    };
+  },
+  methods: {
+    getFavorite() {
+      const vm = this;
+      if (localStorage.getItem('favoriteProducts')) {
+        vm.products = JSON.parse(localStorage.getItem('favoriteProducts'));
+      }
+    },
+    updateFavorite(method, product, index) {
+      const vm = this;
+      if (method === 'add') {
+        const productId = vm.products.map((obj) => obj.id);
+        if (productId.indexOf(product.id) === -1) {
+          vm.products.push(product);
+          vm.$bus.$emit('message:push', '成功', '商品已成功加入我的最愛', 'success');
+        } else {
+          vm.$bus.$emit('message:push', '提醒', '商品已在我的最愛', 'warning');
+        }
+      }
+      if (method === 'delete') {
+        vm.products.splice(index, 1);
+      }
+      let i = 0;
+      while (i < vm.products.length) {
+        vm.products[i].qty = 1;
+        i += 1;
+      }
+      const stringify = JSON.stringify(vm.products);
+      localStorage.setItem('favoriteProducts', stringify);
+      vm.$emit('favorite-length', vm.products.length);
+    },
+    addToShoppingCart(obj) {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      vm.product.product_id = obj.id;
+      vm.product.qty = obj.qty;
+      this.$http.post(api, { data: vm.product }).then((response) => {
+        console.log(response.data);
+        loader.hide();
+        this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
+        vm.$bus.$emit('shopping-cart-notification:update');
+        vm.$emit('update-shopping-cart');
+      });
+    },
+  },
+  created() {
+    const vm = this;
+    vm.$bus.$on('favorite-notification:update', (methods, product) => {
+      vm.updateFavorite(methods, product);
+    });
+    vm.getFavorite();
+    vm.$emit('favorite-length', vm.products.length);
   },
 };
 </script>
@@ -101,47 +177,47 @@ export default {
 .favorite-modal-item {
   @include media-breakpoint-up(xs) {
     align-items: center;
-    margin-bottom: 12px;
+    padding: 12px 0 12px 80px;
   }
   @include media-breakpoint-up(sm) {
-    align-items: flex-start;
+    padding-left: 104px;
   }
   @include media-breakpoint-up(md) {
-    align-items: center;
-    margin-bottom: 16px;
+    padding: 16px 0;
   }
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
   position: relative;
 }
-.product-title,
-.price {
+.counter {
   @include media-breakpoint-up(xs) {
-    margin-left: 82px;
+    margin-bottom: 8px;
   }
   @include media-breakpoint-up(sm) {
     margin-left: 0;
   }
+}
+.product-title,
+.price {
   @include media-breakpoint-up(md) {
-    margin-bottom: 0;
+    margin-left: 0;
   }
+  text-align: left;
 }
 .product-title {
   @include media-breakpoint-up(xs) {
     font-size: 16px;
-    order: -2;
+    margin-bottom: 8px;
     text-align: left;
-    width: 100%;
+    width: 45%;
   }
   @include media-breakpoint-up(sm) {
     font-size: 16px;
-    margin-left: 96px;
-    width: 282px;
+    width: 40%;
   }
   @include media-breakpoint-up(md) {
     margin-left: 0px;
-    order: 0;
     width: 136px;
   }
   @include media-breakpoint-up(lg) {
@@ -152,19 +228,15 @@ export default {
   @include media-breakpoint-up(xs) {
     flex-grow: 0;
     font-size: 16px;
-    margin-bottom: 26px;
-    order: -1;
     text-align: left;
-    width: 100%;
+    width: 30%;
   }
   @include media-breakpoint-up(sm) {
     font-size: 16px;
     margin-bottom: 0px;
-    text-align: right;
     width: 100px;
   }
   @include media-breakpoint-up(md) {
-    order: 0;
     width: 70px;
     text-align: center;
   }
@@ -175,15 +247,15 @@ export default {
 .favorite-modal-img-link {
   @include media-breakpoint-up(xs) {
     flex-shrink: 0;
-    height: 70px;
+    height: 96px;
     left: 0;
     position: absolute;
-    top: 0;
-    width: 70px;
+    top: 12px;
+    width: 72px;
   }
   @include media-breakpoint-up(sm) {
-    height: 60px;
-    width: 80px;
+    height: 96px;
+    width: 96px;
   }
   @include media-breakpoint-up(md) {
     height: 60px;
@@ -194,6 +266,11 @@ export default {
     height: 75px;
     width: 100px;
   }
+  img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
   background-color: $img-link-bg-color;
 }
 .btn-group {
@@ -202,6 +279,8 @@ export default {
     flex-basis: 10%;
     flex-grow: 0;
     justify-content: flex-end;
+  }
+  @include media-breakpoint-up(sm) {
   }
 }
 .favorite-modal-empty {

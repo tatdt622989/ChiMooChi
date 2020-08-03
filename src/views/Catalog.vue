@@ -1,8 +1,11 @@
 <template>
   <div class="catalog">
-    <Navbar />
-    <Favorite />
-    <router-view />
+    <Navbar :favorite-length="favoriteLength"/>
+    <Favorite
+      @favorite-length="getFavoriteLength"
+      @update-shopping-cart="updateShoppingCart = true"
+    />
+    <router-view :update-shopping-cart.sync="updateShoppingCart"/>
     <Footer />
   </div>
 </template>
@@ -19,6 +22,17 @@ export default {
     Navbar,
     Favorite,
     Footer,
+  },
+  data() {
+    return {
+      favoriteLength: 0,
+      updateShoppingCart: false,
+    };
+  },
+  methods: {
+    getFavoriteLength(Length) {
+      this.favoriteLength = Length;
+    },
   },
   created() {
   },

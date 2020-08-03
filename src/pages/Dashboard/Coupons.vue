@@ -322,19 +322,16 @@
       </div>
     </div>
     </div>
-    <Toast />
   </div>
 </template>
 
 <script>
 import $ from 'jquery';
-import Toast from '@/components/Toast.vue';
 import Delete from '@/components/Delete.vue';
 
 export default {
   name: 'Coupons',
   components: {
-    Toast,
     Delete,
   },
   props: ['isNewModal', 'search'],
