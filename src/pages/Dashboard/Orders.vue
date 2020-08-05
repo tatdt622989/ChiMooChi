@@ -147,28 +147,6 @@ export default {
   .order-total {
     background-color: $gray-300;
   }
-  .table {
-    background-color: $gray-300;
-    min-width: 100%;
-  }
-  .tbody-tr {
-    td {
-      padding: 16px 8px 16px 8px;
-    }
-    td:nth-of-type(1) {
-      @include media-breakpoint-up(xs) {
-        width: 40%;
-      }
-      @include media-breakpoint-up(md) {
-        width: 50%;
-      }
-    }
-    td:nth-of-type(2) {
-      width: 20%;
-    }
-    border-bottom: 1px solid $white;
-    font-size: 16px;
-  }
   .form-group {
     margin-bottom: 8px;
   }

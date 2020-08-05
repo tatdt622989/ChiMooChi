@@ -118,18 +118,16 @@ export default {
       vm.isShow = false;
       $('body').css('overflow', '');
     },
-    getCart(shoppingCartLength) {
+    getShoppingCart() {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-      if (shoppingCartLength) {
-        vm.notification.shoppingCart = shoppingCartLength;
-        return;
-      }
       const loader = vm.$loading.show({}, {
         default: this.$createElement('LogoLoadingAnimation'),
       });
       vm.$http.get(api).then((response) => {
         vm.notification.shoppingCart = response.data.data.carts.length;
+        console.log(response.data.data);
+        vm.$emit('shopping-cart', response.data.data);
         loader.hide();
       });
     },
@@ -147,9 +145,10 @@ export default {
       $('body').css('overflow', '');
     });
     vm.notification.favorite = vm.favoriteLength;
-    vm.getCart();
-    vm.$bus.$on('shopping-cart-notification:update', (shoppingCartLength) => {
-      vm.getCart(shoppingCartLength);
+    vm.getShoppingCart();
+    // 註冊更新購物車資料的event bus
+    vm.$bus.$on('shopping-cart:update', () => {
+      vm.getShoppingCart();
     });
   },
   destroyed() {

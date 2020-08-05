@@ -1,11 +1,13 @@
 <template>
   <div class="catalog">
-    <Navbar :favorite-length="favoriteLength"/>
+    <Navbar
+      :favorite-length="favoriteLength"
+      @shopping-cart="getShoppingCart"
+    />
     <Favorite
       @favorite-length="getFavoriteLength"
-      @update-shopping-cart="updateShoppingCart = true"
     />
-    <router-view :update-shopping-cart.sync="updateShoppingCart"/>
+    <router-view :shopping-cart="shoppingCart" />
     <Footer />
   </div>
 </template>
@@ -26,15 +28,17 @@ export default {
   data() {
     return {
       favoriteLength: 0,
-      updateShoppingCart: false,
+      shoppingCart: {},
     };
   },
   methods: {
     getFavoriteLength(Length) {
       this.favoriteLength = Length;
     },
-  },
-  created() {
+    getShoppingCart(shoppingCart) {
+      console.log('有被觸發');
+      this.shoppingCart = shoppingCart;
+    },
   },
 };
 </script>

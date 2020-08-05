@@ -11,7 +11,7 @@
       <div class="col-12 puzzle-wrap">
         <div class="puzzle">
           <div class="puzzle-piece" v-for="n in 9" :key="n">
-            <img :src="`${publicPath}${currentImgNameOrder[n-1]}.png`"
+            <img :src="require(`@/assets/images/${currentImgNameOrder[n-1]}.png`)"
                   class="puzzle-piece-img"
                   :class="{ 'start' : targetStartNum === n-1, 'enter' :
                   targetEnterNum === n-1}"
@@ -68,8 +68,6 @@ export default {
   },
   data() {
     return {
-      // 靜態資源位址
-      publicPath: process.env.BASE_URL,
       // 由左上角開始s型排列
       correctImgNameOrder: [
         'NAgNF3', 'oTFmIM', 'OUOLxK',
@@ -81,7 +79,7 @@ export default {
       targetEnterNum: false,
       isComplete: false,
       playMethod: '拖移',
-      coupon: 'CMCFREESHIPING',
+      coupon: '',
     };
   },
   methods: {
@@ -156,6 +154,7 @@ export default {
       const vm = this;
       if (vm.correctImgNameOrder.toString() === vm.currentImgNameOrder.toString()) {
         setTimeout(() => {
+          vm.coupon = 'CHIMOOCHIOPEN';
           $('#puzzleCompleteModal').modal('show');
         }, 300);
       }

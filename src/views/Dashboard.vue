@@ -170,9 +170,6 @@ export default {
     text-align: left;
     min-width: 290px;
   }
-  select {
-    cursor: pointer;
-  }
   .form-group {
     width: 100%;
   }

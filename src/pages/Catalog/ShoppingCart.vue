@@ -6,7 +6,7 @@
         <ul class="shopping-cart-list p-0 m-0">
           <li
             class="shopping-cart-list-item mb-24"
-            v-for="obj in shoppingCart"
+            v-for="obj in shoppingCart.carts"
             :key="obj.id"
           >
             <a href="#" class="img-link">
@@ -30,7 +30,7 @@
         </ul>
         <div
           class="h-100 d-flex justify-content-center align-content-center flex-wrap py-45"
-          v-if="shoppingCart.length === 0"
+          v-if="!('carts' in shoppingCart) || shoppingCart.carts.length === 0"
         >
           <p class="f-20 f-md-24 w-100 mb-20">購物車內沒有商品喔！</p>
           <router-link to="products" class="btn btn-primary">去逛逛</router-link>
@@ -42,13 +42,8 @@
         <div class="total-body" :class="{ fixed : isFixed }">
           <p class="flex-grow-1">商品共計</p>
           <p class="flex-grow-1 font-weight-bold text-right">
-            {{ shoppingCartPrice.total | currency }}
+            {{ shoppingCart.total | currency }}
           </p>
-          <!-- <p class="w-100 mb-12 mt-20">配送方式<span class="text-danger">*</span></p>
-          <button class="btn btn-outline-secondary mr-16 home-delivery-btn active px-16">宅配</button>
-          <button class="btn btn-outline-secondary cash-on-delivery-btn px-16">貨到付款</button>
-          <p class="mt-20 w-75">運費</p>
-          <p class="mt-20 font-weight-bold text-right w-25">$60</p> -->
           <div class="total-coupon mt-20">
             <ValidationObserver
               ref="form"
@@ -63,7 +58,7 @@
               >
                 <div class="d-flex">
                   <input
-                  class="total-coupon-input mr-16"
+                  class="total-coupon-input form-control mr-16"
                   :class="{ 'is-invalid' : failed }"
                   type="text"
                   placeholder="請輸入優惠券序號"
@@ -83,11 +78,11 @@
           </div>
           <p class="mt-20 w-75">優惠券折抵</p>
           <p class="mt-20 font-weight-bold text-right w-25">
-            {{ shoppingCartPrice.total - shoppingCartPrice.final_total | currency }}
+            {{ shoppingCart.total - shoppingCart.final_total | currency }}
           </p>
           <p class="mt-20 w-25">合計</p>
           <p class="f-24 font-weight-bold mt-20 text-danger text-right w-75">
-            {{ shoppingCartPrice.final_total | currency }}
+            {{ shoppingCart.final_total | currency }}
           </p>
           <router-link class="btn btn-primary mt-20 w-100"
           to="/checkout/order-form">結帳去</router-link>
@@ -131,14 +126,9 @@ import $ from 'jquery';
 
 export default {
   name: 'ShoppingCart',
-  props: ['updateShoppingCart'],
+  props: ['shoppingCart'],
   data() {
     return {
-      shoppingCart: [],
-      shoppingCartPrice: {
-        total: 0,
-        final_total: 0,
-      },
       tempProductId: '',
       deleteModalMsg: '',
       isFixed: false,
@@ -147,21 +137,8 @@ export default {
     };
   },
   methods: {
-    getShoppingCart(method) {
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-      const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
-      });
-      this.$http.get(api).then((response) => {
-        vm.shoppingCart = response.data.data.carts;
-        vm.shoppingCartPrice.total = response.data.data.total;
-        vm.shoppingCartPrice.final_total = response.data.data.final_total;
-        loader.hide();
-        if (method !== 'apply-coupon') {
-          vm.$bus.$emit('shopping-cart-notification:update', vm.shoppingCart.length);
-        }
-      });
+    updateShoppingCart() {
+      this.$bus.$emit('shopping-cart:update');
     },
     openDeleteModal(product) {
       const vm = this;
@@ -180,7 +157,7 @@ export default {
         console.log(response.data);
         loader.hide();
         $('#deleteModal').modal('hide');
-        vm.getShoppingCart();
+        vm.updateShoppingCart();
       });
     },
     applyCoupon() {
@@ -200,22 +177,11 @@ export default {
               vm.$bus.$emit('message:push', '錯誤', response.data.message, 'danger');
             }
             loader.hide();
-            vm.getShoppingCart('apply-coupon');
+            vm.updateShoppingCart();
           });
         }
       });
     },
-  },
-  watch: {
-    updateShoppingCart() {
-      if (this.updateShoppingCart) {
-        this.$emit('update:updateShoppingCart', false);
-        this.getShoppingCart();
-      }
-    },
-  },
-  created() {
-    this.getShoppingCart();
   },
   mounted() {
     const vm = this;
@@ -438,18 +404,7 @@ export default {
   padding: 9px 15px 9px 15px;
 }
 .total-coupon-input {
-  @include media-breakpoint-up(xs) {
-    text-indent: 8px;
-  }
-  @include media-breakpoint-up(sm) {
-    text-indent: 16px;
-  }
-  @include media-breakpoint-up(md) {
-    text-indent: 8px;
-  }
-  @include media-breakpoint-up(lg) {
-    text-indent: 16px;
-  }
+  padding-left: 16px;
   border: 0;
   flex-grow: 1;
   width: 100%;

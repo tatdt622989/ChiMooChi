@@ -202,7 +202,7 @@
                       :class="{ 'is-invalid' : failed }"
                       v-model="tempProduct.category"
                       >
-                        <option value="" disabled>類別</option>
+                        <option value="" disabled></option>
                         <option
                           v-for="item in category"
                           :key="item"
@@ -327,7 +327,7 @@ export default {
     };
   },
   methods: {
-    getProducts(loadMethod) {
+    getProducts() {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/products/all`;
       const loader = vm.$loading.show({}, {
@@ -335,11 +335,13 @@ export default {
       });
       console.log(api);
       this.$http.get(api).then((response) => {
-        vm.products = Object.values(response.data.products).map((item) => item);
-        loader.hide();
-        if (loadMethod === 'update') {
-          vm.$bus.$emit('message:push', '成功', '資料載入成功', 'success');
+        console.log(response.data);
+        if (response.data.success) {
+          vm.products = Object.values(response.data.products).map((item) => item);
+        } else {
+          vm.$bus.$emit('message:push', '錯誤', response.data.message, 'danger');
         }
+        loader.hide();
         vm.sortBy = '';
         vm.sortProducts();
       });
@@ -392,7 +394,7 @@ export default {
           vm.$bus.$emit('message:push', '失敗', response.data.message, 'danger');
         }
         $('#dashboardProductsModal').modal('hide');
-        vm.getProducts('update');
+        vm.getProducts();
       });
     },
     uploadImg() {

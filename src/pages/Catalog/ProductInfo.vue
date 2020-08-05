@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Breadcrumb />
+    <Breadcrumb class="mb-16"/>
     <div class="row product-info">
       <div class="col-sm-6 col-12 product-info-img-link">
         <img src alt />

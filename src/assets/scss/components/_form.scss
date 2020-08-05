@@ -5,7 +5,11 @@
   }
 }
 
-select:required:invalid {
+select {
+  cursor: pointer;
+}
+select:invalid,
+select option[value=""] {
   color: $light;
 }
 select, option {

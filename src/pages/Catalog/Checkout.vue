@@ -17,7 +17,13 @@
         <li>完成購買</li>
       </ul>
     </div>
-    <router-view></router-view>
+    <router-view
+      v-bind="$attrs"
+      :order.sync="order"
+      :order-id.sync="orderId"
+      :order-total.sync="orderTotal"
+      :is-paid.sync="isPaid"
+    ></router-view>
   </div>
 </template>
 
@@ -29,6 +35,10 @@ export default {
       isOrderForm: true,
       isPayment: false,
       isPaymentStatus: false,
+      order: {},
+      orderId: '',
+      orderTotal: 0,
+      isPaid: false,
     };
   },
   methods: {

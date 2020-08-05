@@ -23,9 +23,7 @@ export default {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
 }
-
 .base-enter-active, .base-leave-active{
   transition: $transition-base;
 }

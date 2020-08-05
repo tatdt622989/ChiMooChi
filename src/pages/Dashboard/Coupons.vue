@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboardCoupon">
+  <div class="dashboard-coupon">
     <table class="table mt-24">
       <thead>
         <tr>

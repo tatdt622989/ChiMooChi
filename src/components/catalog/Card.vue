@@ -61,7 +61,7 @@ export default {
         console.log(response.data);
         loader.hide();
         vm.$emit('push-toast');
-        vm.$bus.$emit('shopping-cart-notification:update');
+        vm.$bus.$emit('shopping-cart:update');
       });
     },
   },

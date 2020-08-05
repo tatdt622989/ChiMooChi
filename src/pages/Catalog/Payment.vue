@@ -5,28 +5,28 @@
       offset-md-1 offset-lg-2 p-md-24 p-16"
     >
       <h1 class="f-lg-30 f-24 mt-8 mb-32 w-100">確認付款</h1>
-      <ShoppingCartListTable />
+      <ShoppingCartListTable :shopping-cart="orderShoppingCart"/>
       <table class="orderer-info-table table table-white f-14 f-md-16">
         <tbody>
           <tr>
             <td>姓名</td>
-            <td>劉流流</td>
+            <td>{{ checkOrder.order.user.name }}</td>
           </tr>
           <tr>
             <td>手機</td>
-            <td>0912345678</td>
+            <td>{{ checkOrder.order.user.tel }}</td>
           </tr>
           <tr>
             <td>電子郵件</td>
-            <td>abcd12345678@6yuwei.tw</td>
+            <td>{{ checkOrder.order.user.email }}</td>
           </tr>
           <tr>
             <td>地址</td>
-            <td>433 台中市沙鹿區南陽路xxx號</td>
+            <td>{{ checkOrder.order.user.address }}</td>
           </tr>
           <tr>
             <td>備註</td>
-            <td>請在早上五點前到貨</td>
+            <td>{{ checkOrder.order.message }}</td>
           </tr>
           <tr>
             <td>付款狀態</td>
@@ -34,11 +34,9 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    <div class="col-12 col-md-10 col-lg-8 d-flex offset-lg-2 mt-md-32 mt-24 offset-md-1
-    justify-content-between p-0">
-      <router-link class="btn btn-dark" to="order-form">上一步</router-link>
-      <router-link class="btn btn-primary" to="payment-status">確認付款</router-link>
+      <div class="d-flex mt-md-32 mt-24 justify-content-between">
+        <button class="btn btn-primary" @click="checkOut">確認付款</button>
+      </div>
     </div>
   </div>
 </template>
@@ -47,9 +45,57 @@
 import ShoppingCartListTable from '@/components/Catalog/ShoppingCartListTable.vue';
 
 export default {
-  name: 'OrderForm',
+  name: 'Payment',
   components: {
     ShoppingCartListTable,
+  },
+  props: ['shoppingCart', 'order', 'orderId'],
+  data() {
+    return {
+      orderShoppingCart: {},
+      checkOrder: {
+        order: {
+          user: this.order.user || {},
+          message: this.order.message || '',
+        },
+        orderId: this.orderId,
+      },
+    };
+  },
+  methods: {
+    checkOut() {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/pay/${vm.checkOrder.orderId}`;
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      console.log(api);
+      this.$http.post(api).then((response) => {
+        console.log(response.data);
+        if (response.data.success) {
+          vm.$emit('update:is-paid', true);
+          vm.$bus.$emit('message:push', '成功', response.data.message, 'success');
+          vm.$router.push('payment-status');
+        } else {
+          vm.$bus.$emit('message:push', '失敗', response.data.message, 'danger');
+        }
+        loader.hide();
+      });
+    },
+    copyShoppingCart() {
+      const vm = this;
+      // 在清空購物車前，將購物車內容複製
+      vm.orderShoppingCart = JSON.stringify(vm.shoppingCart);
+      vm.orderShoppingCart = JSON.parse(vm.orderShoppingCart);
+    },
+  },
+  created() {
+    this.copyShoppingCart();
+    if (!('carts' in this.orderShoppingCart) || this.orderShoppingCart.carts.length === 0) {
+      this.$router.push('/shopping-cart');
+      return;
+    }
+    this.$bus.$emit('shopping-cart:update');
   },
 };
 </script>
@@ -60,6 +106,15 @@ export default {
 }
 .orderer-info-table {
   td {
+    &:first-child {
+      width: 100px;
+    }
+    @include media-breakpoint-up(xs) {
+      padding: 12px;
+    }
+    @include media-breakpoint-up(md) {
+      padding: 16px;
+    }
     border-color: $payment-broder-color;
   }
   text-align: left;

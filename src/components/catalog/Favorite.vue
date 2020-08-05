@@ -19,9 +19,11 @@
                 <img :src="obj.imageUrl" />
               </a>
               <p class="product-title text-overflow">{{ obj.title }}</p>
+              <!-- 在這裡的$event等同於emit傳來的第一個參數 -->
               <Counter
                 :qty.sync="obj.qty"
-                :unit.sync="obj.unit"
+                :unit="obj.unit"
+                @update:qty="updateQty($event, index)"
               />
               <p class="price font-weight-bold">
                 {{ obj.price * obj.qty | currency }}
@@ -81,7 +83,10 @@ export default {
       if (method === 'add') {
         const productId = vm.products.map((obj) => obj.id);
         if (productId.indexOf(product.id) === -1) {
-          vm.products.push(product);
+          const tempProduct = product;
+          vm.$set(tempProduct, 'qty', 1);
+          vm.products.push(tempProduct);
+          console.log(vm.products);
           vm.$bus.$emit('message:push', '成功', '商品已成功加入我的最愛', 'success');
         } else {
           vm.$bus.$emit('message:push', '提醒', '商品已在我的最愛', 'warning');
@@ -90,14 +95,15 @@ export default {
       if (method === 'delete') {
         vm.products.splice(index, 1);
       }
-      let i = 0;
-      while (i < vm.products.length) {
-        vm.products[i].qty = 1;
-        i += 1;
-      }
       const stringify = JSON.stringify(vm.products);
       localStorage.setItem('favoriteProducts', stringify);
       vm.$emit('favorite-length', vm.products.length);
+    },
+    updateQty(qty, index) {
+      const i = index;
+      this.products[i].qty = qty;
+      const stringify = JSON.stringify(this.products);
+      localStorage.setItem('favoriteProducts', stringify);
     },
     addToShoppingCart(obj) {
       const vm = this;
@@ -111,7 +117,7 @@ export default {
         console.log(response.data);
         loader.hide();
         this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
-        vm.$bus.$emit('shopping-cart-notification:update');
+        vm.$bus.$emit('shopping-cart:update');
         vm.$emit('update-shopping-cart');
       });
     },

@@ -29,6 +29,9 @@
 export default {
   name: 'Counter',
   props: ['qty', 'unit'],
+  mounted() {
+    console.log(this.$props);
+  },
 };
 </script>
 
@@ -80,7 +83,7 @@ export default {
   }
   &[disabled] {
     &:hover {
-      background-color: #fff;
+      background-color: $gray-300;
     }
     background-color: $gray-300;
   }

@@ -16,6 +16,7 @@ import {
   // eslint-disable-next-line camelcase
   alpha_dash,
   max,
+  min,
   numeric,
 } from 'vee-validate/dist/rules';
 import TW from 'vee-validate/dist/locale/zh_TW.json';
@@ -81,12 +82,27 @@ extend('alpha_dash', {
 
 extend('max', {
   ...max,
-  message: '此欄位最大不可超過{length}個字元',
+  message: '此欄位不可超過{length}個字元',
+});
+
+extend('min', {
+  ...min,
+  message: '此欄位不可小於{length}個字元',
 });
 
 extend('numeric', {
   ...numeric,
   message: '此欄位需為數字',
+});
+
+extend('mobile_phone', {
+  validate: (value) => {
+    if (value.match(/^09/g)) {
+      return true;
+    }
+    return false;
+  },
+  message: '手機格式不正確',
 });
 
 configure({

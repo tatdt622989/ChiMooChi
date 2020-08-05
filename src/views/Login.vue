@@ -9,35 +9,46 @@
       </div>
       <div class="login-panel-content">
         <h1 class="f-30 f-md-36 mt-12 mt-md-0 mb-12 mb-md-28 text-left">歡迎來到奇木奇！</h1>
-        <ValidationObserver ref="form" slim>
-          <form class="d-flex flex-wrap" @submit.prevent="signIn">
-            <ValidationProvider class="form-group mb-16" rules="email|required"
-            v-slot="{ errors, failed }" tag="div">
-              <label class="text-left w-100" for="username">會員帳號</label>
-              <input
-                class="login-input form-control"
-                :class="{ 'is-invalid' : failed }"
-                type="email" id="username"
-                autocomplete="username"
-                v-model="user.username"
-              />
-              <div class="invalid-feedback">{{ errors[0] }}</div>
-            </ValidationProvider>
-            <ValidationProvider class="form-group mb-16" rules="required"
-            v-slot="{ errors, failed }" tag="div">
-              <label class="text-left w-100" for="current-password">會員密碼</label>
-              <input
-                class="login-input form-control"
-                :class="{ 'is-invalid' : failed }"
-                type="password"
-                id="current-password"
-                autocomplete="current-password"
-                v-model="user.password"
-              />
-              <div class="invalid-feedback">{{ errors[0] }}</div>
-            </ValidationProvider>
-            <button class="btn btn-primary mt-28 w-100" type="submit">登入</button>
-          </form>
+        <ValidationObserver
+          ref="form"
+          tag="form"
+          class="d-flex flex-wrap"
+          @submit.prevent="signIn"
+        >
+          <ValidationProvider
+            class="form-group mb-16"
+            rules="email|required"
+            v-slot="{ errors, failed }"
+            tag="div"
+          >
+            <label class="text-left w-100" for="username">會員帳號</label>
+            <input
+              class="login-input form-control"
+              :class="{ 'is-invalid' : failed }"
+              type="email" id="username"
+              autocomplete="username"
+              v-model="user.username"
+            />
+            <div class="invalid-feedback">{{ errors[0] }}</div>
+          </ValidationProvider>
+          <ValidationProvider
+            class="form-group mb-16"
+            rules="required"
+            v-slot="{ errors, failed }"
+            tag="div"
+          >
+            <label class="text-left w-100" for="current-password">會員密碼</label>
+            <input
+              class="login-input form-control"
+              :class="{ 'is-invalid' : failed }"
+              type="password"
+              id="current-password"
+              autocomplete="current-password"
+              v-model="user.password"
+            />
+            <div class="invalid-feedback">{{ errors[0] }}</div>
+          </ValidationProvider>
+          <button class="btn btn-primary mt-28 w-100" type="submit">登入</button>
         </ValidationObserver>
       </div>
     </div>
