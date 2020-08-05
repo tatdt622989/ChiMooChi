@@ -75,7 +75,7 @@
         <tr v-for="item in showCoupon" :key="item.id">
           <td>{{ item.title }}</td>
           <td class="responsive">{{ item.code }}</td>
-          <td class="font-weight-bold text-danger pl-12">{{ item.percent }}折</td>
+          <td class="font-weight-bold text-danger pl-12">{{ getDiscount(item.percent) }}折</td>
           <td class="responsive">{{ getTime(item.due_date) }}</td>
           <td
             class="font-weight-bold nowrap"
@@ -356,7 +356,7 @@ export default {
     };
   },
   methods: {
-    getCoupons(page = 1, loadMethod) {
+    getCoupons(page = 1) {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupons?page=:${page}`;
       const loader = vm.$loading.show({}, {
@@ -366,9 +366,6 @@ export default {
         vm.coupons = response.data.coupons;
         console.log(response.data);
         loader.hide();
-        if (loadMethod === 'update') {
-          vm.$bus.$emit('message:push', '成功', '資料載入成功', 'success');
-        }
       });
       vm.sortAttr = '';
       vm.sortProducts();
@@ -387,6 +384,7 @@ export default {
       if (!vm.tempCoupon.is_enabled) { vm.tempCoupon.is_enabled = false; }
       // 將使用者輸入的時間轉換成至1970年以來的毫秒數
       vm.tempCoupon.due_date = dueDate.getTime();
+      vm.tempCoupon.percent = vm.getPercent(vm.tempCoupon.percent);
       if (couponHandlingmethod === '建立') {
         api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupon`;
         httpMethod = 'post';
@@ -420,7 +418,7 @@ export default {
           vm.$bus.$emit('message:push', '失敗', response.data.message, 'danger');
         }
         $('#dashboardCouponsModal').modal('hide');
-        vm.getCoupons(1, 'update');
+        vm.getCoupons(1);
       });
     },
     openEditModal(item) {
@@ -520,6 +518,20 @@ export default {
         return vm.isReverse ? b[attr].localeCompare(a[attr], 'zh-hant') : a[attr].localeCompare(b[attr], 'zh-hant');
       });
       vm.sortAttr = attr;
+    },
+    getDiscount(percent) {
+      if (percent % 10 === 0) {
+        return percent / 10;
+      }
+      const discount = percent;
+      return discount;
+    },
+    getPercent(discount) {
+      if (discount < 10) {
+        return discount * 10;
+      }
+      const percent = discount;
+      return percent;
     },
   },
   watch: {

@@ -73,7 +73,8 @@
     v-if="search && searchProducts.length === 0 || !search && categorizedProducts.length === 0"
     class="f-30 font-weight-bold text-dark mt-20 mb-45"
     >查無有關"{{ search || currentCategory }}"的商品</p>
-    <Pagination :pagination="pagination"
+    <Pagination
+      :pagination="pagination"
       @change-page="changePage"
       v-else
     />
@@ -94,7 +95,7 @@ export default {
   },
   data() {
     return {
-      products: [],
+      allProducts: [],
       categorizedProducts: [],
       searchProducts: [],
       paginatedProducts: [],
@@ -120,7 +121,7 @@ export default {
       this.$http.get(api).then((response) => {
         console.log(response.data);
         // 取得所有商品
-        vm.products = response.data.products;
+        vm.allProducts = response.data.products;
         vm.productsFilter();
         loader.hide();
       });
@@ -153,7 +154,7 @@ export default {
       vm.currentCategory = category;
       let result;
       if (vm.currentCategory !== '全部商品') {
-        result = vm.products.filter((obj) => {
+        result = vm.allProducts.filter((obj) => {
           if (vm.currentCategory === obj.category) {
             return obj;
           }
@@ -161,7 +162,7 @@ export default {
         });
         vm.categorizedProducts = result;
       } else {
-        vm.categorizedProducts = [...vm.products];
+        vm.categorizedProducts = [...vm.allProducts];
       }
     },
     sortProducts(array) {
@@ -223,8 +224,8 @@ export default {
     },
     changePage(page) {
       /*
-      換頁是由子元件觸發，並且需要經過getRenderProducts來處理，
-      而getRenderProducts有一些參數並不存在子元件，
+      換頁是由子元件觸發，並且需要經過productsFilter來處理，
+      而productsFilter有一些參數並不存在子元件，
       所以改由子元件觸發此函式，再來觸發getproducts，實現換頁。
       */
       const vm = this;
@@ -238,7 +239,7 @@ export default {
     search() {
       const vm = this;
       if (vm.search) {
-        const result = vm.products.filter((obj) => {
+        const result = vm.allProducts.filter((obj) => {
           const str = obj.category
           + obj.title
           + obj.origin_price

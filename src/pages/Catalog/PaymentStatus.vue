@@ -72,10 +72,13 @@ export default {
     },
   },
   created() {
-    // const vm = this;
-    // if (!vm.isPaid) {
-    //   vm.$router.push('/shopping-cart');
-    // }
+    const vm = this;
+    if (!vm.isPaid) {
+      vm.$router.push('/shopping-cart');
+    }
+  },
+  destroyed() {
+    this.$emit('update:is-paid', false);
   },
 };
 </script>

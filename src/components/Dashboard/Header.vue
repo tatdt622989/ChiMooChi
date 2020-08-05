@@ -4,7 +4,10 @@
     @click="openSidebarRequest">
       <span class="material-icons">menu</span>
     </button>
-    <h1 class="dashboard-header-title f-lg-30 f-24 my-24 ml-0 ml-lg-0">{{ headerText }}管理</h1>
+    <h1
+      class="dashboard-header-title f-lg-30 f-24 my-24 ml-0 ml-lg-0"
+      :class="{ 'is-order' : isOrder  }"
+    >{{ headerText }}管理</h1>
     <button
       class="btn-square btn-primary d-block d-lg-none"
       v-if="targetModal"
@@ -38,6 +41,7 @@ export default {
     return {
       headerText: '商品',
       targetModal: '#dashboardProductsModal',
+      isOrder: false,
     };
   },
   methods: {
@@ -51,6 +55,7 @@ export default {
     },
     updateHeader(path) {
       const vm = this;
+      vm.isOrder = false;
       switch (path) {
         case '/dashboard/products':
           vm.headerText = '商品';
@@ -59,6 +64,7 @@ export default {
         case '/dashboard/orders':
           vm.headerText = '訂單';
           vm.targetModal = false;
+          vm.isOrder = true;
           break;
         case '/dashboard/coupons':
           vm.headerText = '優惠券';
@@ -102,6 +108,9 @@ export default {
   justify-content: space-between;
 }
 .dashboard-header-title {
+  &.is-order {
+    padding-right: 44px;
+  }
   @include media-breakpoint-up(xs) {
     text-align: center;
   }
