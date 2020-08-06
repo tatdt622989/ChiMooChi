@@ -6,7 +6,7 @@
           <th>
             <button
               class="btn font-weight-bold p-0"
-              @click="sortProducts('title')"
+              @click="couponsFilter('title')"
             >
               名稱
               <span
@@ -19,7 +19,7 @@
           <th class="responsive">
             <button
               class="btn font-weight-bold p-0"
-              @click="sortProducts('code')"
+              @click="couponsFilter('code')"
             >
               序號
               <span
@@ -32,7 +32,7 @@
           <th class="pl-12">
             <button
               class="btn font-weight-bold p-0"
-              @click="sortProducts('percent')"
+              @click="couponsFilter('percent')"
             >
               折扣
               <span
@@ -45,7 +45,7 @@
           <th class="responsive">
             <button
               class="btn font-weight-bold p-0"
-              @click="sortProducts('due_date')"
+              @click="couponsFilter('due_date')"
             >
               截止日期
               <span
@@ -58,7 +58,7 @@
           <th class="nowrap">
             <button
               class="btn font-weight-bold p-0"
-              @click="sortProducts('is_enabled')"
+              @click="couponsFilter('is_enabled')"
             >
               啟用狀態
               <span
@@ -72,7 +72,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in showCoupon" :key="item.id">
+        <tr v-for="item in paginatedCoupons" :key="item.id">
           <td>{{ item.title }}</td>
           <td class="responsive">{{ item.code }}</td>
           <td class="font-weight-bold text-danger pl-12">{{ getDiscount(item.percent) }}折</td>
@@ -86,8 +86,6 @@
           <td class="text-center nowrap info-edit">
             <button
               class="btn-square btn-outline-secondary"
-              data-toggle="modal"
-              data-target="#dashboardOrdersModal"
               @click="openEditModal(item)"
             >
               <span class="material-icons">edit</span>
@@ -96,6 +94,10 @@
         </tr>
       </tbody>
     </table>
+    <Pagination
+      :pagination="pagination"
+      @change-page="changePage"
+    />
     <div
       class="dashboard-coupons-modal modal fade"
       id="dashboardCouponsModal"
@@ -328,18 +330,22 @@
 <script>
 import $ from 'jquery';
 import Delete from '@/components/Delete.vue';
+import Pagination from '@/components/Pagination.vue';
 
 export default {
   name: 'Coupons',
   components: {
     Delete,
+    Pagination,
   },
   props: ['isNewModal', 'search'],
   data() {
     return {
-      coupons: [],
+      allCoupons: [],
       tempCoupon: {},
       searchCoupons: [],
+      paginatedCoupons: [],
+      pagination: {},
       now: {},
       selectTime: {
         year: '',
@@ -356,19 +362,57 @@ export default {
     };
   },
   methods: {
-    getCoupons(page = 1) {
+    getCoupons() {
       const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupons?page=:${page}`;
+      let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupons?page=1`;
       const loader = vm.$loading.show({}, {
         default: this.$createElement('LogoLoadingAnimation'),
       });
-      this.$http.get(api).then((response) => {
-        vm.coupons = response.data.coupons;
-        console.log(response.data);
-        loader.hide();
+      // 這段目的是取得全部的訂單列表，因為api提供的是分頁資料，並且有排序全部資料的需要
+      vm.$http.get(api).then((response) => {
+        // 先取得第一頁的資料
+        vm.allCoupons = response.data.coupons;
+        vm.pagination = response.data.pagination;
+        const otherCouponsRequest = [];
+        // 判斷總頁數是否大於一頁
+        if (vm.pagination.total_pages > 1) {
+          // 判斷剩餘的頁數
+          let i = 1;
+          while (i < vm.pagination.total_pages) {
+            const page = i + 1;
+            api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupons?page=${page}`;
+            otherCouponsRequest.push(vm.$http.get(api));
+            i += 1;
+          }
+          // 將剩餘頁數的資料取回
+          vm.$http.all(otherCouponsRequest).then(
+            vm.$http.spread((...couponsResponse) => {
+              console.log(response);
+              const CouponsArray = couponsResponse.map((obj) => obj.data.coupons);
+              let couponsConcat = [];
+              CouponsArray.forEach((obj) => {
+                couponsConcat = couponsConcat.concat(obj);
+              });
+              // 加入第一頁的陣列中
+              couponsConcat.forEach((obj) => {
+                vm.allCoupons.push(obj);
+              });
+              vm.couponsFilter();
+              loader.hide();
+            }),
+          );
+        } else {
+          vm.couponsFilter();
+          loader.hide();
+        }
       });
-      vm.sortAttr = '';
-      vm.sortProducts();
+    },
+    couponsFilter(sortAttr = 'title', trigger = 'table-header') {
+      const vm = this;
+      const target = vm.search ? vm.searchCoupons : vm.allCoupons;
+      vm.sortProducts(sortAttr, trigger, target);
+      vm.getPagination(target);
+      vm.paginateCoupons(target);
     },
     upadateCoupons(couponHandlingmethod) {
       const vm = this;
@@ -418,7 +462,7 @@ export default {
           vm.$bus.$emit('message:push', '失敗', response.data.message, 'danger');
         }
         $('#dashboardCouponsModal').modal('hide');
-        vm.getCoupons(1);
+        vm.getCoupons();
       });
     },
     openEditModal(item) {
@@ -500,15 +544,14 @@ export default {
       vm.selectTime.hour = '';
       vm.selectTime.minute = '';
     },
-    sortProducts(attr = 'title') {
+    sortProducts(attr, trigger, target) {
       const vm = this;
-      const sortTarget = vm.search ? vm.searchCoupons : vm.coupons;
-      if (vm.sortAttr === attr) {
+      if (vm.sortAttr === attr && trigger === 'table-header') {
         vm.isReverse = !vm.isReverse;
       } else {
         vm.isReverse = false;
       }
-      sortTarget.sort((a, b) => {
+      target.sort((a, b) => {
         if (attr === 'percent' || attr === 'due_date') {
           return vm.isReverse ? a[attr] - b[attr] : b[attr] - a[attr];
         }
@@ -533,12 +576,62 @@ export default {
       const percent = discount;
       return percent;
     },
+    getPagination(array) {
+      const vm = this;
+      const target = array;
+      const targetLen = target.length;
+      vm.$set(vm.pagination, 'current_page', 1);
+      if (targetLen % 10 !== 0) {
+        vm.$set(vm.pagination, 'total_pages', Math.floor(targetLen / 10) + 1);
+      } else {
+        vm.$set(vm.pagination, 'total_pages', Math.floor(targetLen / 10));
+      }
+      vm.$set(vm.pagination, 'has_pre', false);
+      if (vm.pagination.total_pages > 1) {
+        vm.$set(vm.pagination, 'has_next', true);
+      } else {
+        vm.$set(vm.pagination, 'has_next', false);
+      }
+    },
+    updatePagination(page) {
+      const vm = this;
+      vm.pagination.current_page = page;
+      if (page === 1) {
+        vm.$set(vm.pagination, 'has_pre', false);
+      } else {
+        vm.$set(vm.pagination, 'has_pre', true);
+      }
+      if (page < vm.pagination.total_pages) {
+        vm.$set(vm.pagination, 'has_next', true);
+      } else {
+        vm.$set(vm.pagination, 'has_next', false);
+      }
+    },
+    paginateCoupons(array) {
+      const vm = this;
+      const target = array;
+      console.log(target);
+      const startIndex = (vm.pagination.current_page - 1) * 10;
+      const result = target.filter((obj, index) => {
+        if (startIndex <= index && startIndex + 9 >= index) {
+          return obj;
+        }
+        return false;
+      });
+      vm.paginatedCoupons = result;
+    },
+    changePage(page) {
+      const vm = this;
+      const target = vm.search ? vm.searchCoupons : vm.allCoupons;
+      vm.updatePagination(page);
+      vm.paginateCoupons(target);
+    },
   },
   watch: {
     search() {
       const vm = this;
       if (vm.search) {
-        const result = vm.coupons.filter((obj) => {
+        const result = vm.allCoupons.filter((obj) => {
           const str = obj.title + obj.code + vm.getTime(obj.due_date) + obj.percent;
           if (str.indexOf(vm.search) > -1) {
             return obj;
@@ -551,12 +644,7 @@ export default {
           vm.searchCoupons = [];
         }
       }
-    },
-  },
-  computed: {
-    showCoupon() {
-      const vm = this;
-      return vm.search ? vm.searchCoupons : vm.coupons;
+      vm.couponsFilter('title', 'search');
     },
   },
   created() {

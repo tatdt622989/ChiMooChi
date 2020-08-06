@@ -229,7 +229,19 @@ export default {
       所以改由子元件觸發此函式，再來觸發getproducts，實現換頁。
       */
       const vm = this;
-      vm.productsFilter(vm.search ? '' : vm.currentCategory, vm.currentSortMethod, page);
+      const target = vm.search ? vm.searchProducts : vm.categorizedProducts;
+      vm.pagination.current_page = page;
+      if (page === 1) {
+        vm.$set(vm.pagination, 'has_pre', false);
+      } else {
+        vm.$set(vm.pagination, 'has_pre', true);
+      }
+      if (page < vm.pagination.total_pages) {
+        vm.$set(vm.pagination, 'has_next', true);
+      } else {
+        vm.$set(vm.pagination, 'has_next', false);
+      }
+      vm.paginateProducts(target);
     },
     pushMessage() {
       this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');

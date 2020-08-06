@@ -6,7 +6,7 @@
         <th>
           <button
             class="btn font-weight-bold p-0"
-            @click="sortOrders('create_at')"
+            @click="ordersFilter('create_at')"
           >
             時間
             <span
@@ -20,7 +20,7 @@
         <th class="pl-16">
           <button
             class="btn font-weight-bold p-0"
-            @click="sortOrders('total')"
+            @click="ordersFilter('total')"
           >
             金額
             <span
@@ -33,7 +33,7 @@
         <th class="nowrap">
           <button
             class="btn font-weight-bold p-0"
-            @click="sortOrders('is_paid')"
+            @click="ordersFilter('is_paid')"
           >
             付款狀態
             <span
@@ -58,9 +58,10 @@
           {{ obj.is_paid ? '已付款' : '未付款' }}
           </td>
         <td class="info-edit text-center">
-          <button class="btn-square btn-outline-secondary"
-                  data-toggle="modal"
-                  data-target="#dashboardOrdersModal">
+          <button
+            class="btn-square btn-outline-secondary"
+            @click="openEditModal(obj)"
+          >
             <span class="material-icons">edit</span>
           </button>
         </td>
@@ -81,94 +82,181 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body text-left pt-0">
-          <p class="mb-8">
-            訂單時間：{{'\xa0'}}{{'\xa0'}}
-            <span>2020-07-19{{'\xa0'}}{{'\xa0'}}00:00:00</span>
-          </p>
-          <p class="pb-8">
-            訂單編號：{{'\xa0'}}{{'\xa0'}}
-            <span>L9tH8jxVb2Ka_DYPwng</span>
-          </p>
-          <p class="order-products mb-12">訂購商品：</p>
-          <table class="table table-light table-borderless m-0">
-            <tbody>
-              <tr class="tbody-tr">
-                <td class="text-overflow">尊爵日式雙人沙發沙發沙發沙發</td>
-                <td class="text-nowrap text-center">99/個</td>
-                <td class="text-right">小計{{'\xa0'}}{{'\xa0'}}$99999</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="order-total pt-16 pr-8 pr-md-12 pb-20 text-right">
-            總計(已扣優惠券){{'\xa0'}}{{'\xa0'}}
-            <span class="text-danger">$99999</span>
-          </p>
-          <p class="mr-16 my-12">訂購人資訊：</p>
-          <div class="form-group">
-            <label for="name">姓名</label>
-            <input class="form-control" type="text" id="name" autocomplete="name">
-          </div>
-          <div class="d-flex">
-            <div class="form-group pr-12">
-              <label for="county">縣市</label>
-              <select class="form-control" id="excounty">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
+        <ValidationObserver
+          ref="form"
+          tag="form"
+          class="order-form"
+          @submit.prevent="editOrder"
+        >
+          <div class="modal-body text-left">
+            <p class="mb-8">
+              訂單時間：{{'\xa0'}}{{'\xa0'}}
+              <span>{{ getTime(tempOrder.create_at) }}</span>
+            </p>
+            <p class="pb-8">
+              訂單編號：{{'\xa0'}}{{'\xa0'}}
+              <span>{{ tempOrder.id }}</span>
+            </p>
+            <p class="order-products mb-12">訂購商品：</p>
+            <table class="table table-borderless m-0">
+              <tbody>
+                <tr
+                  class="tbody-tr"
+                  v-for="obj in tempOrder.products"
+                  :key="obj.id"
+                >
+                  <td class="text-overflow pl-12 pl-md-16">{{ obj.product.title }}</td>
+                  <td class="text-nowrap text-center">{{ `${obj.qty} / ${obj.product.unit}` }}</td>
+                  <td class="text-right pr-12 pr-md-16">{{ obj.product.price | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="order-total pt-16 pb-20 text-right">
+              總計(已扣優惠券){{'\xa0'}}{{'\xa0'}}
+              <span class="text-danger font-weight-bold">{{ tempOrder.total | currency }}</span>
+            </p>
+            <p class="mr-16 my-12">訂購人資訊：</p>
+            <ValidationProvider
+              class="form-group"
+              rules="required"
+              tag="div"
+              v-slot="{ errors, failed }"
+            >
+              <label for="user-name" class="w-100 text-left">姓名</label>
+              <input
+                type="text"
+                class="form-control"
+                :class="{ 'is-invalid' : failed }"
+                id="user-name"
+                placeholder="請輸入姓名"
+                autocomplete="name"
+                v-model="tempOrder.user.name"
+              />
+              <div class="invalid-feedback">{{ errors[0] }}</div>
+            </ValidationProvider>
+            <p class="mb-8">地址</p>
+            <div class="d-flex mb-12 mb-md-16">
+              <ValidationProvider
+                class="form-group w-50 county mb-0"
+                rules="required"
+                tag="div"
+                v-slot="{ errors, failed }"
+              >
+                <select
+                  class="form-control"
+                  :class="{ 'is-invalid' : failed }"
+                  @change="getRegion(selectCountyIndex)"
+                  v-model="selectCountyIndex"
+                  required
+                >
+                  <option selected disabled value="">請選擇縣市</option>
+                  <option
+                    v-for="(item, index) in areaList"
+                    :key="item.county"
+                    :value="index"
+                  > {{ item.county }} </option>
+                </select>
+                <div class="invalid-feedback">{{ errors[0] }}</div>
+              </ValidationProvider>
+              <ValidationProvider
+              class="form-group w-50 region mb-0"
+              rules="required"
+              tag="div"
+              v-slot="{ errors, failed }"
+              >
+                <select
+                  class="form-control"
+                  :class="{ 'is-invalid' : failed }"
+                  v-model="selectRegion"
+                  required
+                >
+                  <option selected disabled value="">請選擇鄉鎮區</option>
+                  <option v-for="item in regionList" :key="item" :value="item">
+                    {{ item }}
+                  </option>
+                </select>
+                <div class="invalid-feedback">{{ errors[0] }}</div>
+              </ValidationProvider>
             </div>
-            <div class="form-group pl-12">
-              <label for="region">鄉鎮區</label>
-              <select class="form-control" id="region">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
+            <ValidationProvider
+              class="form-group"
+              rules="required"
+              tag="div"
+              v-slot="{ errors, failed }"
+            >
+              <input
+                type="text"
+                class="form-control"
+                :class="{ 'is-invalid' : failed }"
+                placeholder="請輸入地址"
+                autocomplete="on"
+                v-model="otherAddress"
+              />
+              <div class="invalid-feedback">{{ errors[0] }}</div>
+            </ValidationProvider>
+            <div class="d-flex">
+              <ValidationProvider
+                class="form-group w-50 mobile-phone"
+                rules="required|numeric|max:10"
+                tag="div"
+                v-slot="{ errors, failed }"
+              >
+                <label for="mobile-phone">手機</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  :class="{ 'is-invalid' : failed }"
+                  id="mobile-phone"
+                  placeholder="請輸入手機號碼"
+                  autocomplete="on"
+                  v-model="tempOrder.user.tel"
+                />
+                <div class="invalid-feedback">{{ errors[0] }}</div>
+              </ValidationProvider>
+              <ValidationProvider
+                class="form-group w-50 email"
+                rules="required|email"
+                tag="div"
+                v-slot="{ errors, failed }"
+              >
+                <label for="email">電子信箱</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  :class="{ 'is-invalid' : failed }"
+                  id="email"
+                  placeholder="請輸入電子信箱"
+                  autocomplete="email"
+                  v-model="tempOrder.user.email"
+                />
+                <div class="invalid-feedback">{{ errors[0] }}</div>
+              </ValidationProvider>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="address">地址</label>
-            <input class="form-control" type="text" id="address" autocomplete="street-address">
-          </div>
-          <div class="d-flex">
-            <div class="form-group pr-12">
-              <label for="telephone">手機</label>
-              <input class="form-control" type="text" id="telephone" autocomplete="tel">
+            <div class="form-group">
+              <label for="notes" class="textarea-form-label">備註</label>
+              <textarea
+                class="form-control"
+                id="notes"
+                rows="3"
+                v-model="tempOrder.message"
+              ></textarea>
             </div>
-            <div class="form-group pl-12">
-              <label for="email">電子信箱</label>
-              <input class="form-control" type="text" id="email" autocomplete="email">
-            </div>
-          </div>
-          <div class="order-form-group form-group">
-            <label for="notes" class="textarea-form-label">備註</label>
-            <textarea class="form-control form-textarea" id="notes" rows="3"></textarea>
-          </div>
-          <div class="d-flex">
-            <div class="form-group pr-12">
-              <label for="paymentMethodSelect">付款方式</label>
-              <select class="form-control" id="paymentMethodSelect">
-                <option>信用卡</option>
-                <option>貨到付款</option>
-              </select>
-            </div>
-            <div class="form-group pl-12">
+            <div class="form-group">
               <label for="paymentMethodSelect">付款狀態</label>
-              <select class="form-control" id="paymentStatusSelect">
-                <option>未付款</option>
-                <option>已付款</option>
+              <select
+                class="form-control"
+                id="paymentStatusSelect"
+                v-model="isPaid"
+              >
+                <option value="0">未付款</option>
+                <option value="1">已付款</option>
               </select>
             </div>
-            </div>
-        </div>
-        <div class="modal-footer p-16">
-          <button type="button" class="btn btn-primary m-0">編輯</button>
-        </div>
+          </div>
+          <div class="modal-footer p-16">
+            <button type="submit" class="btn btn-primary m-0">編輯</button>
+          </div>
+        </ValidationObserver>
       </div>
     </div>
   </div>
@@ -176,6 +264,8 @@
 </template>
 
 <script>
+import $ from 'jquery';
+import areaList from '@/assets/area-list.json';
 import Pagination from '@/components/Pagination.vue';
 
 export default {
@@ -190,15 +280,24 @@ export default {
       searchOrders: [],
       paginatedOrders: [],
       pagination: {},
+      tempOrder: {
+        user: {},
+      },
+      areaList,
+      regionList: [],
+      selectCountyIndex: '',
+      selectRegion: '',
+      isPaid: 0,
+      tempAddress: '',
+      otherAddress: '',
       sortAttr: '',
       isReverse: false,
     };
   },
   methods: {
-    getOrders(page = 1) {
+    getOrders() {
       const vm = this;
-      let orderPage = page;
-      let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/orders?page=${orderPage}`;
+      let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/orders?page=1`;
       const loader = vm.$loading.show({}, {
         default: this.$createElement('LogoLoadingAnimation'),
       });
@@ -213,35 +312,38 @@ export default {
           // 判斷剩餘的頁數
           let i = 1;
           while (i < vm.pagination.total_pages) {
-            orderPage = i + 1;
-            api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/orders?page=${orderPage}`;
+            const page = i + 1;
+            api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/orders?page=${page}`;
             otherOrdersRequest.push(vm.$http.get(api));
             i += 1;
           }
           // 將剩餘頁數的資料取回
           vm.$http.all(otherOrdersRequest).then(
-            vm.$http.spread((...orderResponse) => {
+            vm.$http.spread((...ordersResponse) => {
               console.log(response);
-              const ordersArray = orderResponse.map((obj) => obj.data.orders);
-              let orderConcat = [];
+              const ordersArray = ordersResponse.map((obj) => obj.data.orders);
+              let ordersConcat = [];
               ordersArray.forEach((obj) => {
-                orderConcat = orderConcat.concat(obj);
+                ordersConcat = ordersConcat.concat(obj);
               });
               // 加入第一頁的陣列中
-              orderConcat.forEach((obj) => {
+              ordersConcat.forEach((obj) => {
                 vm.allOrders.push(obj);
               });
-              vm.paginateOrders(vm.allOrders);
+              vm.ordersFilter();
               loader.hide();
             }),
           );
+        } else {
+          vm.couponsFilter();
+          loader.hide();
         }
       });
-      vm.sortAttr = '';
-      vm.sortOrders();
     },
     getTime(timestamp) {
       const vm = this;
+      console.log(timestamp);
+      if (!timestamp) { return false; }
       let timestampStr = timestamp.toString();
       if (timestampStr.length < 13) {
         let i = 0;
@@ -273,21 +375,58 @@ export default {
       }
       return str;
     },
-    sortOrders(attr = 'create_at') {
+    ordersFilter(sortAttr = 'create_at', trigger = 'table-header') {
       const vm = this;
-      const sortTarget = vm.search ? vm.searchOrders : vm.allOrders;
-      if (vm.sortAttr === attr) {
+      const target = vm.search ? vm.searchOrders : vm.allOrders;
+      vm.sortOrders(sortAttr, trigger, target);
+      vm.getPagination(target);
+      vm.paginateOrders(target);
+    },
+    sortOrders(attr = 'create_at', trigger = 'table-header', target) {
+      const vm = this;
+      if (vm.sortAttr === attr && trigger === 'table-header') {
         vm.isReverse = !vm.isReverse;
       } else {
         vm.isReverse = false;
       }
-      sortTarget.sort((a, b) => {
+      target.sort((a, b) => {
         if (attr === 'total' || attr === 'create_at') {
           return vm.isReverse ? a[attr] - b[attr] : b[attr] - a[attr];
         }
         return vm.isReverse ? +a[attr] - +b[attr] : +b[attr] - +a[attr];
       });
       vm.sortAttr = attr;
+    },
+    getPagination(array) {
+      const vm = this;
+      const target = array;
+      const targetLen = target.length;
+      vm.$set(vm.pagination, 'current_page', 1);
+      if (targetLen % 10 !== 0) {
+        vm.$set(vm.pagination, 'total_pages', Math.floor(targetLen / 10) + 1);
+      } else {
+        vm.$set(vm.pagination, 'total_pages', Math.floor(targetLen / 10));
+      }
+      vm.$set(vm.pagination, 'has_pre', false);
+      if (vm.pagination.total_pages > 1) {
+        vm.$set(vm.pagination, 'has_next', true);
+      } else {
+        vm.$set(vm.pagination, 'has_next', false);
+      }
+    },
+    updatePagination(page) {
+      const vm = this;
+      vm.pagination.current_page = page;
+      if (page === 1) {
+        vm.$set(vm.pagination, 'has_pre', false);
+      } else {
+        vm.$set(vm.pagination, 'has_pre', true);
+      }
+      if (page < vm.pagination.total_pages) {
+        vm.$set(vm.pagination, 'has_next', true);
+      } else {
+        vm.$set(vm.pagination, 'has_next', false);
+      }
     },
     paginateOrders(array) {
       const vm = this;
@@ -304,18 +443,90 @@ export default {
     },
     changePage(page) {
       const vm = this;
-      vm.pagination.current_page = page;
-      if (page === 1) {
-        vm.$set(vm.pagination, 'has_pre', false);
-      } else {
-        vm.$set(vm.pagination, 'has_pre', true);
+      const target = vm.search ? vm.searchOrders : vm.allOrders;
+      vm.updatePagination(page);
+      vm.paginateOrders(target);
+    },
+    openEditModal(obj) {
+      const vm = this;
+      vm.tempOrder = JSON.stringify(obj);
+      vm.tempOrder = JSON.parse(vm.tempOrder);
+      vm.isPaid = vm.tempOrder.is_paid ? 1 : 0;
+      const county = vm.tempOrder.user.address.slice(4, 7);
+      const postalCode = vm.tempOrder.user.address.slice(0, 3);
+      vm.areaList.forEach((area, index) => {
+        if (area.county === county) {
+          vm.selectCountyIndex = index;
+        }
+      });
+      vm.getRegion(vm.selectCountyIndex);
+      vm.regionList.forEach((item) => {
+        const region = item.split(' ');
+        console.log(region[1], postalCode);
+        if (region[1] === postalCode) {
+          vm.selectRegion = item;
+          console.log(vm.selectRegion);
+        }
+      });
+      const region = vm.selectRegion.split(' ');
+      console.log(region);
+      const otherAddress = vm.tempOrder.user.address.split(region[0]);
+      [, vm.otherAddress] = otherAddress;
+      $('#dashboardOrdersModal').modal('show');
+    },
+    getRegion(countyIndex) {
+      if (countyIndex !== '') {
+        this.regionList = this.areaList[countyIndex].region;
       }
-      if (page < vm.pagination.total_pages) {
-        vm.$set(vm.pagination, 'has_next', true);
-      } else {
-        vm.$set(vm.pagination, 'has_next', false);
+    },
+    editOrder() {
+      const vm = this;
+      vm.$refs.form.validate().then((success) => {
+        if (success) {
+          const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/order/${vm.tempOrder.id}`;
+          const region = vm.selectRegion.split(' ');
+          vm.tempOrder.user.address = `${region[1]} ${vm.areaList[vm.selectCountyIndex].county}${region[0]}${vm.otherAddress}`;
+          console.log(vm.tempOrder.user.address);
+          vm.tempOrder.is_paid = !!parseInt(vm.isPaid, 10);
+          const loader = vm.$loading.show({}, {
+            default: this.$createElement('LogoLoadingAnimation'),
+          });
+          this.$http.put(api, { data: vm.tempOrder }).then((response) => {
+            console.log(response.data);
+            if (response.data.success) {
+              vm.$bus.$emit('message:push', '成功', '訂單修改成功', 'success');
+              $('#dashboardOrdersModal').modal('hide');
+              vm.getOrders();
+            } else {
+              vm.$bus.$emit('message:push', '失敗', response.data.message, 'danger');
+            }
+            loader.hide();
+          });
+        }
+      });
+    },
+  },
+  watch: {
+    search() {
+      const vm = this;
+      if (vm.search) {
+        const result = vm.allOrders.filter((obj) => {
+          const str = vm.getTime(obj.create_at)
+          + obj.id
+          + obj.message
+          + obj.total;
+          if (str.indexOf(vm.search) > -1) {
+            return obj;
+          }
+          return false;
+        });
+        if (result.length) {
+          vm.searchOrders = result;
+        } else {
+          vm.searchOrders = [];
+        }
       }
-      vm.paginateOrders(vm.allOrders);
+      vm.ordersFilter('create_at', 'search');
     },
   },
   created() {
@@ -326,14 +537,64 @@ export default {
 
 <style lang="scss">
 .dashboard-orders-modal {
+  .modal-header {
+    @include media-breakpoint-up(xs) {
+      padding: 12px;
+    }
+    @include media-breakpoint-up(md) {
+      padding: 16px;
+    }
+  }
+  .modal-body {
+    @include media-breakpoint-up(xs) {
+      padding: 0 12px 12px 12px;
+    }
+    @include media-breakpoint-up(md) {
+      padding: 0 16px 16px 16px;
+    }
+    td:nth-of-type(1) {
+      width: 40%;
+    }
+    .county, .moblie-phone {
+      @include media-breakpoint-up(xs) {
+        padding-right: 6px;
+      }
+      @include media-breakpoint-up(md) {
+        padding-right: 8px;
+      }
+    }
+    .region, .email {
+      @include media-breakpoint-up(xs) {
+        padding-left: 6px;
+      }
+      @include media-breakpoint-up(md) {
+        padding-left: 8px;
+      }
+    }
+  }
+  table {
+    background-color: $gray-300;
+  }
+  tbody {
+    tr {
+      border-bottom: 1px solid #fff;
+    }
+  }
   .order-products {
     border-top: 1px solid $white;
   }
   .order-total {
+    @include media-breakpoint-up(xs) {
+      padding-right: 12px;
+    }
+    @include media-breakpoint-up(md) {
+      padding-right: 16px;
+    }
     background-color: $gray-300;
+    font-size: 14px;
   }
   .form-group {
-    margin-bottom: 8px;
+    margin-bottom: 16px;
   }
 }
 </style>
