@@ -1,5 +1,5 @@
 <template>
-  <div class="promotion container mb-lg-90 mb-md-60 mb-45">
+  <div class="promotion container mb-lg-60 mb-md-45 mb-32">
     <div class="row">
       <div class="col-12 d-flex justify-content-center flex-column">
         <img class="px-12" src="@/assets/images/promotion-title.svg" />

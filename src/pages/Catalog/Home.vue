@@ -71,7 +71,7 @@
         <h3 class="d-none d-md-block mb-md-16 mb-lg-24 mb-xl-32 f-16 f-lg-20 f-xl-24">
           即刻入手進口高品質躺椅讓度假不再需要出遠門！
         </h3>
-        <router-link to="/products" class="btn btn-outline-white-primary f-lg-20">
+        <router-link to="/products/木椅" class="btn btn-outline-white-primary f-lg-20">
           去逛逛
         </router-link>
       </div>
@@ -85,7 +85,7 @@
         <h3 class="d-none d-md-block mb-md-16 mb-lg-24 mb-xl-32 f-16 f-lg-20 f-xl-24">
           嚴選舒適美學沙發以及精緻抱枕直接一次擁有！
         </h3>
-        <router-link to="/products" class="btn btn-outline-white-dark f-lg-20">
+        <router-link to="/products/沙發" class="btn btn-outline-white-dark f-lg-20">
           去逛逛
         </router-link>
       </div>
@@ -93,8 +93,30 @@
     <div class="newsletter">
       <h2 class="f-24 f-lg-30 f-xl-36 mb-12 w-100">訂閱電子報</h2>
       <h3 class="f-16 f-lg-20 f-xl-24 mb-20 w-100">立即訂閱「奇木奇奇」，一手掌握所有好康優惠！</h3>
-      <input type="text" placeholder="請輸入您的電子郵件" class="newsletter-input"/>
-      <button value="訂閱" class="btn btn-primary mb-12">訂閱</button>
+      <ValidationObserver
+        class="d-flex align-items-start"
+        ref="form"
+        tag="form"
+        @submit.prevent="subscribe"
+      >
+        <ValidationProvider
+          class="form-group"
+          rules="email"
+          tag="div"
+          v-slot="{ errors, failed }"
+        >
+          <input
+            class="newsletter-input form-control"
+            :class="{ 'is-invalid' : failed }"
+            type="email"
+            placeholder="請輸入您的電子郵件"
+            autocomplete="email"
+            v-model="email"
+          />
+          <div class="invalid-feedback">{{ errors[0] }}</div>
+        </ValidationProvider>
+        <button type="submit" value="訂閱" class="btn btn-primary mb-12">訂閱</button>
+      </ValidationObserver>
     </div>
   </div>
 </template>
@@ -111,6 +133,7 @@ export default {
     return {
       products: [],
       recommendProducts: [],
+      email: '',
     };
   },
   methods: {
@@ -142,6 +165,14 @@ export default {
     },
     pushMessage() {
       this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
+    },
+    subscribe() {
+      this.$refs.form.validate().then((success) => {
+        if (success) {
+          this.email = '';
+          this.$bus.$emit('message:push', '成功', '訂閱成功', 'success');
+        }
+      });
     },
   },
   created() {
@@ -322,6 +353,9 @@ export default {
   @include media-breakpoint-up(xl) {
     margin-bottom: 90px;
   }
+  .invalid-feedback {
+    color: #fff;
+  }
   align-content: center;
   align-items: center;
   background:
@@ -343,9 +377,10 @@ export default {
     text-indent: 20px;
     width: 445px;
   }
-  border: 0;
+  border: 1px solid #fff;
   height: 44px;
   margin-bottom: 12px;
+  padding: 0;
 }
 .card-wrap.hide {
   @include media-breakpoint-up(md) {

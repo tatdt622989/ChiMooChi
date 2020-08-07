@@ -12,7 +12,7 @@
           <ul class="m-0 p-0">
             <li
               class="favorite-modal-item flex-wrap border-bottom border-light"
-              v-for="(obj, index) in products"
+              v-for="(obj, index) in favoriteProducts"
               :key="obj.id"
             >
               <a href="#" class="favorite-modal-img-link">
@@ -31,7 +31,7 @@
               <div class="btn-group">
                 <button
                   class="btn-square btn-outline-secondary mr-16"
-                  @click="addToShoppingCart(obj)"
+                  @click="addToShoppingCart(obj, index)"
                 >
                   <span class="material-icons">shopping_cart</span>
                 </button>
@@ -46,7 +46,7 @@
           </ul>
           <div
             class="favorite-modal-empty"
-            v-if="products.length === 0"
+            v-if="favoriteProducts.length === 0"
           >
             <p class="mb-3 fz-3">還沒有最愛的商品喔！</p>
             <a href class="btn btn-primary text-white">去逛逛</a>
@@ -67,7 +67,8 @@ export default {
   },
   data() {
     return {
-      products: [],
+      favoriteProducts: [],
+      allProducts: [],
       product: {},
     };
   },
@@ -75,41 +76,56 @@ export default {
     getFavorite() {
       const vm = this;
       if (localStorage.getItem('favoriteProducts')) {
-        vm.products = JSON.parse(localStorage.getItem('favoriteProducts'));
+        vm.favoriteProducts = JSON.parse(localStorage.getItem('favoriteProducts'));
       }
+    },
+    addToShoppingCart(obj, index) {
+      const vm = this;
+      const productsApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      this.$http.get(productsApi).then((response) => {
+        console.log(response.data);
+        // 取得所有商品
+        vm.allProducts = response.data.products;
+        const matchIndex = vm.allProducts.findIndex((product) => product.id === obj.id);
+        loader.hide();
+        if (matchIndex === -1) {
+          vm.updateFavorite('delete', undefined, index);
+          this.$bus.$emit('message:push', '提醒', '此產品已經下架', 'warning');
+        } else {
+          const internalLoader = vm.$loading.show({}, {
+            default: this.$createElement('LogoLoadingAnimation'),
+          });
+          vm.product.product_id = obj.id;
+          vm.product.qty = obj.qty;
+          const cartApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+          this.$http.post(cartApi, { data: vm.product }).then(() => {
+            internalLoader.hide();
+            vm.$bus.$emit('shopping-cart:update');
+            this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
+          });
+        }
+      });
     },
     updateFavorite(method, product, index) {
       const vm = this;
       if (method === 'add') {
-        vm.products.push(product);
+        vm.favoriteProducts.push(product);
       }
       if (method === 'delete') {
-        vm.products.splice(index, 1);
+        vm.favoriteProducts.splice(index, 1);
       }
-      const stringify = JSON.stringify(vm.products);
+      const stringify = JSON.stringify(vm.favoriteProducts);
       localStorage.setItem('favoriteProducts', stringify);
-      vm.$emit('favorite-products', vm.products);
+      vm.$emit('favorite-products', vm.favoriteProducts);
     },
     updateQty(qty, index) {
       const i = index;
-      this.products[i].qty = qty;
-      const stringify = JSON.stringify(this.products);
+      this.favoriteProducts[i].qty = qty;
+      const stringify = JSON.stringify(this.favoriteProducts);
       localStorage.setItem('favoriteProducts', stringify);
-    },
-    addToShoppingCart(obj) {
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-      const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
-      });
-      vm.product.product_id = obj.id;
-      vm.product.qty = obj.qty;
-      this.$http.post(api, { data: vm.product }).then((response) => {
-        console.log(response.data);
-        loader.hide();
-        vm.$bus.$emit('shopping-cart:update');
-        this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
-      });
     },
   },
   created() {
@@ -118,7 +134,7 @@ export default {
       vm.updateFavorite(methods, product);
     });
     vm.getFavorite();
-    vm.$emit('favorite-products', vm.products);
+    vm.$emit('favorite-products', vm.favoriteProducts);
   },
 };
 </script>

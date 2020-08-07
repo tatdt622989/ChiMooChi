@@ -38,7 +38,7 @@
           <select
             class="category form-control"
             v-model="currentCategory"
-            @change="productsFilter(currentCategory, currentSortMethod, pagination.current_page)"
+            @change="productsFilter(currentCategory, currentSortMethod)"
             required
           >
             <option>類別</option>
@@ -57,7 +57,7 @@
         v-for="(item, index) in category"
         :key="index"
         :class="{ active : currentCategory === item }"
-        @click="productsFilter(item, currentSortMethod, pagination.current_page)"
+        @click="productsFilter(item, currentSortMethod)"
       >{{ item }}</button>
     </div>
     <div class="row product-list">
@@ -100,7 +100,7 @@ export default {
       searchProducts: [],
       paginatedProducts: [],
       pagination: {},
-      category: ['全部商品', '特色推薦', '經典設計', '木椅', '塑膠椅', '金屬椅', '沙發/沙發床'],
+      category: ['全部商品', '特色推薦', '經典設計', '木椅', '塑膠椅', '金屬椅', '沙發'],
       categoryId: '',
       isPathHasCategory: false,
       currentCategory: '全部商品',
@@ -135,7 +135,7 @@ export default {
       } else {
         vm.isPathHasCategory = false;
       }
-      console.log(category);
+      console.log(page);
       // category === '' 代表非更換類別狀態
       // category !== '' 代表觸發更換類別
       if (vm.search && category !== '') {

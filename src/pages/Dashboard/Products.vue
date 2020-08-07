@@ -331,7 +331,7 @@ export default {
       isLoading: false,
       isOpenDeleteModal: false,
       isReverse: false,
-      category: ['特色推薦', '經典設計', '木椅', '塑膠椅', '金屬椅', '沙發/沙發床'],
+      category: ['特色推薦', '經典設計', '木椅', '塑膠椅', '金屬椅', '沙發'],
     };
   },
   methods: {

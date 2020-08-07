@@ -70,9 +70,10 @@ export default {
       });
       const productInfo = {};
       productInfo.product_id = productId;
-      productInfo.qty = vm.qty;
-      this.$http.post(api, { data: productInfo }).then((response) => {
-        console.log(response.data);
+      productInfo.qty = 1;
+      console.log(productInfo);
+      this.$http.post(api, { data: productInfo }).then(() => {
+        console.log(productInfo);
         loader.hide();
         vm.$bus.$emit('shopping-cart:update');
         this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
