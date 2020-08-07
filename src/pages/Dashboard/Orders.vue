@@ -71,7 +71,7 @@
   <Pagination
     :pagination="pagination"
     @change-page="changePage"
-    />
+  />
   <div class="dashboard-orders-modal modal fade" id="dashboardOrdersModal"
     tabindex="-1" role="dialog" aria-labelledby="dashboardOrdersModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

@@ -1086,8 +1086,8 @@ $breadcrumb-item-padding:           .5rem !default;
 $breadcrumb-margin-bottom:          0rem !default;
 
 $breadcrumb-bg:                     #fff !default;
-$breadcrumb-divider-color:          $gray-500 !default;
-$breadcrumb-active-color:           $gray-600 !default;
+$breadcrumb-divider-color:          $secondary !default;
+$breadcrumb-active-color:           $dark !default;
 $breadcrumb-divider:                quote("/") !default;
 
 $breadcrumb-border-radius:          $border-radius !default;
@@ -1198,11 +1198,12 @@ $featured-banner-link-hover:        $primary;
 $newsletter-color:                  $white;
 $newsletter-bg-img:                 url('~@/assets/images/newsletter.png');
 // Footer
-$footer-about-bg-color:             $gray-600;
+$footer-about-bg-color:             $dark;
 $footer-btn-color:                  $white;
-$footer-btn-bg-color:               $gray-600;
+$footer-btn-bg-color:               $dark;
 $footer-color:                      $white;
-$footer-declaration-bg-color:       $primary;
+$copyright-bg-color:                $white;
+$copyright-color:                   $secondary;
 // Img link
 $img-link-bg-color:                 $light;
 // Shopping cart

@@ -1,33 +1,35 @@
 <template>
-  <footer>
+  <footer class="container">
     <div class="footer-body">
-      <div class="container">
-        <div class="row">
-          <div class="col-xl-3 col-lg-4 col-md-5 col-12">
-            <img src="@/assets/images/white-logo.svg" alt="logo-white" />
-            <p>奇木奇成立於2020年，已經有超過一年的歷史，將產品做到最好，是我們一直以來的原則。</p>
+      <div class="footer-content">
+        <img src="@/assets/images/white-logo.svg" alt="logo-white"/>
+        <p class="w-100 mb-0">奇木奇成立於2020年，已經有超過一年的歷史，將產品做到最好，是我們一直以來的原則。</p>
+      </div>
+      <div class="footer-nav">
+        <div class="contact">
+          <h4>聯絡我們</h4>
+          <div class="email">
+            <p class="mr-12 my-0">chimoochi@example.com</p>
+            <button>
+              <font-awesome-icon :icon="['fas', 'envelope-square']" />
+            </button>
           </div>
-          <div class="offset-xl-4 offset-lg-2 col-xl-5 col-lg-6 col-md-7 col-12 footer-nav">
-            <h4>聯絡我們</h4>
-            <h4>關注我們</h4>
-            <div class="email">
-              <p class="mr-12 my-0">chimoochi@example.com</p>
-              <button>
-                <font-awesome-icon :icon="['fas', 'envelope-square']" />
-              </button>
-            </div>
+          <div class="phone">
+            <p class="mr-12 my-0">0800-xxx-xxx</p>
+            <button>
+              <font-awesome-icon :icon="['fas', 'phone-square']" />
+            </button>
+          </div>
+        </div>
+        <div class="about">
+          <h4>關注我們</h4>
+          <div class="btn-group">
             <a href="#" class="instagram-logo">
-              <font-awesome-icon :icon="['fab', 'instagram-square']" />
+            <font-awesome-icon :icon="['fab', 'instagram-square']" />
             </a>
             <a href="#" class="youtube-logo">
               <font-awesome-icon :icon="['fab', 'youtube-square']" />
             </a>
-            <div class="phone">
-              <p class="mr-12 my-0">0800-xxx-xxx</p>
-              <button>
-                <font-awesome-icon :icon="['fas', 'phone-square']" />
-              </button>
-            </div>
             <a href="#" class="facebook-logo">
               <font-awesome-icon :icon="['fab', 'facebook-square']" />
             </a>
@@ -42,7 +44,7 @@
       <p>僅用於個人學習使用，非商業用途。</p>
       <p>
         ©2020 ChiMooChi by
-        <a href="http://6yuwei.tw/" target="_parent">6yuwei</a>
+        <a class="text-primary" href="http://6yuwei.tw/" target="_parent">6yuwei</a>
       </p>
     </div>
   </footer>
@@ -73,6 +75,10 @@ footer {
       margin-top: 18px;
       margin-bottom: 6px;
     }
+    align-items: center;
+    display: flex;
+    height: 284px;
+    justify-content: space-between;
     padding-top: 45px;
     padding-bottom: 39px;
     text-align: left;
@@ -84,6 +90,24 @@ footer {
     color: $footer-btn-color;
   }
   background-color: $footer-about-bg-color;
+}
+
+.footer-content {
+  @include media-breakpoint-up(xs){
+    justify-content: center;
+    margin:  0 16px 24px 16px;
+  }
+  @include media-breakpoint-up(md) {
+    justify-content: flex-start;
+    margin:  0 0 16px 16px;
+    width: 200px;
+  }
+  @include media-breakpoint-up(lg){
+    margin-left: 24px;
+    width: 300px;
+  }
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .footer-nav {
@@ -99,19 +123,23 @@ footer {
     .phone {
       order: 2;
     }
-    h4 {
-      margin:  20px 0 12px 0;
-      &:nth-last-of-type(1){
-        order: 3;
-      }
-      flex-basis: 100%;
-    }
     a {
       margin-right: 30px;
       order: 4;
     }
     .twitter-logo{
       margin-right: 0;
+    }
+    .contact, .about {
+      h4 {
+        text-align: center;
+        width: 100%;
+      }
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 24px;
+      width: 100%;
     }
     align-items: center;
     justify-content: center;
@@ -120,29 +148,46 @@ footer {
     .email,.phone {
         flex-basis: auto;
         justify-content: flex-end;
-        margin-right: 25px;
+        margin-right: 24px;
         order: 0;
-      }
+    }
+    .youtube-logo, .twitter-logo {
+      margin-right: -10px;
+    }
+    .instagram-logo, .facebook-logo {
+      margin-right: 12px;
+    }
+    a {
+      order: 0;
+    }
+    .contact, .about {
       h4 {
-        &:nth-last-of-type(1){
-          order: 0;
-        }
-        flex-basis: auto;
-        margin: 0 0 0 45px
+        text-align: center;
+        width: 100%;
       }
-      .youtube-logo, .twitter-logo {
-        margin-right: -10px;
+      margin-bottom: 0;
+    }
+    .about {
+      width: 100px;
+    }
+    .contact {
+      h4 {
+        margin-right: 32px;
+        text-align: right;
       }
-      .instagram-logo, .facebook-logo {
-        margin-right: 12px;
-      }
-      a {
-        order: 0;
-      }
-      align-items: flex-end;
       display: flex;
-      flex-direction: row;
       justify-content: flex-end;
+      width: 300px;
+    }
+    align-items: flex-end;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    margin-right: 6px;
+  }
+  @include media-breakpoint-up(lg){
+    margin-right: 14px;
   }
   a, button {
     color: #fff;
@@ -176,6 +221,16 @@ footer {
     transition: $transition-base;
     width: 44px;
   }
+  .btn-group {
+    @include media-breakpoint-up(xs){
+      width: auto;
+    }
+    @include media-breakpoint-up(md){
+      width: 100px;
+    }
+    display: flex;
+    flex-wrap: wrap;
+  }
   .email, .phone {
     align-items: center;
     display: flex;
@@ -201,8 +256,12 @@ footer {
     }
     padding: 16px 0 16px 0;
   }
+  a {
+    transition: $transition-base;
+  }
   align-items: center;
-  background-color: $footer-declaration-bg-color;
+  background-color: $copyright-bg-color;
+  color: $copyright-color;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

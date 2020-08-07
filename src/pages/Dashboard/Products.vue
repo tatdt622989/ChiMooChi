@@ -6,12 +6,12 @@
           <th class="responsive">
             <button
               class="btn font-weight-bold p-0"
-              @click="sortProducts('category')"
+              @click="productsFilter('category')"
             >
               類別
               <span
                 class="material-icons"
-                :class="{ active : sortBy === 'category',
+                :class="{ active : sortAttr === 'category',
                 reverse : isReverse }"
               >keyboard_arrow_down</span>
             </button>
@@ -19,12 +19,12 @@
           <th>
             <button
               class="btn p-0 font-weight-bold"
-              @click="sortProducts('title')"
+              @click="productsFilter('title')"
             >
               名稱
               <span
                 class="material-icons"
-                :class="{ active : sortBy === 'title',
+                :class="{ active : sortAttr === 'title',
                 reverse : isReverse }"
               >keyboard_arrow_down</span>
             </button>
@@ -32,12 +32,12 @@
           <th class="responsive">
             <button
               class="btn font-weight-bold p-0"
-              @click="sortProducts('origin_price')"
+              @click="productsFilter('origin_price')"
             >
               原價
               <span
                 class="material-icons"
-                :class="{ active : sortBy === 'origin_price',
+                :class="{ active : sortAttr === 'origin_price',
                 reverse : isReverse }"
               >keyboard_arrow_down</span>
             </button>
@@ -45,12 +45,12 @@
           <th class="pl-12">
             <button
               class="btn p-0 font-weight-bold"
-              @click="sortProducts('price')"
+              @click="productsFilter('price')"
             >
               售價
               <span
                 class="material-icons"
-                :class="{ active : sortBy === 'price',
+                :class="{ active : sortAttr === 'price',
                 reverse : isReverse }"
               >keyboard_arrow_down</span>
             </button>
@@ -58,12 +58,12 @@
           <th class="nowrap">
             <button
               class="btn p-0 font-weight-bold"
-              @click="sortProducts('is_enabled')"
+              @click="productsFilter('is_enabled')"
             >
               啟用狀態
               <span
                 class="material-icons"
-                :class="{ active : sortBy === 'is_enabled',
+                :class="{ active : sortAttr === 'is_enabled',
                 reverse : isReverse}"
               >keyboard_arrow_down</span>
             </button>
@@ -72,7 +72,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for=" item in showProducts" :key="item.id">
+        <tr v-for=" item in paginatedProducts" :key="item.id">
           <td class="responsive">{{ item.category }}</td>
           <td>{{ item.title }}</td>
           <td class="responsive">{{ item.origin_price | currency}}</td>
@@ -90,6 +90,10 @@
         </tr>
       </tbody>
     </table>
+    <Pagination
+      :pagination="pagination"
+      @change-page="changePage"
+    />
     <div
       class="dashboard-poducts-modal modal fade"
       id="dashboardProductsModal"
@@ -302,24 +306,28 @@
 <script>
 import $ from 'jquery';
 import Delete from '@/components/Delete.vue';
+import Pagination from '@/components/Pagination.vue';
 
 export default {
   name: 'Products',
   components: {
     Delete,
+    Pagination,
   },
   // 從Header傳過來的資料，用來判斷開啟的modal是否為建立內容的狀態
   props: ['isNewModal', 'search'],
   data() {
     return {
-      products: [],
+      allProducts: [],
       tempProduct: {
         category: '',
         is_enabled: false,
       },
+      paginatedProducts: [],
+      pagination: {},
       searchProducts: [],
       imgLoadMethod: 'upload',
-      sortBy: '',
+      sortAttr: '',
       isLoading: false,
       isOpenDeleteModal: false,
       isReverse: false,
@@ -337,13 +345,13 @@ export default {
       this.$http.get(api).then((response) => {
         console.log(response.data);
         if (response.data.success) {
-          vm.products = Object.values(response.data.products).map((item) => item);
+          vm.allProducts = Object.values(response.data.products).map((item) => item);
         } else {
           vm.$bus.$emit('message:push', '錯誤', response.data.message, 'danger');
         }
         loader.hide();
-        vm.sortBy = '';
-        vm.sortProducts();
+        vm.sortAttr = '';
+        vm.productsFilter();
       });
     },
     // 使用編輯商品的方式開啟modal
@@ -433,11 +441,16 @@ export default {
         vm.isOpenDeleteModal = true;
       }
     },
-    sortProducts(attr = 'category') {
+    productsFilter(sortAttr = 'title', trigger = 'table-header') {
       const vm = this;
-      const target = vm.search ? vm.searchProducts : vm.products;
-      console.log(target);
-      if (vm.sortBy === attr) {
+      const target = vm.search ? vm.searchProducts : vm.allProducts;
+      vm.sortProducts(sortAttr, trigger, target);
+      vm.getPagination(target);
+      vm.paginateProducts(target);
+    },
+    sortProducts(attr = 'title', trigger = 'table-header', target) {
+      const vm = this;
+      if (vm.sortAttr === attr && trigger === 'table-header') {
         vm.isReverse = !vm.isReverse;
       } else {
         vm.isReverse = false;
@@ -451,14 +464,64 @@ export default {
         }
         return vm.isReverse ? b[attr].localeCompare(a[attr], 'zh-hant') : a[attr].localeCompare(b[attr], 'zh-hant');
       });
-      vm.sortBy = attr;
+      vm.sortAttr = attr;
+    },
+    getPagination(array) {
+      const vm = this;
+      const target = array;
+      const targetLen = target.length;
+      vm.$set(vm.pagination, 'current_page', 1);
+      if (targetLen % 10 !== 0) {
+        vm.$set(vm.pagination, 'total_pages', Math.floor(targetLen / 10) + 1);
+      } else {
+        vm.$set(vm.pagination, 'total_pages', Math.floor(targetLen / 10));
+      }
+      vm.$set(vm.pagination, 'has_pre', false);
+      if (vm.pagination.total_pages > 1) {
+        vm.$set(vm.pagination, 'has_next', true);
+      } else {
+        vm.$set(vm.pagination, 'has_next', false);
+      }
+    },
+    updatePagination(page) {
+      const vm = this;
+      vm.pagination.current_page = page;
+      if (page === 1) {
+        vm.$set(vm.pagination, 'has_pre', false);
+      } else {
+        vm.$set(vm.pagination, 'has_pre', true);
+      }
+      if (page < vm.pagination.total_pages) {
+        vm.$set(vm.pagination, 'has_next', true);
+      } else {
+        vm.$set(vm.pagination, 'has_next', false);
+      }
+    },
+    paginateProducts(array) {
+      const vm = this;
+      const target = array;
+      console.log(target);
+      const startIndex = (vm.pagination.current_page - 1) * 10;
+      const result = target.filter((obj, index) => {
+        if (startIndex <= index && startIndex + 9 >= index) {
+          return obj;
+        }
+        return false;
+      });
+      vm.paginatedProducts = result;
+    },
+    changePage(page) {
+      const vm = this;
+      const target = vm.search ? vm.searchProducts : vm.allProducts;
+      vm.updatePagination(page);
+      vm.paginateProducts(target);
     },
   },
   watch: {
     search() {
       const vm = this;
       if (vm.search) {
-        const result = vm.products.filter((obj) => {
+        const result = vm.allProducts.filter((obj) => {
           const str = obj.category
           + obj.title
           + obj.origin_price
@@ -474,12 +537,7 @@ export default {
           vm.searchProducts = [];
         }
       }
-    },
-  },
-  computed: {
-    showProducts() {
-      const vm = this;
-      return vm.search ? vm.searchProducts : vm.products;
+      vm.productsFilter('title', 'search');
     },
   },
   created() {

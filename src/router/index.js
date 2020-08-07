@@ -46,7 +46,12 @@ const routes = [
         component: Products,
       },
       {
-        path: 'product-info',
+        path: 'products/:id',
+        name: 'ProductsCategory',
+        component: Products,
+      },
+      {
+        path: 'product-info/:id',
         name: 'ProductInfo',
         component: ProductInfo,
       },

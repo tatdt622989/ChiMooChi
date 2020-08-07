@@ -81,23 +81,14 @@ export default {
     updateFavorite(method, product, index) {
       const vm = this;
       if (method === 'add') {
-        const productId = vm.products.map((obj) => obj.id);
-        if (productId.indexOf(product.id) === -1) {
-          const tempProduct = product;
-          vm.$set(tempProduct, 'qty', 1);
-          vm.products.push(tempProduct);
-          console.log(vm.products);
-          vm.$bus.$emit('message:push', '成功', '商品已成功加入我的最愛', 'success');
-        } else {
-          vm.$bus.$emit('message:push', '提醒', '商品已在我的最愛', 'warning');
-        }
+        vm.products.push(product);
       }
       if (method === 'delete') {
         vm.products.splice(index, 1);
       }
       const stringify = JSON.stringify(vm.products);
       localStorage.setItem('favoriteProducts', stringify);
-      vm.$emit('favorite-length', vm.products.length);
+      vm.$emit('favorite-products', vm.products);
     },
     updateQty(qty, index) {
       const i = index;
@@ -116,19 +107,18 @@ export default {
       this.$http.post(api, { data: vm.product }).then((response) => {
         console.log(response.data);
         loader.hide();
-        this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
         vm.$bus.$emit('shopping-cart:update');
-        vm.$emit('update-shopping-cart');
+        this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
       });
     },
   },
   created() {
     const vm = this;
-    vm.$bus.$on('favorite-notification:update', (methods, product) => {
+    vm.$bus.$on('favorite:update', (methods, product) => {
       vm.updateFavorite(methods, product);
     });
     vm.getFavorite();
-    vm.$emit('favorite-length', vm.products.length);
+    vm.$emit('favorite-products', vm.products);
   },
 };
 </script>

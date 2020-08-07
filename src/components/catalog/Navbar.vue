@@ -93,7 +93,7 @@ import $ from 'jquery';
 
 export default {
   name: 'Navbar',
-  props: ['favoriteLength'],
+  props: ['favoriteProducts'],
   data() {
     return {
       isShow: false,
@@ -133,8 +133,8 @@ export default {
     },
   },
   watch: {
-    favoriteLength() {
-      this.notification.favorite = this.favoriteLength;
+    favoriteProducts() {
+      this.notification.favorite = this.favoriteProducts.length;
     },
   },
   created() {
@@ -144,7 +144,7 @@ export default {
       vm.isShow = false;
       $('body').css('overflow', '');
     });
-    vm.notification.favorite = vm.favoriteLength;
+    vm.notification.favorite = vm.favoriteProducts.length;
     vm.getShoppingCart();
     // 註冊更新購物車資料的event bus
     vm.$bus.$on('shopping-cart:update', () => {

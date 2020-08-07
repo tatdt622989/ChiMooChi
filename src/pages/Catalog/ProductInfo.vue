@@ -1,32 +1,45 @@
 <template>
   <div class="container">
-    <Breadcrumb class="mb-16"/>
+    <Breadcrumb class="mb-16" :product="product"/>
     <div class="row product-info">
-      <div class="col-sm-6 col-12 product-info-img-link">
-        <img src alt />
+      <div class="col-md-6 col-12 product-info-img-link">
+        <img :src="product.imageUrl" />
       </div>
-      <div class="col-12 col-sm-6 text-left d-flex flex-column">
-        <h1 class="f-lg-30 f-24 mb-lg-32 mb-md-24 mb-16">簡約造型單人沙發</h1>
+      <div class="col-12 col-md-6 text-left d-flex flex-column">
+        <p class="badge badge-secondary">{{ product.category }}</p>
+        <h1 class="f-lg-30 f-24 mb-lg-32 mb-md-24 mb-16">{{ product.title }}</h1>
         <div class="product-info-price">
           <p class="text-danger f-lg-28 f-20 font-weight-bold mr-lg-24
-          mr-12">$<span>2000</span></p>
-          <p class="f-lg-20 f-16 text-dark">$<del>2500</del></p>
+          mr-12">{{ product.price | currency }}</p>
+          <del class="f-lg-20 f-16 text-dark">{{ product.origin_price | currency }}</del>
         </div>
-        <h2 class="f-14 f-sm-16 mb-lg-20 mb-md-12">
-          尺寸:  長1.2m x 寬0.6m x 高1.0m<br>材質:  皮革、泡棉、木材
+        <h2 class="font-weight-bold f-16 f-md-20">
+          產品尺寸
         </h2>
-        <h3 class="f-14 f-md-16 mb-lg-45 mb-md-24 mb-16">
+        <p class="f-14 f-sm-16 mb-lg-20 mb-md-24 mb-20">
+          尺寸:  長1.2m x 寬0.6m x 高1.0m<br>材質:  皮革、泡棉、木材
+        </p>
+        <h2 class="font-weight-bold f-16 f-md-20">
+            產品說明
+        </h2>
+        <p class="f-14 f-md-16 mb-lg-45 mb-md-24 mb-24">
           皮製經典復古沙發，是由多位大師級的工匠和設計師，
           經過不容妥協的選材和設計，再經由專家嚴格的多項耐用性和安全性的測試，
           聯手打造出兼具尊爵的視覺饗宴以及最高等級的使用體驗的產品。
-        </h3>
+        </p>
         <div class="d-flex align-items-center">
           <span class="f-lg-20 mr-lg-32 mr-16">數量：</span>
-          <Counter />
+          <Counter :unit="product.unit" :qty.sync="qty"/>
         </div>
         <div class="product-info-btn-group">
-          <button class="btn btn-secondary product-info-favorite">加入我的最愛</button>
-          <button class="btn btn-primary product-info-cart">加入購物車</button>
+          <button
+            class="btn product-info-favorite"
+            :class="[ isRemove ? 'btn-danger' : 'btn-dark' ]"
+            @click="updateFavorite()"
+          >{{ isRemove ? '從我的最愛移除' : '加入我的最愛' }}</button>
+          <button
+            class="btn btn-primary product-info-cart"
+            @click="addToShoppingCart(product.id)">加入購物車</button>
         </div>
       </div>
     </div>
@@ -42,6 +55,81 @@ export default {
   components: {
     Breadcrumb,
     Counter,
+  },
+  props: ['favoriteProducts'],
+  data() {
+    return {
+      product: {},
+      productId: '',
+      qty: 1,
+      matchIndex: 0,
+      isRemove: false,
+    };
+  },
+  methods: {
+    getProduct() {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/product/${vm.productId}`;
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      console.log(api);
+      this.$http.get(api).then((response) => {
+        console.log(response.data);
+        if (response.data.success) {
+          // 取得所有商品
+          vm.product = response.data.product;
+          vm.getBtnState();
+        } else {
+          vm.$router.push('/');
+        }
+        loader.hide();
+      });
+    },
+    updateFavorite() {
+      const vm = this;
+      if (vm.matchIndex === -1) {
+        vm.$set(vm.product, 'qty', vm.qty);
+        vm.$bus.$emit('favorite:update', 'add', vm.product);
+      } else {
+        vm.$bus.$emit('favorite:update', 'delete', undefined, vm.matchIndex);
+      }
+    },
+    addToShoppingCart(productId) {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+      const loader = vm.$loading.show({}, {
+        default: this.$createElement('LogoLoadingAnimation'),
+      });
+      const productInfo = {};
+      productInfo.product_id = productId;
+      productInfo.qty = vm.qty;
+      this.$http.post(api, { data: productInfo }).then((response) => {
+        console.log(response.data);
+        loader.hide();
+        vm.$bus.$emit('shopping-cart:update');
+        this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
+      });
+    },
+    getBtnState() {
+      const vm = this;
+      vm.matchIndex = vm.favoriteProducts.findIndex((obj) => obj.id === vm.product.id);
+      if (vm.matchIndex === -1) {
+        vm.isRemove = false;
+      } else {
+        vm.isRemove = true;
+      }
+    },
+  },
+  watch: {
+    favoriteProducts() {
+      this.getBtnState();
+    },
+  },
+  created() {
+    const vm = this;
+    vm.productId = vm.$route.params.id;
+    vm.getProduct();
   },
 };
 </script>
@@ -63,16 +151,58 @@ export default {
     min-height: 570px;
     margin-bottom: 90px;
   }
+  .badge {
+    @include media-breakpoint-up(xs) {
+      font-size: 16px;
+      height: 28px;
+      margin: 12px 0;
+      width: 88px;
+    }
+    @include media-breakpoint-up(md) {
+      font-size: 20px;
+      height: 32px;
+      margin: 0 0 24px 0;
+      width: 100px;
+    }
+    align-items: center;
+    background-color: $dark;
+    border-radius: 0;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+  }
 }
 .product-info-img-link{
   @include media-breakpoint-up(xs) {
     margin-bottom: 16px;
-    min-height: 211px;
+    height: 240px;
   }
   @include media-breakpoint-up(sm) {
     margin-bottom: 0;
-    min-height: auto;
   }
+  @include media-breakpoint-up(md) {
+    height: 600px;
+  }
+  @include media-breakpoint-up(lg) {
+    height: 720px;
+  }
+  animation: product-loading 1s ease-in-out infinite normal;
+  @keyframes product-loading {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 100% 100%;
+    }
+  }
+  img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+  background: no-repeat
+  linear-gradient(90deg, $light 0%, $light 20%, $gray-300 40%,
+  $gray-300 60%, $light 80%, $light 100% ) 0/1000%;
   background-color: $img-link-bg-color;
   background-clip: content-box;
 }
@@ -88,7 +218,7 @@ export default {
   }
   @include media-breakpoint-up(lg) {
     height: 60px;
-    margin-bottom: 45px;
+    margin-bottom: 32px;
     padding: 8px 24px 8px 24px;
   }
   align-items: center;
@@ -97,10 +227,10 @@ export default {
 }
 .product-info-btn-group {
   @include media-breakpoint-up(xs) {
-    flex-basis: 84px;
+    margin-top: 32px;
   }
   @include media-breakpoint-up(sm) {
-    flex-basis: 90px;
+    margin-top: 32px;
   }
   @include media-breakpoint-up(md) {
     flex-basis: auto;

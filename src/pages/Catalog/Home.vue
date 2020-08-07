@@ -59,7 +59,7 @@
         v-for="(obj, index) in recommendProducts"
         :key="obj.id"
       >
-      <Card :obj="obj" @push-message="pushMessage"></Card>
+      <Card :product="obj" @push-message="pushMessage" v-bind="$attrs"></Card>
       </div>
     </div>
     <div class="featured-banner-top row">

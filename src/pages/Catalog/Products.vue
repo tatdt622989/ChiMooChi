@@ -66,7 +66,7 @@
         v-for="obj in paginatedProducts"
         :key="obj.id"
       >
-      <Card :obj="obj" @push-toast="pushMessage"></Card>
+      <Card :product="obj" @push-toast="pushMessage" v-bind="$attrs"></Card>
       </div>
     </div>
     <p
@@ -101,6 +101,8 @@ export default {
       paginatedProducts: [],
       pagination: {},
       category: ['全部商品', '特色推薦', '經典設計', '木椅', '塑膠椅', '金屬椅', '沙發/沙發床'],
+      categoryId: '',
+      isPathHasCategory: false,
       currentCategory: '全部商品',
       sortMethods: {
         time: '新到舊',
@@ -111,7 +113,7 @@ export default {
     };
   },
   methods: {
-    getProducts() {
+    getProducts(category) {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;
       const loader = vm.$loading.show({}, {
@@ -122,12 +124,17 @@ export default {
         console.log(response.data);
         // 取得所有商品
         vm.allProducts = response.data.products;
-        vm.productsFilter();
+        vm.productsFilter(category);
         loader.hide();
       });
     },
     productsFilter(category = '全部商品', currentSortMethod = '新到舊', page = 1) {
       const vm = this;
+      if (vm.categoryId !== '' && !vm.isPathHasCategory) {
+        vm.$router.replace('/products').catch((err) => err);
+      } else {
+        vm.isPathHasCategory = false;
+      }
       console.log(category);
       // category === '' 代表非更換類別狀態
       // category !== '' 代表觸發更換類別
@@ -271,7 +278,18 @@ export default {
     },
   },
   created() {
-    this.getProducts();
+    const vm = this;
+    vm.categoryId = vm.$route.params.id;
+    const isExist = vm.category.indexOf(vm.categoryId);
+    console.log(vm.categoryId);
+    if (isExist !== -1) {
+      vm.isPathHasCategory = true;
+      vm.getProducts(vm.categoryId);
+    } else if (vm.categoryId === undefined) {
+      vm.getProducts();
+    } else {
+      vm.$router.replace('/products').catch((err) => err);
+    }
   },
 };
 </script>

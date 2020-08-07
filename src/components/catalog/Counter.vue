@@ -8,7 +8,7 @@
     </button>
     <div class="counter-quantity">
       <input
-        class=" w-100 border-0 p-0 text-secondary"
+        class=" w-100 border-0 p-0 text-secondary text-center"
         type="text"
         ref="qty"
         @input="$emit('update:qty', $refs.qty.value)"

@@ -9,9 +9,9 @@
             v-for="obj in shoppingCart.carts"
             :key="obj.id"
           >
-            <a href="#" class="img-link">
+            <div href="#" class="img-link">
               <img :src="obj.product.imageUrl">
-            </a>
+            </div>
             <h2 class="tilte f-16
             text-overflow text-left">{{ obj.product.title }}</h2>
             <p class="unit">{{ `${obj.qty} / ${obj.product.unit}` }}</p>

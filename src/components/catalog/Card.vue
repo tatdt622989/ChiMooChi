@@ -1,31 +1,38 @@
 <template>
   <div class="card">
-    <router-link to="product-info" class="card-img-link">
-      <img :src="obj.imageUrl" class="card-img" />
+    <router-link :to="`/product-info/${product.id}`" class="card-img-link">
+      <img :src="product.imageUrl" class="card-img" />
     </router-link>
     <div class="card-body">
       <a class="card-title" href="#">
-        <h3>{{ obj.title }}</h3>
+        <h3>{{ product.title }}</h3>
       </a>
       <div class="product-price">
-        <del class="original-price">{{ obj.origin_price | currency }}</del>
-        <p class="on-sale-price">{{ obj.price | currency }}</p>
+        <del class="original-price">{{ product.origin_price | currency }}</del>
+        <p class="on-sale-price">{{ product.price | currency }}</p>
       </div>
       <div class="card-btn-group">
         <button
-          class="btn-square btn-light mr-12"
-          @click="addToFavorite(obj)"
+          class="btn-square btn-danger mr-12"
+          :class="[ isRemove ? 'btn-danger' : 'btn-dark' ]"
+          @click="updateFavorite()"
         >
-          <span class="material-icons">favorite_border</span>
+          <transition name="base">
+            <span class="material-icons" v-if="isRemove">favorite</span>
+            <span class="material-icons" v-if="!isRemove">favorite_border</span>
+          </transition>
         </button>
-        <button class="btn-square btn-primary" @click="addToShoppingCart(obj.id)">
+        <button
+        class="btn-square btn-primary"
+        @click="addToShoppingCart(product.id)"
+        >
           <span class="material-icons">shopping_cart</span>
         </button>
       </div>
     </div>
     <div
       class="sold-out"
-      v-if="!obj.is_enabled"
+      v-if="!product.is_enabled"
     >
     <div class="border border-white">
       <p>已售完</p>
@@ -38,16 +45,22 @@
 
 export default {
   name: 'Card',
-  props: ['obj'],
+  props: ['product', 'favoriteProducts'],
   data() {
     return {
-      product: {},
+      isRemove: false,
+      matchIndex: 0,
     };
   },
   methods: {
-    addToFavorite(obj) {
+    updateFavorite() {
       const vm = this;
-      vm.$bus.$emit('favorite-notification:update', 'add', obj);
+      if (vm.matchIndex === -1) {
+        vm.$set(vm.product, 'qty', 1);
+        vm.$bus.$emit('favorite:update', 'add', vm.product);
+      } else {
+        vm.$bus.$emit('favorite:update', 'delete', undefined, vm.matchIndex);
+      }
     },
     addToShoppingCart(productId) {
       const vm = this;
@@ -55,15 +68,33 @@ export default {
       const loader = vm.$loading.show({}, {
         default: this.$createElement('LogoLoadingAnimation'),
       });
-      vm.product.product_id = productId;
-      vm.product.qty = 1;
-      this.$http.post(api, { data: vm.product }).then((response) => {
+      const productInfo = {};
+      productInfo.product_id = productId;
+      productInfo.qty = vm.qty;
+      this.$http.post(api, { data: productInfo }).then((response) => {
         console.log(response.data);
         loader.hide();
-        vm.$emit('push-toast');
         vm.$bus.$emit('shopping-cart:update');
+        this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
       });
     },
+    getBtnState() {
+      const vm = this;
+      vm.matchIndex = vm.favoriteProducts.findIndex((obj) => obj.id === vm.product.id);
+      if (vm.matchIndex === -1) {
+        vm.isRemove = false;
+      } else {
+        vm.isRemove = true;
+      }
+    },
+  },
+  watch: {
+    favoriteProducts() {
+      this.getBtnState();
+    },
+  },
+  created() {
+    this.getBtnState();
   },
 };
 </script>

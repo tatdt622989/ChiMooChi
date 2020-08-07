@@ -1,13 +1,16 @@
 <template>
   <div class="catalog">
     <Navbar
-      :favorite-length="favoriteLength"
+      :favorite-products="favoriteProducts"
       @shopping-cart="getShoppingCart"
     />
     <Favorite
-      @favorite-length="getFavoriteLength"
+      @favorite-products="getFavoriteProducts"
     />
-    <router-view :shopping-cart="shoppingCart" />
+    <router-view
+      :shopping-cart="shoppingCart"
+      :favorite-products="favoriteProducts"
+    />
     <Footer />
   </div>
 </template>
@@ -27,13 +30,13 @@ export default {
   },
   data() {
     return {
-      favoriteLength: 0,
+      favoriteProducts: [],
       shoppingCart: {},
     };
   },
   methods: {
-    getFavoriteLength(Length) {
-      this.favoriteLength = Length;
+    getFavoriteProducts(products) {
+      this.favoriteProducts = products;
     },
     getShoppingCart(shoppingCart) {
       console.log('有被觸發');

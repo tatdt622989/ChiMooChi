@@ -46,7 +46,7 @@ export default {
             vm.messages.splice(index, 1);
           }
         });
-      }, 5000);
+      }, 3000);
     },
   },
   created() {
@@ -61,6 +61,15 @@ export default {
 
 <style lang="scss">
 .toast-list {
+  @include media-breakpoint-up(xs) {
+    top: 54px;
+  }
+  @include media-breakpoint-up(md) {
+    top: 60px;
+  }
+  @include media-breakpoint-up(lg) {
+    top: 72px;
+  }
   .toast {
   &.success {
     background-color: $success;
@@ -81,7 +90,6 @@ export default {
   }
   position: fixed;
   right: 16px;
-  top: 16px;
   z-index: $zindex-toast;
 }
 </style>
