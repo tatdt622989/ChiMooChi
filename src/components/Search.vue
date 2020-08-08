@@ -21,6 +21,11 @@
 export default {
   name: 'Search',
   props: ['search'],
+  watch: {
+    $route() {
+      this.$emit('update:search', '');
+    },
+  },
 };
 </script>
 

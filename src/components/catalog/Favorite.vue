@@ -115,6 +115,7 @@ export default {
         vm.favoriteProducts.push(product);
       }
       if (method === 'delete') {
+        console.log(index);
         vm.favoriteProducts.splice(index, 1);
       }
       const stringify = JSON.stringify(vm.favoriteProducts);
@@ -130,8 +131,8 @@ export default {
   },
   created() {
     const vm = this;
-    vm.$bus.$on('favorite:update', (methods, product) => {
-      vm.updateFavorite(methods, product);
+    vm.$bus.$on('favorite:update', (method, product, index) => {
+      vm.updateFavorite(method, product, index);
     });
     vm.getFavorite();
     vm.$emit('favorite-products', vm.favoriteProducts);

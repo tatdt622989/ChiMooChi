@@ -202,12 +202,12 @@ export default {
 .shopping-cart-list {
   .img-link {
     @include media-breakpoint-up(xs) {
-      height: 80px;
+      height: 74px;
       order: -3;
       left: 12px;
       position: absolute;
       top: 12px;
-      width: 80px;
+      width: 74px;
     }
     @include media-breakpoint-up(sm) {
       height: 60px;
@@ -218,12 +218,12 @@ export default {
       width: 80px;
     }
     @include media-breakpoint-up(md) {
-      height: 80px;
+      height: 76px;
       left: 12px;
       margin-bottom: 12px;
       position: absolute;
       top: 12px;
-      width: 80px;
+      width: 76px;
     }
     @include media-breakpoint-up(lg) {
       height: 75px;
