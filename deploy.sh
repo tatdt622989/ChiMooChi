@@ -1,19 +1,19 @@
 #!/usr/bin/env sh
 
-# 当发生错误时中止脚本
+# 當發生錯誤時終止腳本
 set -e
 
-# 构建
+# 打包輸出
 npm run build
 
-# cd 到构建输出的目录下 
+# cd 到打包輸出的目錄下 
 cd dist
 
 git init
 git add -A
 git commit -m 'deploy'
 
-# 部署到 https://<USERNAME>.github.io/<REPO>
+# 部署到 GitHub
 git push -f git@github.com:tatdt622989/ChiMooChi.git master:gh-pages
 
 cd -

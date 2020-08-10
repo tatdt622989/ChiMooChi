@@ -9,7 +9,7 @@
       :class="{ 'is-order' : isOrder  }"
     >{{ headerText }}管理</h1>
     <button
-      class="btn-square btn-primary d-block d-lg-none"
+      class="btn-square btn-tertiary d-block d-lg-none"
       v-if="targetModal"
       @click="openModal"
     >
@@ -21,7 +21,7 @@
       v-on="$listeners"
     />
     <button
-      class="btn btn-primary d-none d-lg-block order-2"
+      class="btn btn-tertiary d-none d-lg-block order-2"
       @click="openModal"
       v-if="targetModal"
     >建立{{ headerText }}</button>

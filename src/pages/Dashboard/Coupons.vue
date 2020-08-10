@@ -313,7 +313,7 @@
           >{{ isNewModal ? '取消' : '刪除' }}</button>
           <button
             type="submit"
-            class="btn btn-primary m-0 ml-sm-8"
+            class="btn btn-tertiary m-0 ml-sm-8"
           >{{ isNewModal ? '建立' : '修改' }}</button>
           <Delete
             :isOpenDeleteModal.sync="isOpenDeleteModal"
@@ -366,17 +366,13 @@ export default {
       const vm = this;
       let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupons?page=1`;
       const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
+        default: vm.$createElement('LogoLoadingAnimation'),
       });
-      // 這段目的是取得全部的訂單列表，因為api提供的是分頁資料，並且有排序全部資料的需要
       vm.$http.get(api).then((response) => {
-        // 先取得第一頁的資料
         vm.allCoupons = response.data.coupons;
         vm.pagination = response.data.pagination;
         const otherCouponsRequest = [];
-        // 判斷總頁數是否大於一頁
         if (vm.pagination.total_pages > 1) {
-          // 判斷剩餘的頁數
           let i = 1;
           while (i < vm.pagination.total_pages) {
             const page = i + 1;
@@ -384,16 +380,13 @@ export default {
             otherCouponsRequest.push(vm.$http.get(api));
             i += 1;
           }
-          // 將剩餘頁數的資料取回
           vm.$http.all(otherCouponsRequest).then(
             vm.$http.spread((...couponsResponse) => {
-              console.log(response);
               const CouponsArray = couponsResponse.map((obj) => obj.data.coupons);
               let couponsConcat = [];
               CouponsArray.forEach((obj) => {
                 couponsConcat = couponsConcat.concat(obj);
               });
-              // 加入第一頁的陣列中
               couponsConcat.forEach((obj) => {
                 vm.allCoupons.push(obj);
               });
@@ -426,7 +419,6 @@ export default {
       let api;
       let httpMethod;
       if (!vm.tempCoupon.is_enabled) { vm.tempCoupon.is_enabled = false; }
-      // 將使用者輸入的時間轉換成至1970年以來的毫秒數
       vm.tempCoupon.due_date = dueDate.getTime();
       vm.tempCoupon.percent = vm.getPercent(vm.tempCoupon.percent);
       if (couponHandlingmethod === '建立') {
@@ -452,7 +444,7 @@ export default {
     updateCouponsMethods(httpMethod, api, msg) {
       const vm = this;
       const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
+        default: vm.$createElement('LogoLoadingAnimation'),
       });
       vm.$http[httpMethod](api, { data: vm.tempCoupon }).then((response) => {
         loader.hide();
@@ -469,9 +461,7 @@ export default {
       const vm = this;
       const dueDate = new Date(item.due_date);
       vm.$emit('update:isNewModal', false);
-      // 複製不傳參考的物件
       vm.tempCoupon = { ...item };
-      console.log('now', vm.now.timestamp, 'due_date', item.due_date);
       if (vm.now.timestamp > item.due_date) {
         vm.resetTimeSelect();
         vm.$bus.$emit('message:push', '提醒', '此優惠券已經過期，請更新日期', 'warning');
@@ -610,7 +600,6 @@ export default {
     paginateCoupons(array) {
       const vm = this;
       const target = array;
-      console.log(target);
       const startIndex = (vm.pagination.current_page - 1) * 10;
       const result = target.filter((obj, index) => {
         if (startIndex <= index && startIndex + 9 >= index) {
@@ -655,7 +644,6 @@ export default {
   mounted() {
     const vm = this;
     $('#dashboardCouponsModal').on('hide.bs.modal', () => {
-      console.log('關閉視窗');
       vm.tempCoupon = {};
       vm.resetTimeSelect();
       vm.isOpenDeleteModal = false;

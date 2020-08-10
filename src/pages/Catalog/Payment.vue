@@ -35,7 +35,7 @@
         </tbody>
       </table>
       <div class="d-flex mt-md-32 mt-24 justify-content-between">
-        <button class="btn btn-primary" @click="checkOut">確認付款</button>
+        <button class="btn btn-tertiary" @click="checkOut">確認付款</button>
       </div>
     </div>
   </div>
@@ -67,11 +67,9 @@ export default {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/pay/${vm.checkOrder.orderId}`;
       const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
+        default: vm.$createElement('LogoLoadingAnimation'),
       });
-      console.log(api);
-      this.$http.post(api).then((response) => {
-        console.log(response.data);
+      vm.$http.post(api).then((response) => {
         if (response.data.success) {
           vm.$emit('update:is-paid', true);
           vm.$bus.$emit('message:push', '成功', response.data.message, 'success');
@@ -84,18 +82,19 @@ export default {
     },
     copyShoppingCart() {
       const vm = this;
-      // 在清空購物車前，將購物車內容複製
+      // 在清空購物車前，將購物車內容深度複製
       vm.orderShoppingCart = JSON.stringify(vm.shoppingCart);
       vm.orderShoppingCart = JSON.parse(vm.orderShoppingCart);
     },
   },
   created() {
-    this.copyShoppingCart();
-    if (!('carts' in this.orderShoppingCart) || this.orderShoppingCart.carts.length === 0) {
-      this.$router.push('/shopping-cart');
+    const vm = this;
+    vm.copyShoppingCart();
+    if (!('carts' in vm.orderShoppingCart) || vm.orderShoppingCart.carts.length === 0) {
+      vm.$router.push('/shopping-cart');
       return;
     }
-    this.$bus.$emit('shopping-cart:update');
+    vm.$bus.$emit('shopping-cart:update');
   },
 };
 </script>

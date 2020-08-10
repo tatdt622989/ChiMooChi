@@ -254,7 +254,7 @@
             </div>
           </div>
           <div class="modal-footer p-16">
-            <button type="submit" class="btn btn-primary m-0">編輯</button>
+            <button type="submit" class="btn btn-tertiary m-0">編輯</button>
           </div>
         </ValidationObserver>
       </div>
@@ -299,17 +299,14 @@ export default {
       const vm = this;
       let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/orders?page=1`;
       const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
+        default: vm.$createElement('LogoLoadingAnimation'),
       });
       // 這段目的是取得全部的訂單列表，因為api提供的是分頁資料，並且有排序全部資料的需要
       vm.$http.get(api).then((response) => {
-        // 先取得第一頁的資料
         vm.allOrders = response.data.orders;
         vm.pagination = response.data.pagination;
         const otherOrdersRequest = [];
-        // 判斷總頁數是否大於一頁
         if (vm.pagination.total_pages > 1) {
-          // 判斷剩餘的頁數
           let i = 1;
           while (i < vm.pagination.total_pages) {
             const page = i + 1;
@@ -317,16 +314,13 @@ export default {
             otherOrdersRequest.push(vm.$http.get(api));
             i += 1;
           }
-          // 將剩餘頁數的資料取回
           vm.$http.all(otherOrdersRequest).then(
             vm.$http.spread((...ordersResponse) => {
-              console.log(response);
               const ordersArray = ordersResponse.map((obj) => obj.data.orders);
               let ordersConcat = [];
               ordersArray.forEach((obj) => {
                 ordersConcat = ordersConcat.concat(obj);
               });
-              // 加入第一頁的陣列中
               ordersConcat.forEach((obj) => {
                 vm.allOrders.push(obj);
               });
@@ -342,7 +336,6 @@ export default {
     },
     getTime(timestamp) {
       const vm = this;
-      console.log(timestamp);
       if (!timestamp) { return false; }
       let timestampStr = timestamp.toString();
       if (timestampStr.length < 13) {
@@ -431,7 +424,6 @@ export default {
     paginateOrders(array) {
       const vm = this;
       const target = array;
-      console.log(target);
       const startIndex = (vm.pagination.current_page - 1) * 10;
       const result = target.filter((obj, index) => {
         if (startIndex <= index && startIndex + 9 >= index) {
@@ -462,14 +454,11 @@ export default {
       vm.getRegion(vm.selectCountyIndex);
       vm.regionList.forEach((item) => {
         const region = item.split(' ');
-        console.log(region[1], postalCode);
         if (region[1] === postalCode) {
           vm.selectRegion = item;
-          console.log(vm.selectRegion);
         }
       });
       const region = vm.selectRegion.split(' ');
-      console.log(region);
       const otherAddress = vm.tempOrder.user.address.split(region[0]);
       [, vm.otherAddress] = otherAddress;
       $('#dashboardOrdersModal').modal('show');
@@ -486,13 +475,11 @@ export default {
           const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/order/${vm.tempOrder.id}`;
           const region = vm.selectRegion.split(' ');
           vm.tempOrder.user.address = `${region[1]} ${vm.areaList[vm.selectCountyIndex].county}${region[0]}${vm.otherAddress}`;
-          console.log(vm.tempOrder.user.address);
           vm.tempOrder.is_paid = !!parseInt(vm.isPaid, 10);
           const loader = vm.$loading.show({}, {
-            default: this.$createElement('LogoLoadingAnimation'),
+            default: vm.$createElement('LogoLoadingAnimation'),
           });
-          this.$http.put(api, { data: vm.tempOrder }).then((response) => {
-            console.log(response.data);
+          vm.$http.put(api, { data: vm.tempOrder }).then((response) => {
             if (response.data.success) {
               vm.$bus.$emit('message:push', '成功', '訂單修改成功', 'success');
               $('#dashboardOrdersModal').modal('hide');

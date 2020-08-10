@@ -148,7 +148,7 @@
         <div class="d-flex mt-md-32 mt-24
         justify-content-between w-100">
           <router-link class="btn btn-dark" to="/shopping-cart">回購物車</router-link>
-          <button class="btn btn-primary" type="submit">開始結帳</button>
+          <button class="btn btn-tertiary" type="submit">開始結帳</button>
         </div>
       </ValidationObserver>
     </div>
@@ -189,13 +189,11 @@ export default {
         if (success) {
           const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/order`;
           const loader = vm.$loading.show({}, {
-            default: this.$createElement('LogoLoadingAnimation'),
+            default: vm.$createElement('LogoLoadingAnimation'),
           });
           vm.selectRegion = vm.selectRegion.split(' ');
           vm.order.user.address = `${vm.selectRegion[1]} ${vm.areaList[vm.selectCountyIndex].county}${vm.selectRegion[0]}${vm.tempAddress}`;
-          console.log(api);
-          this.$http.post(api, { data: vm.order }).then((response) => {
-            console.log(response.data);
+          vm.$http.post(api, { data: vm.order }).then((response) => {
             if (response.data.success) {
               vm.$emit('update:order', vm.order);
               vm.$emit('update:order-id', response.data.orderId);

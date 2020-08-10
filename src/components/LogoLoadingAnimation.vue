@@ -7,7 +7,6 @@ export default {
   name: 'LogoLoadingAnimation',
   data() {
     return {
-      // 靜態資源位址
       publicPath: process.env.BASE_URL,
     };
   },

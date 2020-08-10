@@ -50,7 +50,6 @@ export default {
     },
   },
   created() {
-    console.log('建立');
     const vm = this;
     vm.$bus.$on('message:push', (title, message, mode) => {
       vm.pushToast(title, message, mode);

@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-center mb-lg-90 mb-md-60 mb-45">
-      <router-link class="btn btn-primary" to="/products">繼續選購</router-link>
+      <router-link class="btn btn-tertiary" to="/products">繼續選購</router-link>
     </div>
     <Toast />
   </div>

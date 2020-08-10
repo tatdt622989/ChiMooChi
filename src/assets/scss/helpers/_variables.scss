@@ -10,7 +10,7 @@ $gray-100: #f8f9fa !default;
 $gray-200: #e9ecef !default;
 $gray-300: #dee2e6 !default; // ┐
 $gray-400: #C4C4C4 !default; // │
-$gray-500: #9D9D9D !default; // │─ common color
+$gray-500: #909090 !default; // │─ common color
 $gray-600: #616161 !default; // ┘
 $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
@@ -670,7 +670,7 @@ $custom-file-button-color:          $white !default;
 $custom-file-button-bg:             $secondary !default;
 $custom-file-text: (
   en: "Browse",
-  zh-TW: "瀏覽"
+  zh-Hant-TW: "瀏覽"
 ) !default;
 
 
@@ -835,7 +835,7 @@ $pagination-hover-bg:               $gray-200 !default;
 $pagination-hover-border-color:     $light !default;
 
 $pagination-active-color:           $component-active-color !default;
-$pagination-active-bg:              $component-active-bg !default;
+$pagination-active-bg:              $tertiary !default;
 $pagination-active-border-color:    $pagination-active-bg !default;
 
 $pagination-disabled-color:         $gray-600 !default;
@@ -1174,11 +1174,11 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 $navbar-toggler-hover-color:        $primary;
 // Nav
 $nav-color:                         $secondary;
-$nav-active-xs-bg:                  $primary;
+$nav-active-xs-bg:                  $tertiary;
 $nav-active-lg-bg:                  $white;
 $nav-active-xs-color:               white;
 $nav-active-lg-color:               $secondary;
-$nav-hover-xs-bg:                   $primary;
+$nav-hover-xs-bg:                   $tertiary;
 $nav-hover-lg-bg:                   $white;
 $nav-hover-xs-color:                white;
 $nav-hover-lg-color:                $primary;
@@ -1198,9 +1198,9 @@ $featured-banner-link-hover:        $primary;
 $newsletter-color:                  $white;
 $newsletter-bg-img:                 url('~@/assets/images/newsletter.png');
 // Footer
-$footer-about-bg-color:             $dark;
+$footer-about-bg-color:             $secondary;
 $footer-btn-color:                  $white;
-$footer-btn-bg-color:               $dark;
+$footer-btn-bg-color:               $secondary;
 $footer-color:                      $white;
 $copyright-bg-color:                $white;
 $copyright-color:                   $secondary;

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row mb-lg-60 mb-md-45 mb-32">
+    <div class="row">
       <h1 class="f-lg-30 f-24 mt-lg-16 mb-lg-45 mt-12 mb-30 w-100">購物車清單</h1>
       <div class="col-lg-8 col-md-7">
         <ul class="shopping-cart-list p-0 m-0">
@@ -9,12 +9,16 @@
             v-for="obj in shoppingCart.carts"
             :key="obj.id"
           >
-            <div href="#" class="img-link">
+            <div class="product-img">
               <img :src="obj.product.imageUrl">
             </div>
             <h2 class="tilte f-16
             text-overflow text-left">{{ obj.product.title }}</h2>
-            <p class="unit">{{ `${obj.qty} / ${obj.product.unit}` }}</p>
+            <Counter
+              :qty="obj.qty"
+              @update:qty="changeShoppingCartPage(obj, $event)"
+              :unit.sync="obj.product.unit"
+            />
             <p class="price font-weight-bold">
               {{ obj.coupon ? obj.total * (obj.coupon.percent / 100)
               : obj.total | currency }}
@@ -33,7 +37,7 @@
           v-if="!('carts' in shoppingCart) || shoppingCart.carts.length === 0"
         >
           <p class="f-20 f-md-24 w-100 mb-20">購物車內沒有商品喔！</p>
-          <router-link to="products" class="btn btn-primary">去逛逛</router-link>
+          <router-link to="products" class="btn btn-tertiary">去逛逛</router-link>
         </div>
       </div>
       <div
@@ -84,8 +88,10 @@
           <p class="f-24 font-weight-bold mt-20 text-danger text-right w-75">
             {{ shoppingCart.final_total | currency }}
           </p>
-          <router-link class="btn btn-primary mt-20 w-100"
-          to="/checkout/order-form">結帳去</router-link>
+          <router-link
+            class="btn btn-tertiary mt-20 w-100"
+            to="/checkout/order-form"
+          >結帳去</router-link>
         </div>
       </div>
     </div>
@@ -123,9 +129,13 @@
 </template>
 <script>
 import $ from 'jquery';
+import Counter from '@/components/Catalog/Counter.vue';
 
 export default {
   name: 'ShoppingCart',
+  components: {
+    Counter,
+  },
   props: ['shoppingCart'],
   data() {
     return {
@@ -142,7 +152,6 @@ export default {
     },
     openDeleteModal(product) {
       const vm = this;
-      console.log(product);
       $('#deleteModal').modal('show');
       vm.deleteModalMsg = product.product.title;
       vm.tempProductId = product.id;
@@ -151,13 +160,28 @@ export default {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${vm.tempProductId}`;
       const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
+        default: vm.$createElement('LogoLoadingAnimation'),
       });
-      this.$http.delete(api).then((response) => {
-        console.log(response.data);
+      vm.$http.delete(api).then(() => {
         loader.hide();
         $('#deleteModal').modal('hide');
         vm.updateShoppingCart();
+      });
+    },
+    changeShoppingCartPage(obj, qty) {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+      const loader = vm.$loading.show({}, {
+        default: vm.$createElement('LogoLoadingAnimation'),
+      });
+      const product = obj;
+      product.qty = qty;
+      vm.tempProductId = product.id;
+      vm.deleteProduct();
+      vm.$http.post(api, { data: obj }).then(() => {
+        loader.hide();
+        vm.$bus.$emit('shopping-cart:update');
+        vm.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
       });
     },
     applyCoupon() {
@@ -166,10 +190,9 @@ export default {
       vm.$refs.form.validate().then((success) => {
         if (success) {
           const loader = vm.$loading.show({}, {
-            default: this.$createElement('LogoLoadingAnimation'),
+            default: vm.$createElement('LogoLoadingAnimation'),
           });
           vm.$http.post(api, { data: { code: vm.coupon } }).then((response) => {
-            console.log(this);
             if (response.data.success) {
               vm.couponMessage = response.data.message;
               vm.$bus.$emit('message:push', '成功', response.data.message, 'success');
@@ -200,25 +223,23 @@ export default {
 </script>
 <style lang="scss">
 .shopping-cart-list {
-  .img-link {
+  .product-img {
     @include media-breakpoint-up(xs) {
-      height: 74px;
+      height: 72px;
       order: -3;
       left: 12px;
       position: absolute;
       top: 12px;
-      width: 74px;
+      width: 72px;
     }
     @include media-breakpoint-up(sm) {
-      height: 60px;
+      width: 96px;
+      height: 96px;
       margin-bottom: 0;
-      left: auto;
-      position: static;
-      top: auto;
       width: 80px;
     }
     @include media-breakpoint-up(md) {
-      height: 76px;
+      height: 96px;
       left: 12px;
       margin-bottom: 12px;
       position: absolute;
@@ -245,17 +266,16 @@ export default {
   }
   .tilte {
     @include media-breakpoint-up(xs) {
-      margin: 0 0 6px 12px;
+      margin-bottom: 8px;
       order: -2;
       width: 100%
     }
     @include media-breakpoint-up(sm) {
-      margin: 0 6px 0 12px;
-      width: 100px;
+      margin-right: 6px;
+      width: 40%;
     }
     @include media-breakpoint-up(md) {
-      margin-bottom: 8px;
-      width: 45%;
+      width: 30%;
     }
     @include media-breakpoint-up(lg) {
       padding: 0 6px 0 12px;
@@ -273,16 +293,18 @@ export default {
     @include media-breakpoint-up(xs) {
       flex-grow: 2;
       flex-shrink: 2;
-      margin: 0 0 0 6px;
+      margin-bottom: 8px;
       text-align: left;
+      width: 50%;
     }
     @include media-breakpoint-up(sm) {
       flex-grow: 1;
-      margin: 0 12px 0 6px;
+      margin-bottom: 0;
+      margin-right: 12px;
       width: 80px;
     }
     @include media-breakpoint-up(md) {
-      margin: 0 0 0 12px;
+      width: 50%;
       text-align: left;
     }
     @include media-breakpoint-up(lg) {
@@ -298,63 +320,53 @@ export default {
     }
     font-size: 16px;
   }
-  .unit {
+  .shopping-cart-list-item-delete-btn {
     @include media-breakpoint-up(xs) {
-      flex-grow: 1;
-      flex-shrink: 2;
-      margin: 0 6px 0 12px;
-      text-align: left;
-      width: auto;
+      margin-bottom: 8px;
     }
     @include media-breakpoint-up(sm) {
-      margin: 0 6px;
-      text-align: center;
-      width: auto;
-    }
-    @include media-breakpoint-up(md) {
-      margin: 0 12px 8px 6px;
-      text-align: right;
-    }
-    @include media-breakpoint-up(lg) {
-      padding: 0 0 0 24px;
-      margin: 0;
-      text-align: left;
-      width: 45px;
-    }
-    @include media-breakpoint-up(xl) {
-      padding: 0 0 0 32px;
-      width: 60px;
-    }
-    flex-grow: 1;
-  }
-  .delete-btn {
-    @include media-breakpoint-up(xs) {
-      margin-bottom: 12px;
-      order: -1;
-    }
-    @include media-breakpoint-up(sm) {
-      margin-bottom: 16px;
-    }
-    @include media-breakpoint-up(md) {
-      margin-bottom: 12px;
-    }
-    @include media-breakpoint-up(lg) {
       margin-bottom: 0;
-      order: 0;
+    }
+  }
+  .counter {
+    @include media-breakpoint-up(xs) {
+      margin-bottom: 8px;
+      margin-right: 100px;
+    }
+    @include media-breakpoint-up(sm) {
+      margin-right: 0;
+    }
+    @include media-breakpoint-up(md) {
+      margin-left: 12px;
+    }
+    @include media-breakpoint-up(lg) {
+      margin: 0;
+    }
+  }
+  .counter-quantity {
+    @include media-breakpoint-up(md) {
+      padding: 0 4px;
+      width: 40px;
+    }
+    @include media-breakpoint-up(lg) {
+      padding: 0 12px;
+      width: 60px;
     }
   }
   position: relative;
 }
 .shopping-cart-list-item {
   @include media-breakpoint-up(xs) {
+    align-items: center;
     flex-wrap: wrap;
-    padding: 12px 12px 12px 92px;
+    padding: 12px 12px 4px 96px;
   }
   @include media-breakpoint-up(sm) {
-    padding: 12px;
+    padding-bottom: 12px;
+    padding-left: 104px;
   }
   @include media-breakpoint-up(md) {
-    padding: 12px 12px 12px 92px;
+    padding-left: 100px;
   }
   @include media-breakpoint-up(lg) {
     padding: 16px;

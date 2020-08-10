@@ -38,7 +38,7 @@
             @click="updateFavorite()"
           >{{ isRemove ? '從我的最愛移除' : '加入我的最愛' }}</button>
           <button
-            class="btn btn-primary product-info-cart"
+            class="btn btn-tertiary product-info-cart"
             @click="addToShoppingCart(product.id)">加入購物車</button>
         </div>
       </div>
@@ -56,7 +56,7 @@ export default {
     Breadcrumb,
     Counter,
   },
-  props: ['favoriteProducts'],
+  props: ['favoriteProducts', 'shopping-cart'],
   data() {
     return {
       product: {},
@@ -71,13 +71,10 @@ export default {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/product/${vm.productId}`;
       const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
+        default: vm.$createElement('LogoLoadingAnimation'),
       });
-      console.log(api);
-      this.$http.get(api).then((response) => {
-        console.log(response.data);
+      vm.$http.get(api).then((response) => {
         if (response.data.success) {
-          // 取得所有商品
           vm.product = response.data.product;
           vm.getBtnState();
         } else {
@@ -97,19 +94,36 @@ export default {
     },
     addToShoppingCart(productId) {
       const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+      const matchProduct = vm.shoppingCart.carts.filter((obj) => {
+        if (obj.product_id === productId) {
+          return obj;
+        }
+        return false;
+      });
+      const addApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
       const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
+        default: vm.$createElement('LogoLoadingAnimation'),
       });
       const productInfo = {};
       productInfo.product_id = productId;
-      productInfo.qty = vm.qty;
-      this.$http.post(api, { data: productInfo }).then((response) => {
-        console.log(response.data);
-        loader.hide();
-        vm.$bus.$emit('shopping-cart:update');
-        this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
-      });
+      if (matchProduct.length !== 0) {
+        const deleteApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${matchProduct[0].id}`;
+        productInfo.qty = matchProduct[0].qty + vm.qty;
+        vm.$http.delete(deleteApi).then(() => {
+          vm.$http.post(addApi, { data: productInfo }).then(() => {
+            loader.hide();
+            vm.$bus.$emit('shopping-cart:update');
+            vm.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
+          });
+        });
+      } else {
+        productInfo.qty = 1;
+        vm.$http.post(addApi, { data: productInfo }).then(() => {
+          loader.hide();
+          vm.$bus.$emit('shopping-cart:update');
+          vm.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
+        });
+      }
     },
     getBtnState() {
       const vm = this;

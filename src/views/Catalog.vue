@@ -16,7 +16,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import Navbar from '@/components/Catalog/Navbar.vue';
 import Favorite from '@/components/Catalog/Favorite.vue';
 import Footer from '@/components/Catalog/Footer.vue';
@@ -39,7 +38,6 @@ export default {
       this.favoriteProducts = products;
     },
     getShoppingCart(shoppingCart) {
-      console.log('有被觸發');
       this.shoppingCart = shoppingCart;
     },
   },
@@ -47,4 +45,9 @@ export default {
 </script>
 
 <style lang="scss">
+.catalog {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 </style>

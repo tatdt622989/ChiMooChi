@@ -48,7 +48,7 @@
             />
             <div class="invalid-feedback">{{ errors[0] }}</div>
           </ValidationProvider>
-          <button class="btn btn-primary mt-28 w-100" type="submit">登入</button>
+          <button class="btn btn-tertiary mt-28 w-100" type="submit">登入</button>
         </ValidationObserver>
       </div>
     </div>
@@ -74,8 +74,8 @@ export default {
   },
   methods: {
     signIn() {
-      const api = `${process.env.VUE_APP_APIPATH}/admin/signin`;
       const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/admin/signin`;
       vm.$refs.form.validate().then((success) => {
         if (success) {
           vm.loader = this.$loading.show({},
@@ -133,8 +133,6 @@ export default {
     height: 100vh;
     padding: 0;
     width: 100%;
-  }
-  @include media-breakpoint-up(sm) {
   }
   @include media-breakpoint-up(lg) {
     background-color: #fff;

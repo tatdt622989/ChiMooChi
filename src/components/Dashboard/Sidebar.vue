@@ -51,9 +51,9 @@ export default {
   },
   methods: {
     signout() {
-      const api = `${process.env.VUE_APP_APIPATH}/logout`;
       const vm = this;
-      this.$http.post(api).then((response) => {
+      const api = `${process.env.VUE_APP_APIPATH}/logout`;
+      vm.$http.post(api).then((response) => {
         if (response.data.success) {
           vm.$router.push('/');
         }
@@ -66,7 +66,6 @@ export default {
   },
   created() {
     const vm = this;
-    // 視窗大小改變，關閉導覽列
     $(window).resize(() => {
       vm.$emit('close-sidebar-request');
       $('body').css('overflow', '');
@@ -75,7 +74,6 @@ export default {
   },
   destroyed() {
     $('body').css('overflow', '');
-    // 導覽列移除後，將resize事件也移除
     $(window).off('resize');
   },
 };

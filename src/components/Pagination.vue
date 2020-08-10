@@ -65,6 +65,7 @@ export default {
 }
 .num-link {
   font-size: 16px;
+  font-weight: bold;
   line-height: 1;
   padding: 13px 13px;
 }

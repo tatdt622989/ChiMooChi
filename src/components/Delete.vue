@@ -14,7 +14,7 @@
       <button
         type="button"
         class="btn btn-outline-white"
-        @click="$emit('deleteData')"
+        @click="$emit('delete-data')"
       >確定刪除</button>
     </div>
   </div>
@@ -64,7 +64,7 @@ export default {
 .delete-fade-enter-active, .delete-fade-leave-active {
   transition: $transition-base;
 }
-.delete-fade-enter, .delete-fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.delete-fade-enter, .delete-fade-leave-to {
   opacity: 0;
 }
 </style>

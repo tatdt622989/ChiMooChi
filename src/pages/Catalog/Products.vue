@@ -117,12 +117,9 @@ export default {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;
       const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
+        default: vm.$createElement('LogoLoadingAnimation'),
       });
-      console.log(api);
-      this.$http.get(api).then((response) => {
-        console.log(response.data);
-        // 取得所有商品
+      vm.$http.get(api).then((response) => {
         vm.allProducts = response.data.products;
         vm.productsFilter(category);
         loader.hide();
@@ -135,9 +132,6 @@ export default {
       } else {
         vm.isPathHasCategory = false;
       }
-      console.log(page);
-      // category === '' 代表非更換類別狀態
-      // category !== '' 代表觸發更換類別
       if (vm.search && category !== '') {
         vm.search = '';
         vm.currentCategory = category;
@@ -146,18 +140,13 @@ export default {
       }
       vm.categorizeProducts(vm.currentCategory);
       const target = vm.search ? vm.searchProducts : vm.categorizedProducts;
-      console.log(target);
-      console.log(vm.search);
-      // 將分類後的商品排序
       vm.currentSortMethod = currentSortMethod;
       vm.sortProducts(target);
-      // 將排序後的商品分頁
       vm.getPagination(page, target);
       vm.paginateProducts(target);
     },
     categorizeProducts(category) {
       const vm = this;
-      console.log(category);
       vm.currentCategory = category;
       let result;
       if (vm.currentCategory !== '全部商品') {
@@ -197,9 +186,7 @@ export default {
       const vm = this;
       const target = array;
       const targetLen = target.length;
-      console.log(page);
       vm.$set(vm.pagination, 'current_page', page);
-      console.log(Math.floor(targetLen / 12));
       if (targetLen % 12 !== 0) {
         vm.$set(vm.pagination, 'total_pages', Math.floor(targetLen / 12) + 1);
       } else {
@@ -219,7 +206,6 @@ export default {
     paginateProducts(array) {
       const vm = this;
       const target = array;
-      console.log(target);
       const startIndex = (vm.pagination.current_page - 1) * 12;
       const result = target.filter((obj, index) => {
         if (startIndex <= index && startIndex + 11 >= index) {
@@ -230,11 +216,6 @@ export default {
       vm.paginatedProducts = result;
     },
     changePage(page) {
-      /*
-      換頁是由子元件觸發，並且需要經過productsFilter來處理，
-      而productsFilter有一些參數並不存在子元件，
-      所以改由子元件觸發此函式，再來觸發getproducts，實現換頁。
-      */
       const vm = this;
       const target = vm.search ? vm.searchProducts : vm.categorizedProducts;
       vm.pagination.current_page = page;
@@ -281,7 +262,6 @@ export default {
     const vm = this;
     vm.categoryId = vm.$route.params.id;
     const isExist = vm.category.indexOf(vm.categoryId);
-    console.log(vm.categoryId);
     if (isExist !== -1) {
       vm.isPathHasCategory = true;
       vm.getProducts(vm.categoryId);
@@ -396,11 +376,13 @@ export default {
     padding: 10px 20px;
   }
   &.active {
-    color: $primary;
+    color: $tertiary;
+    font-weight: bold;
   }
   &:focus {
     box-shadow: none;
   }
   flex-shrink: 0;
+  font-weight: normal;
 }
 </style>

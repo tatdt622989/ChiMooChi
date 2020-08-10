@@ -16,12 +16,11 @@
                   :class="{ 'start' : targetStartNum === n-1, 'enter' :
                   targetEnterNum === n-1}"
                   draggable="true"
-                  @contextmenu="$event.preventDefault()"
                   @mousedown="classChange($event, 'start')"
                   @mouseup="classChange($event, 'cancel')"
                   @dragstart="dragStart"
-                  @dragover="dragOver"
-                  @dragenter="dragEnter"
+                  @dragover.prevent
+                  @dragenter.prevent="dragEnter"
                   @dragend="dragEnd"
                   @drop="dropped"
                   @touchstart="touchStart"
@@ -50,7 +49,7 @@
               readonly>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-primary" @click="copyCoupon">複製</button>
+              <button class="btn btn-tertiary" @click="copyCoupon">複製</button>
             </div>
           </div>
         </div>
@@ -96,10 +95,6 @@ export default {
       }
       return randomNumArray;
     },
-    cancelDefault(e) {
-      e.preventDefault();
-      e.stopPropagation();
-    },
     classChange(e, status) {
       const vm = this;
       switch (status) {
@@ -124,12 +119,7 @@ export default {
     },
     dragEnter(e) {
       const vm = this;
-      vm.cancelDefault(e);
       vm.classChange(e, 'enter');
-    },
-    dragOver(e) {
-      const vm = this;
-      vm.cancelDefault(e);
     },
     dragEnd() {
       const vm = this;
@@ -137,7 +127,6 @@ export default {
     },
     dropped(e) {
       const vm = this;
-      vm.cancelDefault(e);
       const dragNum = e.dataTransfer.getData('text/plain');
       const targetNum = parseInt(e.target.dataset.num, 10);
       vm.changePuzzlePlace(dragNum, targetNum);
@@ -188,11 +177,9 @@ export default {
   created() {
     const vm = this;
     const randomNumArray = vm.getRandomOrder();
-    // 檢測是否為觸控裝置
     if (window.ontouchstart === null) {
       vm.playMethod = '點擊';
     }
-    // 將圖片亂數打散
     randomNumArray.forEach((obj) => {
       const str = `${vm.correctImgNameOrder[obj]}`;
       vm.currentImgNameOrder.push(str);

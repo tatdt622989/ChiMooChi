@@ -48,7 +48,7 @@
         <span>
           <span class="material-icons f-20 mr-8 lh-1-5">thumb_up</span>特色推薦商品
         </span>
-        <router-link to="products" class="text-primary">
+        <router-link to="products" class="text-tertiary">
           查看更多
           <span class="material-icons f-20 mr-8 lh-1-5">play_arrow</span>
         </router-link>
@@ -101,7 +101,7 @@
       >
         <ValidationProvider
           class="form-group"
-          rules="email"
+          rules="email|required"
           tag="div"
           v-slot="{ errors, failed }"
         >
@@ -115,7 +115,7 @@
           />
           <div class="invalid-feedback">{{ errors[0] }}</div>
         </ValidationProvider>
-        <button type="submit" value="訂閱" class="btn btn-primary mb-12">訂閱</button>
+        <button type="submit" value="訂閱" class="btn btn-tertiary mb-12">訂閱</button>
       </ValidationObserver>
     </div>
   </div>
@@ -141,12 +141,9 @@ export default {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;
       const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
+        default: vm.$createElement('LogoLoadingAnimation'),
       });
-      console.log(api);
-      this.$http.get(api).then((response) => {
-        console.log(response.data);
-        // 取得所有商品
+      vm.$http.get(api).then((response) => {
         vm.products = response.data.products;
         vm.productsFilter();
         loader.hide();
@@ -167,10 +164,11 @@ export default {
       this.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
     },
     subscribe() {
-      this.$refs.form.validate().then((success) => {
+      const vm = this;
+      vm.$refs.form.validate().then((success) => {
         if (success) {
-          this.email = '';
-          this.$bus.$emit('message:push', '成功', '訂閱成功', 'success');
+          vm.email = '';
+          vm.$bus.$emit('message:push', '成功', '訂閱成功', 'success');
         }
       });
     },
@@ -344,14 +342,14 @@ export default {
 
 .newsletter {
   @include media-breakpoint-up(xs) {
-    margin-bottom: 45px;
+    margin-bottom: 35px;
     padding: 0 16px 0 16px;
   }
   @include media-breakpoint-up(md) {
-    margin-bottom: 60px;
+    margin-bottom: 45px;
   }
   @include media-breakpoint-up(xl) {
-    margin-bottom: 90px;
+    margin-bottom: 60px;
   }
   .invalid-feedback {
     color: #fff;

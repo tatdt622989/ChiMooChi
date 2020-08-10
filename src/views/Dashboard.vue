@@ -29,22 +29,17 @@ export default {
   },
   data() {
     return {
-      // 這筆資料使用動態props傳到子元件Sidebar內後，
-      // 以資料isShow接收，用來在子元件Sidebar內更新畫面，
-      // 在子元件Sidebar和Header內則使用emit來修改此資料。
       isShow: false,
       isNewModal: false,
       search: '',
     };
   },
   methods: {
-    // 子元件Header使用emit觸發的事件，用來修改資料isShow
     openSidebar() {
       const vm = this;
       vm.isShow = true;
       $('body').css('overflow', 'hidden');
     },
-    // 子元件Sidebar使用emit觸發的事件，用來修改資料isShow
     closeSidebar() {
       const vm = this;
       vm.isShow = false;

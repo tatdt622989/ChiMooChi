@@ -287,13 +287,13 @@
                 >{{ isNewModal ? '取消' : '刪除' }}</button>
                 <button
                   type="submit"
-                  class="btn btn-primary m-0"
+                  class="btn btn-tertiary m-0"
                 >
                   {{ isNewModal ? '建立' : '修改' }}
                 </button>
                 <Delete
                   :isOpenDeleteModal.sync="isOpenDeleteModal"
-                  @deleteData="updateProducts('刪除')"
+                  @delete-data="updateProducts('刪除')"
                 >商品</Delete>
               </div>
             </ValidationObserver>
@@ -314,7 +314,6 @@ export default {
     Delete,
     Pagination,
   },
-  // 從Header傳過來的資料，用來判斷開啟的modal是否為建立內容的狀態
   props: ['isNewModal', 'search'],
   data() {
     return {
@@ -339,11 +338,9 @@ export default {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/products/all`;
       const loader = vm.$loading.show({}, {
-        default: this.$createElement('LogoLoadingAnimation'),
+        default: vm.$createElement('LogoLoadingAnimation'),
       });
-      console.log(api);
-      this.$http.get(api).then((response) => {
-        console.log(response.data);
+      vm.$http.get(api).then((response) => {
         if (response.data.success) {
           vm.allProducts = Object.values(response.data.products).map((item) => item);
         } else {
@@ -354,11 +351,9 @@ export default {
         vm.productsFilter();
       });
     },
-    // 使用編輯商品的方式開啟modal
     openEditModal(item) {
       const vm = this;
       vm.$emit('update:isNewModal', false);
-      // 複製不傳參考的物件
       vm.tempProduct = { ...item };
       $('#dashboardProductsModal').modal('show');
     },
@@ -377,11 +372,9 @@ export default {
         api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product/${vm.tempProduct.id}`;
         httpMethod = 'delete';
         vm.isOpenDeleteModal = false;
-        // 刪除的方法不需要經過表單驗證，即可將資料刪除
         vm.updateProductsMethods(httpMethod, api, prdouctHandlingMethod);
         return;
       }
-      // 經過表單驗證才能建立或修改資料
       vm.$refs.form.validate().then((success) => {
         if (success) {
           vm.$refs.form.reset();
@@ -419,8 +412,6 @@ export default {
         },
       }).then((response) => {
         if (response.data.success) {
-          /* 因為imageUrl這個屬性未事先定義，
-          所以需要使用$set將imageUrl雙向綁定 */
           vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl);
           vm.$bus.$emit('message:push', '成功', '圖片上傳成功', 'success');
         } else if (typeof response.data.message !== 'string') {
@@ -500,7 +491,6 @@ export default {
     paginateProducts(array) {
       const vm = this;
       const target = array;
-      console.log(target);
       const startIndex = (vm.pagination.current_page - 1) * 10;
       const result = target.filter((obj, index) => {
         if (startIndex <= index && startIndex + 9 >= index) {
@@ -546,13 +536,9 @@ export default {
   mounted() {
     const vm = this;
     $('#dashboardProductsModal').on('hide.bs.modal', () => {
-      // 關閉modal時，清空tempProduct
       vm.tempProduct = {};
       vm.isOpenDeleteModal = false;
-      // 關閉modal時，重置表單
       vm.$refs.form.reset();
-      /* 關閉modal時，清除已經置入到input的圖片
-      ，避免上傳相同圖片時，change事件不會觸發 */
       if (vm.imgLoadMethod === 'upload') {
         vm.$refs.files.value = '';
       }
