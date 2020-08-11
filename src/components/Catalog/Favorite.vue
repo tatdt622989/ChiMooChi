@@ -106,7 +106,6 @@ export default {
           const productInfo = {};
           const cartApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
           if (matchProduct.length !== 0) {
-            console.log(matchProduct);
             const deleteApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${matchProduct[0].id}`;
             productInfo.qty = matchProduct[0].qty + obj.qty;
             vm.$http.delete(deleteApi).then(() => {
