@@ -62,6 +62,7 @@ import Counter from '@/components/Catalog/Counter.vue';
 
 export default {
   name: 'Favorite',
+  props: ['shopping-cart'],
   components: {
     Counter,
   },
@@ -96,14 +97,35 @@ export default {
           const internalLoader = vm.$loading.show({}, {
             default: vm.$createElement('LogoLoadingAnimation'),
           });
-          vm.product.product_id = obj.id;
-          vm.product.qty = obj.qty;
-          const cartApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-          vm.$http.post(cartApi, { data: vm.product }).then(() => {
-            internalLoader.hide();
-            vm.$bus.$emit('shopping-cart:update');
-            vm.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
+          const matchProduct = vm.shoppingCart.carts.filter((shoppingCartObj) => {
+            if (shoppingCartObj.product_id === obj.id) {
+              return obj;
+            }
+            return false;
           });
+          const productInfo = {};
+          const cartApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+          if (matchProduct.length !== 0) {
+            console.log(matchProduct);
+            const deleteApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${matchProduct[0].id}`;
+            productInfo.qty = matchProduct[0].qty + obj.qty;
+            vm.$http.delete(deleteApi).then(() => {
+              productInfo.product_id = obj.id;
+              vm.$http.post(cartApi, { data: productInfo }).then(() => {
+                internalLoader.hide();
+                vm.$bus.$emit('shopping-cart:update');
+                vm.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
+              });
+            });
+          } else {
+            productInfo.qty = obj.qty;
+            productInfo.product_id = obj.id;
+            vm.$http.post(cartApi, { data: productInfo }).then(() => {
+              internalLoader.hide();
+              vm.$bus.$emit('shopping-cart:update');
+              vm.$bus.$emit('message:push', '成功', '商品已成功加入購物車', 'success');
+            });
+          }
         }
       });
     },

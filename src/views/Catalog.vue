@@ -6,6 +6,7 @@
     />
     <Favorite
       @favorite-products="getFavoriteProducts"
+      :shopping-cart="shoppingCart"
     />
     <router-view
       :shopping-cart="shoppingCart"

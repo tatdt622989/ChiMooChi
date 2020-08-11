@@ -1,5 +1,5 @@
 <template>
-  <nav aria-label="Page navigation" class="mt-32 mb-60">
+  <nav aria-label="Page navigation" class="pagination-wrap">
     <ul class="pagination justify-content-center">
       <li class="page-item" :class="{ disabled : !pagination.has_pre }">
         <a

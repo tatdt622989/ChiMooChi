@@ -552,6 +552,17 @@ export default {
 
 <style lang="scss">
 .dashboard-products {
+  .pagination-wrap {
+    @include media-breakpoint-up(xs) {
+    margin-top: 20px;
+    }
+    @include media-breakpoint-up(md) {
+      margin-top: 32px;
+    }
+    @include media-breakpoint-up(lg) {
+      margin-top: 45px;
+    }
+  }
   .list-title {
     display: flex;
     justify-content: space-between;

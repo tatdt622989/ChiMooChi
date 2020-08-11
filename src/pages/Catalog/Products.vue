@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container products">
     <div class="row">
       <div class="products-header col-12">
         <div class="products-title mt-8 mt-lg-0">
@@ -10,7 +10,7 @@
             共{{ search ? searchProducts.length : categorizedProducts.length }}件商品
           </h2>
         </div>
-        <div class="products-filter mt-16 mt-lg-0 mb-24 mb-md-0">
+        <div class="products-filter mt-16 mt-lg-0 mb-20 mb-md-0">
           <Search class="search-form mb-8 mb-md-0" :search.sync="search" />
           <select
           class="form-control flex-shrink-0
@@ -62,7 +62,7 @@
     </div>
     <div class="row product-list">
       <div
-        class="col-lg-3 col-md-4 col-6 d-lg-block mb-30 mb-sm-45"
+        class="col-lg-3 col-md-4 col-6 d-lg-block mb-20 mb-md-32 mb-lg-45"
         v-for="obj in paginatedProducts"
         :key="obj.id"
       >
@@ -275,15 +275,25 @@ export default {
 </script>
 
 <style lang="scss">
+.products .pagination-wrap {
+  @include media-breakpoint-up(xs) {
+    margin-bottom: 20px;
+  }
+  @include media-breakpoint-up(md) {
+    margin-bottom: 32px;
+  }
+  @include media-breakpoint-up(lg) {
+    margin-bottom: 45px;
+  }
+}
 .products-header {
   @include media-breakpoint-up(xs) {
     justify-content: flex-start;
   }
   @include media-breakpoint-up(md) {
-    padding-bottom: 24px;
+    padding-bottom: 32px;
   }
   @include media-breakpoint-up(lg) {
-    padding-bottom: 28px;
     justify-content: space-between;
   }
   align-items: center;

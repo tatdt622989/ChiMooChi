@@ -94,17 +94,17 @@ export default {
     },
     addToShoppingCart(productId) {
       const vm = this;
+      const loader = vm.$loading.show({}, {
+        default: vm.$createElement('LogoLoadingAnimation'),
+      });
       const matchProduct = vm.shoppingCart.carts.filter((obj) => {
         if (obj.product_id === productId) {
           return obj;
         }
         return false;
       });
-      const addApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-      const loader = vm.$loading.show({}, {
-        default: vm.$createElement('LogoLoadingAnimation'),
-      });
       const productInfo = {};
+      const addApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
       productInfo.product_id = productId;
       if (matchProduct.length !== 0) {
         const deleteApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${matchProduct[0].id}`;
@@ -117,7 +117,7 @@ export default {
           });
         });
       } else {
-        productInfo.qty = 1;
+        productInfo.qty = vm.qty;
         vm.$http.post(addApi, { data: productInfo }).then(() => {
           loader.hide();
           vm.$bus.$emit('shopping-cart:update');

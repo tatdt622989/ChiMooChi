@@ -572,13 +572,14 @@ export default {
   }
   .order-total {
     @include media-breakpoint-up(xs) {
+      font-size: 14px;
       padding-right: 12px;
     }
     @include media-breakpoint-up(md) {
+      font-size: 16px;
       padding-right: 16px;
     }
     background-color: $gray-300;
-    font-size: 14px;
   }
   .form-group {
     margin-bottom: 16px;
