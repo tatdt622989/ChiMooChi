@@ -1,266 +1,268 @@
 <template>
-<div class="dashboard-orders">
-  <table class="table mt-24">
-    <thead>
-      <tr>
-        <th>
-          <button
-            class="btn font-weight-bold p-0"
-            @click="ordersFilter('create_at')"
-          >
-            時間
-            <span
-              class="material-icons"
-              :class="{ active : sortAttr === 'create_at',
-              reverse : isReverse }"
-            >keyboard_arrow_down</span>
-          </button>
-        </th>
-        <th class="responsive">編號</th>
-        <th class="pl-16">
-          <button
-            class="btn font-weight-bold p-0"
-            @click="ordersFilter('total')"
-          >
-            金額
-            <span
-              class="material-icons"
-              :class="{ active : sortAttr === 'total',
-              reverse : isReverse }"
-            >keyboard_arrow_down</span>
-          </button>
-        </th>
-        <th class="nowrap">
-          <button
-            class="btn font-weight-bold p-0"
-            @click="ordersFilter('is_paid')"
-          >
-            付款狀態
-            <span
-              class="material-icons"
-              :class="{ active : sortAttr === 'is_paid',
-              reverse : isReverse }"
-            >keyboard_arrow_down</span>
-          </button>
-        </th>
-        <th class="info-edit text-center">詳情編輯</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="obj in paginatedOrders" :key="obj.id">
-        <td>{{ getTime(obj.create_at) }}</td>
-        <td class="responsive">{{ obj.id }}</td>
-        <td class="pl-16">{{ obj.total | currency }}</td>
-        <td
-          class="font-weight-bold nowrap"
-          :class="[ obj.is_paid ? 'text-primary' : 'text-dark' ]"
-        >
-          {{ obj.is_paid ? '已付款' : '未付款' }}
-          </td>
-        <td class="info-edit text-center">
-          <button
-            class="btn-square btn-outline-secondary"
-            @click="openEditModal(obj)"
-          >
-            <span class="material-icons">edit</span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <Pagination
-    :pagination="pagination"
-    @change-page="changePage"
-  />
-  <div class="dashboard-orders-modal modal fade" id="dashboardOrdersModal"
-    tabindex="-1" role="dialog" aria-labelledby="dashboardOrdersModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="dashboardOrdersModalLabel">訂單詳情</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <ValidationObserver
-          ref="form"
-          tag="form"
-          class="order-form"
-          @submit.prevent="editOrder"
-        >
-          <div class="modal-body text-left">
-            <p class="mb-8">
-              訂單時間：{{'\xa0'}}{{'\xa0'}}
-              <span>{{ getTime(tempOrder.create_at) }}</span>
-            </p>
-            <p class="pb-8">
-              訂單編號：{{'\xa0'}}{{'\xa0'}}
-              <span>{{ tempOrder.id }}</span>
-            </p>
-            <p class="order-products mb-12">訂購商品：</p>
-            <table class="table table-borderless m-0">
-              <tbody>
-                <tr
-                  class="tbody-tr"
-                  v-for="obj in tempOrder.products"
-                  :key="obj.id"
-                >
-                  <td class="text-overflow pl-12 pl-md-16">{{ obj.product.title }}</td>
-                  <td class="text-nowrap text-center">{{ `${obj.qty} / ${obj.product.unit}` }}</td>
-                  <td class="text-right pr-12 pr-md-16">{{ obj.product.price | currency }}</td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="order-total pt-16 pb-20 text-right">
-              總計(已扣優惠券){{'\xa0'}}{{'\xa0'}}
-              <span class="text-danger font-weight-bold">{{ tempOrder.total | currency }}</span>
-            </p>
-            <p class="mr-16 my-12">訂購人資訊：</p>
-            <ValidationProvider
-              class="form-group"
-              rules="required"
-              tag="div"
-              v-slot="{ errors, failed }"
+  <div class="dashboard-orders">
+    <table class="table mt-24">
+      <thead>
+        <tr>
+          <th>
+            <button
+              class="btn font-weight-bold p-0"
+              @click="ordersFilter('create_at')"
             >
-              <label for="user-name" class="w-100 text-left">姓名</label>
-              <input
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid' : failed }"
-                id="user-name"
-                placeholder="請輸入姓名"
-                autocomplete="name"
-                v-model="tempOrder.user.name"
-              />
-              <div class="invalid-feedback">{{ errors[0] }}</div>
-            </ValidationProvider>
-            <p class="mb-8">地址</p>
-            <div class="d-flex mb-12 mb-md-16">
+              時間
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'create_at',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="responsive">編號</th>
+          <th class="pl-16">
+            <button
+              class="btn font-weight-bold p-0"
+              @click="ordersFilter('total')"
+            >
+              金額
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'total',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="nowrap">
+            <button
+              class="btn font-weight-bold p-0"
+              @click="ordersFilter('is_paid')"
+            >
+              付款狀態
+              <span
+                class="material-icons"
+                :class="{ active : sortAttr === 'is_paid',
+                reverse : isReverse }"
+              >keyboard_arrow_down</span>
+            </button>
+          </th>
+          <th class="info-edit text-center">詳情編輯</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="obj in paginatedOrders" :key="obj.id">
+          <td>{{ getTime(obj.create_at) }}</td>
+          <td class="responsive">{{ obj.id }}</td>
+          <td class="pl-16">{{ obj.total | currency }}</td>
+          <td
+            class="font-weight-bold nowrap"
+            :class="[ obj.is_paid ? 'text-primary' : 'text-dark' ]"
+          >
+            {{ obj.is_paid ? '已付款' : '未付款' }}
+            </td>
+          <td class="info-edit text-center">
+            <button
+              class="btn-square btn-outline-secondary"
+              @click="openEditModal(obj)"
+            >
+              <span class="material-icons">edit</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <Pagination
+      :pagination="pagination"
+      @change-page="changePage"
+    />
+    <div class="dashboard-orders-modal modal fade" id="dashboardOrdersModal"
+      tabindex="-1" role="dialog" aria-labelledby="dashboardOrdersModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="dashboardOrdersModalLabel">訂單詳情</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <ValidationObserver
+            ref="form"
+            tag="form"
+            class="order-form"
+            @submit.prevent="editOrder"
+          >
+            <div class="modal-body text-left">
+              <p class="mb-8">
+                訂單時間：{{'\xa0'}}{{'\xa0'}}
+                <span>{{ getTime(tempOrder.create_at) }}</span>
+              </p>
+              <p class="pb-8">
+                訂單編號：{{'\xa0'}}{{'\xa0'}}
+                <span>{{ tempOrder.id }}</span>
+              </p>
+              <p class="order-products mb-12">訂購商品：</p>
+              <table class="table table-borderless m-0">
+                <tbody>
+                  <tr
+                    class="tbody-tr"
+                    v-for="obj in tempOrder.products"
+                    :key="obj.id"
+                  >
+                    <td class="text-overflow pl-12 pl-md-16">{{ obj.product.title }}</td>
+                    <td class="text-nowrap text-center">
+                      {{ `${obj.qty} / ${obj.product.unit}` }}
+                    </td>
+                    <td class="text-right pr-12 pr-md-16">{{ obj.product.price | currency }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="order-total pt-16 pb-20 text-right">
+                總計(已扣優惠券){{'\xa0'}}{{'\xa0'}}
+                <span class="text-danger font-weight-bold">{{ tempOrder.total | currency }}</span>
+              </p>
+              <p class="mr-16 my-12">訂購人資訊：</p>
               <ValidationProvider
-                class="form-group w-50 county mb-0"
+                class="form-group"
                 rules="required"
                 tag="div"
                 v-slot="{ errors, failed }"
               >
-                <select
-                  class="form-control"
-                  :class="{ 'is-invalid' : failed }"
-                  @change="getRegion(selectCountyIndex)"
-                  v-model="selectCountyIndex"
-                  required
-                >
-                  <option selected disabled value="">請選擇縣市</option>
-                  <option
-                    v-for="(item, index) in areaList"
-                    :key="item.county"
-                    :value="index"
-                  > {{ item.county }} </option>
-                </select>
-                <div class="invalid-feedback">{{ errors[0] }}</div>
-              </ValidationProvider>
-              <ValidationProvider
-              class="form-group w-50 region mb-0"
-              rules="required"
-              tag="div"
-              v-slot="{ errors, failed }"
-              >
-                <select
-                  class="form-control"
-                  :class="{ 'is-invalid' : failed }"
-                  v-model="selectRegion"
-                  required
-                >
-                  <option selected disabled value="">請選擇鄉鎮區</option>
-                  <option v-for="item in regionList" :key="item" :value="item">
-                    {{ item }}
-                  </option>
-                </select>
-                <div class="invalid-feedback">{{ errors[0] }}</div>
-              </ValidationProvider>
-            </div>
-            <ValidationProvider
-              class="form-group"
-              rules="required"
-              tag="div"
-              v-slot="{ errors, failed }"
-            >
-              <input
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid' : failed }"
-                placeholder="請輸入地址"
-                autocomplete="on"
-                v-model="otherAddress"
-              />
-              <div class="invalid-feedback">{{ errors[0] }}</div>
-            </ValidationProvider>
-            <div class="d-flex">
-              <ValidationProvider
-                class="form-group w-50 mobile-phone"
-                rules="required|numeric|max:10"
-                tag="div"
-                v-slot="{ errors, failed }"
-              >
-                <label for="mobile-phone">手機</label>
+                <label for="user-name" class="w-100 text-left">姓名</label>
                 <input
                   type="text"
                   class="form-control"
                   :class="{ 'is-invalid' : failed }"
-                  id="mobile-phone"
-                  placeholder="請輸入手機號碼"
-                  autocomplete="on"
-                  v-model="tempOrder.user.tel"
+                  id="user-name"
+                  placeholder="請輸入姓名"
+                  autocomplete="name"
+                  v-model="tempOrder.user.name"
                 />
                 <div class="invalid-feedback">{{ errors[0] }}</div>
               </ValidationProvider>
+              <p class="mb-8">地址</p>
+              <div class="d-flex mb-12 mb-md-16">
+                <ValidationProvider
+                  class="form-group w-50 county mb-0"
+                  rules="required"
+                  tag="div"
+                  v-slot="{ errors, failed }"
+                >
+                  <select
+                    class="form-control"
+                    :class="{ 'is-invalid' : failed }"
+                    @change="getRegion(selectCountyIndex)"
+                    v-model="selectCountyIndex"
+                    required
+                  >
+                    <option selected disabled value="">請選擇縣市</option>
+                    <option
+                      v-for="(item, index) in areaList"
+                      :key="item.county"
+                      :value="index"
+                    > {{ item.county }} </option>
+                  </select>
+                  <div class="invalid-feedback">{{ errors[0] }}</div>
+                </ValidationProvider>
+                <ValidationProvider
+                class="form-group w-50 region mb-0"
+                rules="required"
+                tag="div"
+                v-slot="{ errors, failed }"
+                >
+                  <select
+                    class="form-control"
+                    :class="{ 'is-invalid' : failed }"
+                    v-model="selectRegion"
+                    required
+                  >
+                    <option selected disabled value="">請選擇鄉鎮區</option>
+                    <option v-for="item in regionList" :key="item" :value="item">
+                      {{ item }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback">{{ errors[0] }}</div>
+                </ValidationProvider>
+              </div>
               <ValidationProvider
-                class="form-group w-50 email"
-                rules="required|email"
+                class="form-group"
+                rules="required"
                 tag="div"
                 v-slot="{ errors, failed }"
               >
-                <label for="email">電子信箱</label>
                 <input
-                  type="email"
+                  type="text"
                   class="form-control"
                   :class="{ 'is-invalid' : failed }"
-                  id="email"
-                  placeholder="請輸入電子信箱"
-                  autocomplete="email"
-                  v-model="tempOrder.user.email"
+                  placeholder="請輸入地址"
+                  autocomplete="on"
+                  v-model="otherAddress"
                 />
                 <div class="invalid-feedback">{{ errors[0] }}</div>
               </ValidationProvider>
+              <div class="d-flex">
+                <ValidationProvider
+                  class="form-group w-50 mobile-phone"
+                  rules="required|numeric|max:10"
+                  tag="div"
+                  v-slot="{ errors, failed }"
+                >
+                  <label for="mobile-phone">手機</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    :class="{ 'is-invalid' : failed }"
+                    id="mobile-phone"
+                    placeholder="請輸入手機號碼"
+                    autocomplete="on"
+                    v-model="tempOrder.user.tel"
+                  />
+                  <div class="invalid-feedback">{{ errors[0] }}</div>
+                </ValidationProvider>
+                <ValidationProvider
+                  class="form-group w-50 email"
+                  rules="required|email"
+                  tag="div"
+                  v-slot="{ errors, failed }"
+                >
+                  <label for="email">電子信箱</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    :class="{ 'is-invalid' : failed }"
+                    id="email"
+                    placeholder="請輸入電子信箱"
+                    autocomplete="email"
+                    v-model="tempOrder.user.email"
+                  />
+                  <div class="invalid-feedback">{{ errors[0] }}</div>
+                </ValidationProvider>
+              </div>
+              <div class="form-group">
+                <label for="notes" class="textarea-form-label">備註</label>
+                <textarea
+                  class="form-control"
+                  id="notes"
+                  rows="3"
+                  v-model="tempOrder.message"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="paymentMethodSelect">付款狀態</label>
+                <select
+                  class="form-control"
+                  id="paymentStatusSelect"
+                  v-model="isPaid"
+                >
+                  <option value="0">未付款</option>
+                  <option value="1">已付款</option>
+                </select>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="notes" class="textarea-form-label">備註</label>
-              <textarea
-                class="form-control"
-                id="notes"
-                rows="3"
-                v-model="tempOrder.message"
-              ></textarea>
+            <div class="modal-footer p-16">
+              <button type="submit" class="btn btn-tertiary m-0">編輯</button>
             </div>
-            <div class="form-group">
-              <label for="paymentMethodSelect">付款狀態</label>
-              <select
-                class="form-control"
-                id="paymentStatusSelect"
-                v-model="isPaid"
-              >
-                <option value="0">未付款</option>
-                <option value="1">已付款</option>
-              </select>
-            </div>
-          </div>
-          <div class="modal-footer p-16">
-            <button type="submit" class="btn btn-tertiary m-0">編輯</button>
-          </div>
-        </ValidationObserver>
+          </ValidationObserver>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
