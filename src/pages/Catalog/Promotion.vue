@@ -1,7 +1,7 @@
 <template>
   <div class="promotion container mb-lg-60 mb-md-45 mb-32">
     <div class="row">
-      <div class="col-12 d-flex justify-content-center flex-column">
+      <div class="col-12 d-flex justify-content-center flex-column align-items-center">
         <img class="px-12" src="@/assets/images/promotion-title.svg" />
         <p class="instruction f-20">
           {{ playMethod }}交換位置
@@ -42,8 +42,8 @@
             </div>
             <div class="modal-body">
               <p class="f-28 f-md-32 font-weight-bold">恭喜獲得</p>
-              <p class="f-28 f-md-32 font-weight-bold text-primary">免運券序號一組</p>
-              <p class="f-16 f-md-20">在購物車輸入此序號可享免運優惠</p>
+              <p class="f-28 f-md-32 font-weight-bold text-primary">八折券序號一組</p>
+              <p class="f-16 f-md-20">在購物車輸入此序號可享八折優惠</p>
               <input type="text" class="coupon border border-secondary"
               :value="coupon"
               readonly>
