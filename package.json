@@ -16,7 +16,8 @@
     "bootstrap": "^4.4.1",
     "core-js": "^3.6.4",
     "jquery": "^3.5.1",
-    "material-design-icons": "^3.0.1",
+    "material-icons": "^0.6.4",
+    "node-sass": "^4.13",
     "popper.js": "^1.16.1",
     "vee-validate": "^3.3.7",
     "vue": "^2.6.11",
@@ -35,7 +36,6 @@
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-vue": "^6.2.2",
-    "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11"
   },
