@@ -17,7 +17,7 @@
     "core-js": "^3.6.4",
     "jquery": "^3.5.1",
     "material-icons": "^0.6.4",
-    "node-sass": "^4.13",
+    "node-sass": "^7.0",
     "popper.js": "^1.16.1",
     "vee-validate": "^3.3.7",
     "vue": "^2.6.11",
